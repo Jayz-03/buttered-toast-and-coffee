@@ -6,7 +6,7 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     exit;
 }
 
-$active_page = "staff";
+$active_page = "product";
 ?>
 
 <!DOCTYPE html>
@@ -15,7 +15,7 @@ $active_page = "staff";
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Owner - Staff List</title>
+    <title>Product List</title>
     <?php include 'partials/header.php'; ?>
     <link rel="stylesheet" href="css/dataTables.bootstrap4.css">
 </head>
@@ -69,13 +69,13 @@ $active_page = "staff";
 
 <body class="vertical  light">
     <div class="wrapper">
-        <?php include 'partials/owner-navbar.php'; ?>
+        <?php include 'partials/staff-navbar.php'; ?>
 
         <main role="main" class="main-content">
             <div class="container-fluid">
                 <div class="row justify-content-center">
                     <div class="col-12">
-                        <h2 class="page-title">Staff - Staff List</h2>
+                        <h2 class="page-title">Product List</h2>
                         <div class="row my-4">
                             <!-- Small table -->
                             <div class="col-md-12">
@@ -86,31 +86,36 @@ $active_page = "staff";
                                             <thead>
                                                 <tr class="text-center">
                                                     <th>ID</th>
-                                                    <th>Profile</th>
-                                                    <th>Phone</th>
+                                                    <th>Product Name</th>
+                                                    <th>Category Name</th>
+                                                    <th>Price</th>
                                                     <th>Status</th>
+                                                    <th>Managed by</th>
                                                     <th>Last Updated</th>
-                                                    <th>Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <?php
-                                                $sql1 = "SELECT * FROM staff";
+                                                $sql1 = "SELECT * FROM product";
                                                 $r = mysqli_query($link, $sql1);
 
                                                 if ($r->num_rows > 0) {
                                                     while ($row1 = mysqli_fetch_assoc($r)) {
+                                                        $owner_id = $row1['owner_id'];
+                                                        $sql3 = "SELECT * FROM owner WHERE owner_id = $owner_id";
+                                                        $result3 = mysqli_query($link, $sql3);
+                                                        $row3 = mysqli_fetch_assoc($result3);
                                                         ?>
 
                                                         <tr class="text-center">
                                                             <td>
                                                                 <p class="fw-normal mb-1">
-                                                                    <?php echo $row1['staff_id']; ?>
+                                                                    <?php echo $row1['product_id']; ?>
                                                                 </p>
                                                             </td>
                                                             <td>
                                                                 <div class="d-flex align-items-center">
-                                                                    <img src="storage/profile/<?php if ($row1["photo"] != "") {
+                                                                    <img src="storage/products/<?php if ($row1["photo"] != "") {
                                                                         echo $row1["photo"];
                                                                     } else {
                                                                         echo 'default_image.png';
@@ -118,39 +123,49 @@ $active_page = "staff";
                                                                         class="rounded-circle" />
                                                                     <div class="ms-3 text-left mx-2">
                                                                         <p class="fw-bold mb-1">
-                                                                            <?php echo $row1['lastname']; ?>,
-                                                                            <?php echo $row1['firstname']; ?>
-                                                                        </p>
-                                                                        <p class="text-muted mb-0"><?php echo $row1['email']; ?>
+                                                                            <?php echo $row1['product_name']; ?>
                                                                         </p>
                                                                     </div>
                                                                 </div>
                                                             </td>
                                                             <td>
                                                                 <p class="fw-normal mb-1">
-                                                                    <?php echo $row1['contact_number']; ?>
+                                                                    <?php echo $row1['category_name']; ?>
+                                                                </p>
+                                                            </td>
+                                                            <td>
+                                                                <p class="fw-normal mb-1">
+                                                                    <?php echo $row1['price']; ?>
                                                                 </p>
                                                             </td>
                                                             <td>
                                                                 <?php if ($row1['status'] == 0) {
-                                                                    echo '<span class="badge badge-success rounded-pill d-inline px-3">Active</span>';
+                                                                    echo '<span class="badge badge-success rounded-pill d-inline px-3">Available</span>';
                                                                 } elseif ($row1['status'] == 1) {
-                                                                    echo '<span class="badge badge-danger rounded-pill d-inline px-3">Inactive</span>';
-                                                                } ?>
+                                                                    echo '<span class="badge badge-danger rounded-pill d-inline px-3">Unavailable</span>';
+                                                                }?>
+                                                            </td>
+                                                            <td>
+                                                                <div class="d-flex align-items-center">
+                                                                    <img src="storage/profile/<?php if ($row3["photo"] != "") {
+                                                                        echo $row3["photo"];
+                                                                    } else {
+                                                                        echo 'default_image.png';
+                                                                    } ?>" alt="" style="width: 45px; height: 45px"
+                                                                        class="rounded-circle" />
+                                                                    <div class="ms-3 text-left mx-2">
+                                                                        <p class="fw-bold mb-1">
+                                                                            <?php echo $row3['lastname']; ?>,
+                                                                            <?php echo $row3['firstname']; ?>
+                                                                        </p>
+                                                                        <p class="text-muted mb-0"><?php echo $row3['email']; ?>
+                                                                        </p>
+                                                                    </div>
+                                                                </div>
                                                             </td>
                                                             <td>
                                                                 <?php $formattedDate = date("l, F j Y - h:i A", strtotime($row1["last_updated"]));
                                                                 echo $formattedDate; ?>
-                                                            </td>
-                                                            <td>
-                                                                <div class="d-inline">
-                                                                    <a class="ml-1 action-icon" href="#">
-                                                                        <i class="fe fe-eye fe-16"></i>
-                                                                    </a>
-                                                                    <a class="ml-1 action-icon" href="#">
-                                                                        <i class="fe fe-edit fe-16"></i>
-                                                                    </a>
-                                                                </div>
                                                             </td>
                                                         </tr>
 
@@ -170,7 +185,7 @@ $active_page = "staff";
                 </div> <!-- .row -->
             </div> <!-- .container-fluid -->
 
-            <?php include 'partials/owner-modals.php'; ?>
+            <?php include 'partials/staff-modals.php'; ?>
 
         </main> <!-- main -->
     </div> <!-- .wrapper -->

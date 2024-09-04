@@ -4,10 +4,10 @@ session_start();
 if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
     switch ($_SESSION["user_role"]) {
         case 'owner':
-            header("location: owner-dashboard.php");
+            header("location: owner-dashboard");
             break;
         case 'staff':
-            header("location: staff-dashboard.php");
+            header("location: staff-dashboard");
             break;
     }
     exit;
@@ -63,10 +63,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                                 switch ($role) {
                                     case 'owner':
-                                        header("location: owner-dashboard.php");
+                                        header("location: owner-dashboard");
                                         break;
                                     case 'staff':
-                                        header("location: staff-dashboard.php");
+                                        header("location: staff-dashboard");
                                         break;
                                 }
                             } else {
@@ -95,7 +95,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <?php include 'header.php'; ?>
+    <?php include 'partials/header.php'; ?>
 </head>
 
 <style>
@@ -185,7 +185,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </form>
         </div>
     </div>
-    <?php include 'jscripts.php'; ?>
+    <?php include 'partials/jscripts.php'; ?>
 </body>
 
 </html>

@@ -15,7 +15,7 @@ $active_page = "dashboard";
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Owner - Dashboard</title>
+    <title>Staff - Dashboard</title>
     <?php include 'partials/header.php'; ?>
 </head>
 
@@ -35,7 +35,7 @@ $active_page = "dashboard";
 
 <body class="vertical  light">
     <div class="wrapper">
-        <?php include 'partials/owner-navbar.php'; ?>
+        <?php include 'partials/staff-navbar.php'; ?>
 
         <main role="main" class="main-content">
             <div class="container-fluid">
@@ -46,7 +46,7 @@ $active_page = "dashboard";
                 </div> <!-- .row -->
             </div> <!-- .container-fluid -->
 
-            <?php include 'partials/owner-modals.php'; ?>
+            <?php include 'partials/staff-modals.php'; ?>
 
         </main> <!-- main -->
     </div> <!-- .wrapper -->

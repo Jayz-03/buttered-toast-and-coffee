@@ -2,10 +2,11 @@
 session_start();
 
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
-    header("location: login.php");
+    header("location: login");
     exit;
 }
 
+$active_page = "product";
 ?>
 
 <!DOCTYPE html>
@@ -14,7 +15,7 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Owner - Add Inventory</title>
+    <title>Owner - Create Product</title>
     <?php include 'partials/header.php'; ?>
     <script src="js/jquery.slim.min.js"></script>
 </head>
@@ -56,32 +57,32 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
         <?php include 'partials/owner-navbar.php'; ?>
         <main role="main" class="main-content">
             <div class="container-fluid">
-                <h2 class="page-title">Inventory - Add Inventory</h2>
+                <h2 class="page-title">Product - Create Product</h2>
 
                 <?php
-                $item = $quantity = $photo = "";
-                $item_err = $quantity_err = $photo_err = "";
+                $product_name = $category_name = $price = $photo = "";
+                $product_name_err = $category_name_err = $price_err = $photo_err = "";
                 $status = 0;
 
                 if (isset($_POST["submit"])) {
 
-                    if (empty(trim($_POST["item"]))) {
-                        $item_err = "Please enter an item.";
+                    if (empty(trim($_POST["product_name"]))) {
+                        $product_name_err = "Please enter an product name.";
                     } else {
-                        $sql = "SELECT inventory_id FROM inventory WHERE item = ?";
+                        $sql = "SELECT product_id FROM product WHERE product_name = ?";
 
                         if ($stmt = mysqli_prepare($link, $sql)) {
-                            mysqli_stmt_bind_param($stmt, "s", $param_item);
+                            mysqli_stmt_bind_param($stmt, "s", $param_product_name);
 
-                            $param_item = trim($_POST["item"]);
+                            $param_product_name = trim($_POST["product_name"]);
 
                             if (mysqli_stmt_execute($stmt)) {
                                 mysqli_stmt_store_result($stmt);
 
                                 if (mysqli_stmt_num_rows($stmt) == 1) {
-                                    $item_err = "This item is already exist.";
+                                    $product_name_err = "This product is already exist.";
                                 } else {
-                                    $item = trim($_POST["item"]);
+                                    $product_name = trim($_POST["product_name"]);
                                 }
                             } else {
                                 echo "<script>swal({
@@ -96,10 +97,16 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
                         }
                     }
 
-                    if (empty(trim($_POST["quantity"]))) {
-                        $quantity_err = "Please enter quantity.";
+                    if (empty(trim($_POST["category_name"]))) {
+                        $category_name_err = "Please enter category name.";
                     } else {
-                        $quantity = mysqli_real_escape_string($link, $_POST["quantity"]);
+                        $category_name = mysqli_real_escape_string($link, ($_POST["category_name"]));
+                    }
+
+                    if (empty(trim($_POST["price"]))) {
+                        $price_err = "Please enter price.";
+                    } else {
+                        $price = mysqli_real_escape_string($link, ($_POST["price"]));
                     }
 
                     if (empty($_FILES['photo']['name'])) {
@@ -111,33 +118,35 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
                         $photo_new_name = rand() . $photo;
                     }
 
-                    if (empty($item_err) && empty($quantity_err) && empty($photo_err)) {
+                    if (empty($product_name_err) && empty($category_name_err) && empty($price_err) && empty($photo_err)) {
 
 
-                        $sql = "INSERT INTO inventory (item, quantity, status, photo) VALUES (?, ?, ?, ?)";
+                        $sql = "INSERT INTO product (owner_id, product_name, category_name, price, status, photo) VALUES (?, ?, ?, ?, ?, ?)";
 
                         if ($stmt = mysqli_prepare($link, $sql)) {
-                            mysqli_stmt_bind_param($stmt, "siis", $param_item, $param_quantity, $param_status, $param_photo);
+                            mysqli_stmt_bind_param($stmt, "issiis", $param_owner_id, $param_product_name, $param_category_name, $param_price, $param_status, $param_photo);
 
-                            $param_item = $item;
-                            $param_quantity = $quantity;
+                            $param_owner_id = $owner_id;
+                            $param_product_name = $product_name;
+                            $param_category_name = $category_name;
+                            $param_price = $price;
                             $param_status = $status;
                             $param_photo = $photo_new_name;
 
                             if (mysqli_stmt_execute($stmt)) {
-                                move_uploaded_file($photo_tmp_name, "storage/inventory/" . $photo_new_name);
+                                move_uploaded_file($photo_tmp_name, "storage/products/" . $photo_new_name);
                                 // Clear all inputs
-                                $item = $quantity = $status = $photo_new_name = "";
+                                $product_name = $category_name = $price = $status = $photo_new_name = "";
                                 echo "<script>swal({
                                     title: 'Success!',
-                                    text: 'Inventory Item Added Successfully!',
+                                    text: 'Product Added Successfully!',
                                     icon: 'success',
                                     closeOnClickOutside: false,
                                     button: false
                                 });</script>";
 
                                 ?>
-                                <meta http-equiv="Refresh" content="3; url=owner-inventory-list.php">
+                                <meta http-equiv="Refresh" content="3; url=owner-product-list">
                                 <?php
 
 
@@ -162,19 +171,19 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
                         <div class="col-5">
                             <div class="card shadow mb-4">
                                 <div class="card-header">
-                                    <strong class="card-title">Inventory Photo</strong>
+                                    <strong class="card-title">Product Photo</strong>
                                 </div>
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group mb-3">
                                                 <div class="text-center">
-                                                    <img src="storage/inventory/default_image.png"
+                                                    <img src="storage/products/default_image.png"
                                                         class="avatar img-thumbnail mb-2" alt="avatar" height="250px"
                                                         width="250px">
                                                 </div>
                                                 <br>
-                                                <label for="customFile">Choose Inventory Photo</label>
+                                                <label for="customFile">Choose Product Photo</label>
                                                 <div class="custom-file">
                                                     <input type="file" id="customFile" accept="image/*" name="photo"
                                                         class="custom-file-input form-control <?php echo (!empty($photo_err)) ? 'is-invalid' : ''; ?> file-upload mb-3"
@@ -213,25 +222,45 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
                         <div class="col-7">
                             <div class="card shadow mb-4">
                                 <div class="card-header">
-                                    <strong class="card-title">Inventory Item Information</strong>
+                                    <strong class="card-title">Product Information</strong>
                                 </div>
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group mb-3">
-                                                <label for="example-item">Item Name</label>
-                                                <input type="text" id="example-item" name="item"
-                                                    class="form-control <?php echo (!empty($item_err)) ? 'is-invalid' : ''; ?>"
-                                                    placeholder="Please enter an item." value="<?php echo $item; ?>">
-                                                <span class="invalid-feedback"><?php echo $item_err; ?></span>
+                                                <label for="example-product_name">Product Name</label>
+                                                <input type="text" id="example-product_name" name="product_name"
+                                                    class="form-control <?php echo (!empty($product_name_err)) ? 'is-invalid' : ''; ?>"
+                                                    placeholder="Please enter product name."
+                                                    value="<?php echo $product_name; ?>">
+                                                <span class="invalid-feedback"><?php echo $product_name_err; ?></span>
                                             </div>
                                             <div class="form-group mb-3">
-                                                <label for="example-quantity">Quantity</label>
-                                                <input type="number" id="example-quantity" name="quantity"
-                                                    class="form-control <?php echo (!empty($quantity_err)) ? 'is-invalid' : ''; ?>"
-                                                    placeholder="Please enter quantity."
-                                                    value="<?php echo $quantity; ?>">
-                                                <span class="invalid-feedback"><?php echo $quantity_err; ?></span>
+                                                <label for="example-select">Select Category</label>
+                                                <select class="form-control" id="example-select" name="category_name">
+                                                <option value="">Select Category:</option>
+                                                    <?php
+                                                    $sql1 = "SELECT * FROM category";
+                                                    $r = mysqli_query($link, $sql1);
+
+                                                    if ($r->num_rows > 0) {
+                                                        while ($row1 = mysqli_fetch_assoc($r)) {
+                                                            echo "<option value=\"" . $row1["category_name"] . "\">" . $row1["category_name"] . "</option>";
+                                                        }
+                                                    } else {
+                                                        echo "<option value=\"\">No categories available</option>";
+                                                    }
+                                                    ?>
+                                                </select>
+                                                <span class="invalid-feedback"><?php echo $category_name_err; ?></span>
+                                            </div>
+                                            <div class="form-group mb-3">
+                                                <label for="example-price">Price</label>
+                                                <input type="number" id="example-price" name="price"
+                                                    class="form-control <?php echo (!empty($price_err)) ? 'is-invalid' : ''; ?>"
+                                                    placeholder="Please enter price."
+                                                    value="<?php echo $price; ?>">
+                                                <span class="invalid-feedback"><?php echo $price_err; ?></span>
                                             </div>
                                         </div>
                                     </div>
@@ -239,7 +268,7 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
                             </div> <!-- / .card -->
                         </div> <!-- .col-12 -->
                     </div> <!-- .row -->
-                    <button class="btn btn-lg btn-primary btn-block" type="submit" name="submit">Confirm</button>
+                    <button class="btn btn-lg btn-primary btn-block" type="submit" name="submit">Create</button>
                 </form>
             </div> <!-- .container-fluid -->
 

@@ -6,7 +6,7 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     exit;
 }
 
-$active_page = "staff";
+$active_page = "category";
 ?>
 
 <!DOCTYPE html>
@@ -15,7 +15,7 @@ $active_page = "staff";
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Owner - Staff List</title>
+    <title>Owner - Category List</title>
     <?php include 'partials/header.php'; ?>
     <link rel="stylesheet" href="css/dataTables.bootstrap4.css">
 </head>
@@ -75,7 +75,7 @@ $active_page = "staff";
             <div class="container-fluid">
                 <div class="row justify-content-center">
                     <div class="col-12">
-                        <h2 class="page-title">Staff - Staff List</h2>
+                        <h2 class="page-title">Category - Category List</h2>
                         <div class="row my-4">
                             <!-- Small table -->
                             <div class="col-md-12">
@@ -86,31 +86,35 @@ $active_page = "staff";
                                             <thead>
                                                 <tr class="text-center">
                                                     <th>ID</th>
-                                                    <th>Profile</th>
-                                                    <th>Phone</th>
+                                                    <th>Category Name</th>
                                                     <th>Status</th>
+                                                    <th>Managed By</th>
                                                     <th>Last Updated</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <?php
-                                                $sql1 = "SELECT * FROM staff";
+                                                $sql1 = "SELECT * FROM category";
                                                 $r = mysqli_query($link, $sql1);
 
                                                 if ($r->num_rows > 0) {
                                                     while ($row1 = mysqli_fetch_assoc($r)) {
+                                                        $owner_id = $row1['owner_id'];
+                                                        $sql3 = "SELECT * FROM owner WHERE owner_id = $owner_id";
+                                                        $result3 = mysqli_query($link, $sql3);
+                                                        $row3 = mysqli_fetch_assoc($result3);
                                                         ?>
 
                                                         <tr class="text-center">
                                                             <td>
                                                                 <p class="fw-normal mb-1">
-                                                                    <?php echo $row1['staff_id']; ?>
+                                                                    <?php echo $row1['category_id']; ?>
                                                                 </p>
                                                             </td>
                                                             <td>
                                                                 <div class="d-flex align-items-center">
-                                                                    <img src="storage/profile/<?php if ($row1["photo"] != "") {
+                                                                    <img src="storage/category/<?php if ($row1["photo"] != "") {
                                                                         echo $row1["photo"];
                                                                     } else {
                                                                         echo 'default_image.png';
@@ -118,18 +122,10 @@ $active_page = "staff";
                                                                         class="rounded-circle" />
                                                                     <div class="ms-3 text-left mx-2">
                                                                         <p class="fw-bold mb-1">
-                                                                            <?php echo $row1['lastname']; ?>,
-                                                                            <?php echo $row1['firstname']; ?>
-                                                                        </p>
-                                                                        <p class="text-muted mb-0"><?php echo $row1['email']; ?>
+                                                                            <?php echo $row1['category_name']; ?>
                                                                         </p>
                                                                     </div>
                                                                 </div>
-                                                            </td>
-                                                            <td>
-                                                                <p class="fw-normal mb-1">
-                                                                    <?php echo $row1['contact_number']; ?>
-                                                                </p>
                                                             </td>
                                                             <td>
                                                                 <?php if ($row1['status'] == 0) {
@@ -137,6 +133,24 @@ $active_page = "staff";
                                                                 } elseif ($row1['status'] == 1) {
                                                                     echo '<span class="badge badge-danger rounded-pill d-inline px-3">Inactive</span>';
                                                                 } ?>
+                                                            </td>
+                                                            <td>
+                                                                <div class="d-flex align-items-center">
+                                                                    <img src="storage/profile/<?php if ($row3["photo"] != "") {
+                                                                        echo $row3["photo"];
+                                                                    } else {
+                                                                        echo 'default_image.png';
+                                                                    } ?>" alt="" style="width: 45px; height: 45px"
+                                                                        class="rounded-circle" />
+                                                                    <div class="ms-3 text-left mx-2">
+                                                                        <p class="fw-bold mb-1">
+                                                                            <?php echo $row3['lastname']; ?>,
+                                                                            <?php echo $row3['firstname']; ?>
+                                                                        </p>
+                                                                        <p class="text-muted mb-0"><?php echo $row3['email']; ?>
+                                                                        </p>
+                                                                    </div>
+                                                                </div>
                                                             </td>
                                                             <td>
                                                                 <?php $formattedDate = date("l, F j Y - h:i A", strtotime($row1["last_updated"]));
@@ -149,6 +163,9 @@ $active_page = "staff";
                                                                     </a>
                                                                     <a class="ml-1 action-icon" href="#">
                                                                         <i class="fe fe-edit fe-16"></i>
+                                                                    </a>
+                                                                    <a class="ml-1 action-icon" href="#">
+                                                                        <i class="fe fe-trash fe-16"></i>
                                                                     </a>
                                                                 </div>
                                                             </td>

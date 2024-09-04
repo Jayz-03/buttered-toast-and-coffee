@@ -2,10 +2,11 @@
 session_start();
 
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
-    header("location: login.php");
+    header("location: login");
     exit;
 }
 
+$active_page = "staff";
 ?>
 
 <!DOCTYPE html>
@@ -78,9 +79,11 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
                     }
 
                     if (empty(trim($_POST["password"]))) {
-                        $password_err = "Please enter password.";
+                        $password_err = "Please enter a password.";
+                    } elseif (strlen(trim($_POST["password"])) < 6) {
+                        $password_err = "Password must have at least 6 characters.";
                     } else {
-                        $password = mysqli_real_escape_string($link, ($_POST["password"]));
+                        $password = trim($_POST["password"]);
                     }
                     
                     if (empty(trim($_POST["confirm_password"]))) {
@@ -148,7 +151,7 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
 
                             $param_status = $status;
                             $param_username = $username;
-                            $param_password = $password;
+                            $param_password = password_hash($password, PASSWORD_DEFAULT);
                             $param_email = $email;
                             $param_firstname = $firstname;
                             $param_lastname = $lastname;
@@ -161,14 +164,14 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
                                 $firstname = $lastname = $email = $password = $confirm_password = $username = $contact_number = $photo = "";
                                 echo "<script>swal({
                                     title: 'Success!',
-                                    text: 'Inventory Item Added Successfully!',
+                                    text: 'Staff A  cocount Created Successfully!',
                                     icon: 'success',
                                     closeOnClickOutside: false,
                                     button: false
                                 });</script>";
 
                                 ?>
-                                <meta http-equiv="Refresh" content="3; url=owner-staff-list.php">
+                                <meta http-equiv="Refresh" content="3; url=owner-staff-list">
                                 <?php
 
 

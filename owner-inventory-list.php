@@ -2,10 +2,11 @@
 session_start();
 
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
-    header("location: login.php");
+    header("location: login");
     exit;
 }
 
+$active_page = "inventory";
 ?>
 
 <!DOCTYPE html>

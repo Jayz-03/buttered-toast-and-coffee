@@ -6,7 +6,7 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     exit;
 }
 
-$active_page = "dashboard";
+$active_page = "reports";
 ?>
 
 <!DOCTYPE html>
@@ -15,7 +15,7 @@ $active_page = "dashboard";
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Owner - Dashboard</title>
+    <title>Owner - Reports</title>
     <?php include 'partials/header.php'; ?>
 </head>
 
@@ -39,7 +39,7 @@ $active_page = "dashboard";
 
         <main role="main" class="main-content">
             <div class="container-fluid">
-                <h2 class="page-title">Dashboard</h2>
+                <h2 class="page-title">Reports</h2>
                 <div class="row justify-content-center">
                     <div class="col-12">
                     </div> <!-- .col-12 -->
