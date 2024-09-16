@@ -1,10 +1,11 @@
+
 document.addEventListener("DOMContentLoaded", function () {
     const cartItems = {};
     const cartItemsContainer = document.getElementById("cart-items");
     const totalAmountElement = document.getElementById("total-amount");
 
     function updateCart() {
-        cartItemsContainer.innerHTML = ""; // Clear the cart container
+        cartItemsContainer.innerHTML = "";
         let totalAmount = 0;
 
         for (let id in cartItems) {
@@ -15,11 +16,11 @@ document.addEventListener("DOMContentLoaded", function () {
             const cartItem = document.createElement("div");
             cartItem.className = "order-item";
             cartItem.innerHTML = `
-                <span>${item.name}</span>
-                <input type="number" value="${item.quantity}" data-id="${id}" class="quantity-input">
-                <span>₱${itemTotal.toFixed(2)}</span>
-                <button class="remove-item" data-id="${id}">&times;</button>
-            `;
+        <span>${item.name}</span>
+        <input type="number" value="${item.quantity}" data-id="${id}" class="quantity-input">
+        <span>₱${itemTotal.toFixed(2)}</span>
+        <button class="remove-item" data-id="${id}">&times;</button>
+    `;
             cartItemsContainer.appendChild(cartItem);
         }
 

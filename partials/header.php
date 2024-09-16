@@ -17,10 +17,6 @@
         width: 50px !important;
     }
 
-    .page-title {
-        color: #000000;
-    }
-
     .navbar-light .navbar-nav .nav-link {
         color: #000000 !important;
     }
@@ -56,5 +52,20 @@
     .page-item.active .page-link {
         background-color: #000000 !important;
         border-color: #000000 !important;
+    }
+
+    .page-title,
+    .card-title {
+        color: #000000;
+    }
+
+    .btn-primary {
+        background-color: #000000;
+        border-color: #000000;
+    }
+
+    .btn-primary:hover {
+        background-color: #171717;
+        border-color: #171717;
     }
 </style>
