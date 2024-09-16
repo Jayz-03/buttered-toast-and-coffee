@@ -19,8 +19,19 @@ $active_page = "pos";
     <?php include 'partials/header.php'; ?>
 </head>
 
+
 <style>
-    /* (styles as before) */
+    .small-logo {
+        width: 50px !important;
+    }
+
+    .page-title {
+        color: #000000;
+    }
+
+    .navbar-light .navbar-nav .nav-link {
+        color: #000000 !important;
+    }
 </style>
 
 <body class="vertical  light">
@@ -31,11 +42,9 @@ $active_page = "pos";
             <div class="container-fluid">
                 <h2 class="page-title">Point of Sale (POS)</h2>
                 <div class="row justify-content-center">
-                    <!-- Product Selection Column -->
                     <div class="col-7">
                         <div class="row">
                             <?php
-                            // Mock data for products
                             $products = [
                                 ["id" => 1, "name" => "CE", "price" => 130.00, "image" => "path_to_image_1"],
                                 ["id" => 2, "name" => "SPM", "price" => 160.00, "image" => "path_to_image_2"],

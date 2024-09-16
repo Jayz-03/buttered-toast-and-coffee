@@ -19,20 +19,6 @@ $active_page = "sales";
     <?php include 'partials/header.php'; ?>
 </head>
 
-<style>
-    .small-logo {
-        width: 50px !important;
-    }
-
-    .page-title {
-        color: #000000;
-    }
-
-    .navbar-light .navbar-nav .nav-link {
-        color: #000000 !important;
-    }
-</style>
-
 <body class="vertical  light">
     <div class="wrapper">
         <?php include 'partials/staff-navbar.php'; ?>

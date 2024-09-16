@@ -20,53 +20,6 @@ $active_page = "product";
     <link rel="stylesheet" href="css/dataTables.bootstrap4.css">
 </head>
 
-<style>
-    .small-logo {
-        width: 50px !important;
-    }
-
-    .page-title {
-        color: #000000;
-    }
-
-    .navbar-light .navbar-nav .nav-link {
-        color: #000000 !important;
-    }
-
-    .badge {
-        font-size: 14px;
-    }
-
-    .badge-success {
-        color: #72C894;
-        background-color: #04210F;
-    }
-
-    .badge-warning {
-        color: #EFC776;
-        background-color: #2E2005;
-    }
-
-    .badge-danger {
-        color: #E37083;
-        background-color: #2C0F14;
-    }
-
-    .action-icon {
-        color: #000000;
-    }
-
-    .action-icon:hover {
-        color: #000000;
-        text-decoration: none;
-    }
-
-    .page-item.active .page-link {
-        background-color: #000000 !important;
-        border-color: #000000 !important;
-    }
-</style>
-
 <body class="vertical  light">
     <div class="wrapper">
         <?php include 'partials/owner-navbar.php'; ?>
