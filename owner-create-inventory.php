@@ -15,7 +15,7 @@ $active_page = "inventory";
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Owner - Create Inventory</title>
+    <title>Create Inventory</title>
     <?php include 'partials/header.php'; ?>
     <script src="js/jquery.slim.min.js"></script>
 </head>

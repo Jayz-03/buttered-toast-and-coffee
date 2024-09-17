@@ -15,9 +15,10 @@ $active_page = "product";
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Owner - Product List</title>
+    <title>Product List</title>
     <?php include 'partials/header.php'; ?>
     <link rel="stylesheet" href="css/dataTables.bootstrap4.css">
+    <script src="js/jquery.slim.min.js"></script>
 </head>
 
 <body class="vertical  light">
@@ -29,6 +30,113 @@ $active_page = "product";
                 <div class="row justify-content-center">
                     <div class="col-12">
                         <h2 class="page-title">Product - Product List</h2>
+                        <?php
+                        $product_name_err = $category_name_err = $price_err = $photo_err = $status_err = "";
+
+                        if (isset($_POST["update"])) {
+                            $product_id = $_POST['product_id'];
+
+                            if (empty(trim($_POST["product_name"]))) {
+                                $product_name_err = "Please enter an product name.";
+                            } else {
+                                $sql = "SELECT product_id FROM product WHERE product_name = ?";
+
+                                if ($stmt = mysqli_prepare($link, $sql)) {
+                                    mysqli_stmt_bind_param($stmt, "s", $param_product_name);
+
+                                    $param_product_name = trim($_POST["product_name"]);
+
+                                    if (mysqli_stmt_execute($stmt)) {
+                                        mysqli_stmt_store_result($stmt);
+
+                                        if (mysqli_stmt_num_rows($stmt) == 2) {
+                                            $product_name_err = "This product is already exist.";
+                                        } else {
+                                            $product_name = trim($_POST["product_name"]);
+                                        }
+                                    } else {
+                                        echo "<script>swal({
+                                            title: 'Oops!',
+                                            text: 'Something went wrong. Please try again later.',
+                                            icon: 'warning',
+                                            button: 'Done!',
+                                        });</script>";
+                                    }
+
+                                    mysqli_stmt_close($stmt);
+                                }
+                            }
+
+                            if (empty(trim($_POST["category_name"]))) {
+                                $category_name_err = "Please enter category name.";
+                            } else {
+                                $category_name = mysqli_real_escape_string($link, ($_POST["category_name"]));
+                            }
+
+                            if (empty(trim($_POST["price"]))) {
+                                $price_err = "Please enter price.";
+                            } else {
+                                $price = mysqli_real_escape_string($link, ($_POST["price"]));
+                            }
+
+                            if (!isset($_POST["status"])) {
+                                $status_err = "Please select a status.";
+                            } else {
+                                $status = mysqli_real_escape_string($link, trim($_POST["status"]));
+                            }
+
+                            if (empty($_FILES['photo']['name'])) {
+                                $photo = $_POST['no_photo'];
+                            } else {
+                                $old_photo = "storage/category/" . $_POST['no_photo'];
+
+                                if (file_exists($old_photo)) {
+                                    unlink($old_photo);
+                                }
+                                $photo = ($_FILES["photo"]["name"]);
+                                $photo_tmp_name = $_FILES["photo"]["tmp_name"];
+                                $photo_size = $_FILES["photo"]["size"];
+                                $photo_new_name = rand() . $photo;
+                                $photo = $photo_new_name;
+                            }
+
+                            if (empty($product_name_err) && empty($category_name_err) && empty($price_err) && empty($photo_err) && empty($status_err)) {
+                                $sql = "UPDATE product SET owner_id=?, product_name=?, category_name=?, price=?, status=?, photo=? WHERE product_id=?";
+                                $stmt = mysqli_prepare($link, $sql);
+
+                                mysqli_stmt_bind_param($stmt, "issiisi", $owner_id, $product_name, $category_name, $price, $status, $photo, $product_id);
+
+                                if (mysqli_stmt_execute($stmt)) {
+                                    if (!empty($_FILES['photo']['name'])) {
+                                        move_uploaded_file($photo_tmp_name, "storage/products/" . $photo);
+                                    }
+
+                                    echo "<script>swal({
+                                            title: 'Success!',
+                                            text: 'Product Updated Successfully!',
+                                            icon: 'success',
+                                            button: false,
+                                        });</script>";
+                                    ?>
+                                    <meta http-equiv="Refresh" content="3; url=owner-product-list">
+                                    <?php
+                                } else {
+                                    echo "<script>swal({
+                                            title: 'Oops!',
+                                            text: 'Something went wrong. Please try again later.',
+                                            icon: 'warning',
+                                            button: 'Done!',
+                                        });</script>";
+                                }
+
+                                // Close statement
+                                mysqli_stmt_close($stmt);
+                            }
+                        }
+
+
+
+                        ?>
                         <div class="row my-4">
                             <!-- Small table -->
                             <div class="col-md-12">
@@ -97,7 +205,7 @@ $active_page = "product";
                                                                     echo '<span class="badge badge-success rounded-pill d-inline px-3">Available</span>';
                                                                 } elseif ($row1['status'] == 1) {
                                                                     echo '<span class="badge badge-danger rounded-pill d-inline px-3">Unavailable</span>';
-                                                                }?>
+                                                                } ?>
                                                             </td>
                                                             <td>
                                                                 <div class="d-flex align-items-center">
@@ -123,21 +231,24 @@ $active_page = "product";
                                                             </td>
                                                             <td>
                                                                 <div class="d-inline">
-                                                                    <a class="ml-1 action-icon" href="#">
+                                                                    <a class="ml-1 action-icon" href="#" data-toggle="modal"
+                                                                        type="button"
+                                                                        data-target="#view-product-<?php echo $row1['product_id'] ?>">
                                                                         <i class="fe fe-eye fe-16"></i>
                                                                     </a>
-                                                                    <a class="ml-1 action-icon" href="#">
+                                                                    <a class="ml-1 action-icon" href="#" data-toggle="modal"
+                                                                        type="button"
+                                                                        data-target="#edit-product-<?php echo $row1['product_id'] ?>">
                                                                         <i class="fe fe-edit fe-16"></i>
-                                                                    </a>
-                                                                    <a class="ml-1 action-icon" href="#">
-                                                                        <i class="fe fe-trash fe-16"></i>
                                                                     </a>
                                                                 </div>
                                                             </td>
                                                         </tr>
 
-
                                                         <?php
+
+                                                        include 'view-product.php';
+                                                        include 'edit-product.php';
 
                                                     }
                                                 }

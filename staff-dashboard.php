@@ -15,7 +15,7 @@ $active_page = "dashboard";
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Staff - Dashboard</title>
+    <title>Dashboard</title>
     <?php include 'partials/header.php'; ?>
 </head>
 

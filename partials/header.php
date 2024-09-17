@@ -68,4 +68,8 @@
         background-color: #171717;
         border-color: #171717;
     }
+
+    .modal-title {
+        color: #000;
+    }
 </style>

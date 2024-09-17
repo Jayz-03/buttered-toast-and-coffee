@@ -15,7 +15,7 @@ $active_page = "reports";
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Owner - Reports</title>
+    <title>Reports</title>
     <?php include 'partials/header.php'; ?>
 </head>
 

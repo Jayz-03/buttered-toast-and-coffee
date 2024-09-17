@@ -15,7 +15,7 @@ $active_page = "inventory";
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Owner - Inventory List</title>
+    <title>Inventory List</title>
     <?php include 'partials/header.php'; ?>
     <link rel="stylesheet" href="css/dataTables.bootstrap4.css">
 </head>
@@ -119,14 +119,15 @@ $active_page = "inventory";
                                                             </td>
                                                             <td>
                                                                 <div class="d-inline">
-                                                                    <a class="ml-1 action-icon" href="#">
+                                                                    <a class="ml-1 action-icon" href="#" data-toggle="modal"
+                                                                        type="button"
+                                                                        data-target="#view-inventory-<?php echo $row1['inventory_id'] ?>">
                                                                         <i class="fe fe-eye fe-16"></i>
                                                                     </a>
-                                                                    <a class="ml-1 action-icon" href="#">
+                                                                    <a class="ml-1 action-icon" href="#" data-toggle="modal"
+                                                                        type="button"
+                                                                        data-target="#edit-inventory-<?php echo $row1['inventory_id'] ?>">
                                                                         <i class="fe fe-edit fe-16"></i>
-                                                                    </a>
-                                                                    <a class="ml-1 action-icon" href="#">
-                                                                        <i class="fe fe-trash fe-16"></i>
                                                                     </a>
                                                                 </div>
                                                             </td>
@@ -134,6 +135,9 @@ $active_page = "inventory";
 
 
                                                         <?php
+
+                                                        include 'view-inventory.php';
+                                                        include 'edit-inventory.php';
 
                                                     }
                                                 }

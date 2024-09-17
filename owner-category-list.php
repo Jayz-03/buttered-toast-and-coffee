@@ -15,9 +15,10 @@ $active_page = "category";
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Owner - Category List</title>
+    <title>Category List</title>
     <?php include 'partials/header.php'; ?>
     <link rel="stylesheet" href="css/dataTables.bootstrap4.css">
+    <script src="js/jquery.slim.min.js"></script>
 </head>
 
 <body class="vertical  light">
@@ -29,8 +30,96 @@ $active_page = "category";
                 <div class="row justify-content-center">
                     <div class="col-12">
                         <h2 class="page-title">Category - Category List</h2>
+                        <?php
+                        $category_name_err = $photo_err = $status_err = "";
+                        if (isset($_POST["update"])) {
+                            $category_id = $_POST['category_id'];
+
+                            if (empty(trim($_POST["category_name"]))) {
+                                $category_name_err = "Please enter a category name.";
+                            } else {
+                                $sql = "SELECT category_id FROM category WHERE category_name = ? AND category_id != ?";
+
+                                if ($stmt = mysqli_prepare($link, $sql)) {
+                                    mysqli_stmt_bind_param($stmt, "si", $param_category_name, $category_id);
+
+                                    $param_category_name = trim($_POST["category_name"]);
+
+                                    if (mysqli_stmt_execute($stmt)) {
+                                        mysqli_stmt_store_result($stmt);
+
+                                        if (mysqli_stmt_num_rows($stmt) > 0) {  // Changed from 2 to > 0
+                                            $category_name_err = "This category already exists.";
+                                        } else {
+                                            $category_name = trim($_POST["category_name"]);
+                                        }
+                                    } else {
+                                        echo "<script>swal({
+                                            title: 'Oops!',
+                                            text: 'Something went wrong. Please try again later.',
+                                            icon: 'warning',
+                                            button: 'Done!',
+                                        });</script>";
+                                    }
+
+                                    mysqli_stmt_close($stmt);
+                                }
+                            }
+
+                            if (!isset($_POST["status"])) { 
+                                $status_err = "Please select a status.";
+                            } else {
+                                $status = mysqli_real_escape_string($link, trim($_POST["status"]));
+                            }
+
+                            if (empty($_FILES['photo']['name'])) {
+                                $photo = $_POST['no_photo']; 
+                            } else {
+                                $old_photo = "storage/category/" . $_POST['no_photo'];
+                            
+                                if (file_exists($old_photo)) {
+                                    unlink($old_photo);
+                                }
+                                $photo = ($_FILES["photo"]["name"]);
+                                $photo_tmp_name = $_FILES["photo"]["tmp_name"];
+                                $photo_size = $_FILES["photo"]["size"];
+                                $photo_new_name = rand() . $photo;
+                                $photo = $photo_new_name;
+                            }
+
+                            if (empty($category_name_err) && empty($photo_err) && empty($status_err)) {
+                                $sql1 = "UPDATE category SET owner_id=?, category_name=?, status=?, photo=? WHERE category_id=?";
+                                $stmt = mysqli_prepare($link, $sql1);
+
+                                mysqli_stmt_bind_param($stmt, 'isisi', $owner_id, $category_name, $status, $photo, $category_id);
+
+                                if (mysqli_stmt_execute($stmt)) {
+                                    if (!empty($_FILES['photo']['name'])) {
+                                        move_uploaded_file($photo_tmp_name, "storage/category/" . $photo);
+                                    }
+
+                                    echo "<script>swal({
+                                        title: 'Success!',
+                                        text: 'Category Updated Successfully!',
+                                        icon: 'success',
+                                        button: false,
+                                    });</script>";
+                                    ?>
+                                    <meta http-equiv="Refresh" content="3; url=owner-category-list">
+                                    <?php
+                                } else {
+                                    echo "<script>swal({
+                                        title: 'Error!',
+                                        text: 'Unsuccessful!',
+                                        icon: 'error',
+                                        button: 'Ok!',
+                                    });</script>";
+                                }
+                            }
+                        }
+                        ?>
+
                         <div class="row my-4">
-                            <!-- Small table -->
                             <div class="col-md-12">
                                 <div class="card shadow">
                                     <div class="card-body">
@@ -111,21 +200,24 @@ $active_page = "category";
                                                             </td>
                                                             <td>
                                                                 <div class="d-inline">
-                                                                    <a class="ml-1 action-icon" href="#">
+                                                                    <a class="ml-1 action-icon" href="#" data-toggle="modal"
+                                                                        type="button"
+                                                                        data-target="#view-category-<?php echo $row1['category_id'] ?>">
                                                                         <i class="fe fe-eye fe-16"></i>
                                                                     </a>
-                                                                    <a class="ml-1 action-icon" href="#">
+                                                                    <a class="ml-1 action-icon" href="#" data-toggle="modal"
+                                                                        type="button"
+                                                                        data-target="#edit-category-<?php echo $row1['category_id'] ?>">
                                                                         <i class="fe fe-edit fe-16"></i>
-                                                                    </a>
-                                                                    <a class="ml-1 action-icon" href="#">
-                                                                        <i class="fe fe-trash fe-16"></i>
                                                                     </a>
                                                                 </div>
                                                             </td>
                                                         </tr>
 
-
                                                         <?php
+
+                                                        include 'view-category.php';
+                                                        include 'edit-category.php';
 
                                                     }
                                                 }

@@ -15,7 +15,7 @@ $active_page = "staff";
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Owner - Staff List</title>
+    <title>Staff List</title>
     <?php include 'partials/header.php'; ?>
     <link rel="stylesheet" href="css/dataTables.bootstrap4.css">
 </head>
@@ -97,10 +97,14 @@ $active_page = "staff";
                                                             </td>
                                                             <td>
                                                                 <div class="d-inline">
-                                                                    <a class="ml-1 action-icon" href="#">
+                                                                    <a class="ml-1 action-icon" href="#" data-toggle="modal"
+                                                                        type="button"
+                                                                        data-target="#view-staff-<?php echo $row1['staff_id'] ?>">
                                                                         <i class="fe fe-eye fe-16"></i>
                                                                     </a>
-                                                                    <a class="ml-1 action-icon" href="#">
+                                                                    <a class="ml-1 action-icon" href="#" data-toggle="modal"
+                                                                        type="button"
+                                                                        data-target="#edit-staff-<?php echo $row1['staff_id'] ?>">
                                                                         <i class="fe fe-edit fe-16"></i>
                                                                     </a>
                                                                 </div>
@@ -109,6 +113,9 @@ $active_page = "staff";
 
 
                                                         <?php
+
+                                                        include 'view-staff.php';
+                                                        include 'edit-staff.php';
 
                                                     }
                                                 }
