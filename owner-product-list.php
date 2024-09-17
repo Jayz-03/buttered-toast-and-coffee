@@ -88,7 +88,7 @@ $active_page = "product";
                             if (empty($_FILES['photo']['name'])) {
                                 $photo = $_POST['no_photo'];
                             } else {
-                                $old_photo = "storage/category/" . $_POST['no_photo'];
+                                $old_photo = "storage/products/" . $_POST['no_photo'];
 
                                 if (file_exists($old_photo)) {
                                     unlink($old_photo);

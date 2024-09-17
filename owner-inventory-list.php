@@ -18,6 +18,7 @@ $active_page = "inventory";
     <title>Inventory List</title>
     <?php include 'partials/header.php'; ?>
     <link rel="stylesheet" href="css/dataTables.bootstrap4.css">
+    <script src="js/jquery.slim.min.js"></script>
 </head>
 
 <body class="vertical  light">
@@ -29,6 +30,103 @@ $active_page = "inventory";
                 <div class="row justify-content-center">
                     <div class="col-12">
                         <h2 class="page-title">Inventory - Inventory List</h2>
+                        <?php
+                        $item_err = $quantity_err = $photo_err = $status_err = "";
+                        if (isset($_POST["update"])) {
+                            $inventory_id = $_POST['inventory_id'];
+
+                            if (empty(trim($_POST["item"]))) {
+                                $item_err = "Please enter an item.";
+                            } else {
+                                $sql = "SELECT inventory_id FROM inventory WHERE item = ?";
+
+                                if ($stmt = mysqli_prepare($link, $sql)) {
+                                    mysqli_stmt_bind_param($stmt, "s", $param_item);
+
+                                    $param_item = trim($_POST["item"]);
+
+                                    if (mysqli_stmt_execute($stmt)) {
+                                        mysqli_stmt_store_result($stmt);
+
+                                        if (mysqli_stmt_num_rows($stmt) == 2) {
+                                            $item_err = "This item is already exist.";
+                                        } else {
+                                            $item = trim($_POST["item"]);
+                                        }
+                                    } else {
+                                        echo "<script>swal({
+                                            title: 'Oops!',
+                                            text: 'Something went wrong. Please try again later.',
+                                            icon: 'warning',
+                                            button: 'Done!',
+                                        });</script>";
+                                    }
+
+                                    mysqli_stmt_close($stmt);
+                                }
+                            }
+
+                            if (empty(trim($_POST["quantity"]))) {
+                                $quantity_err = "Please enter quantity.";
+                            } else {
+                                $quantity = mysqli_real_escape_string($link, $_POST["quantity"]);
+                            }
+
+                            if (!isset($_POST["status"])) {
+                                $status_err = "Please select a status.";
+                            } else {
+                                $status = mysqli_real_escape_string($link, trim($_POST["status"]));
+                            }
+
+                            if (empty($_FILES['photo']['name'])) {
+                                $photo = $_POST['no_photo'];
+                            } else {
+                                $old_photo = "storage/inventory/" . $_POST['no_photo'];
+
+                                if (file_exists($old_photo)) {
+                                    unlink($old_photo);
+                                }
+                                $photo = ($_FILES["photo"]["name"]);
+                                $photo_tmp_name = $_FILES["photo"]["tmp_name"];
+                                $photo_size = $_FILES["photo"]["size"];
+                                $photo_new_name = rand() . $photo;
+                                $photo = $photo_new_name;
+                            }
+
+                            if (empty($item_err) && empty($quantity_err) && empty($photo_err) && empty($status_err)) {
+                                $sql = "UPDATE inventory SET owner_id=?, item=?, quantity=?, status=?, photo=? WHERE inventory_id=?";
+                                $stmt = mysqli_prepare($link, $sql);
+
+                                mysqli_stmt_bind_param($stmt, "isiisi", $owner_id, $item, $quantity, $status, $photo, $inventory_id);
+
+                                if (mysqli_stmt_execute($stmt)) {
+                                    if (!empty($_FILES['photo']['name'])) {
+                                        move_uploaded_file($photo_tmp_name, "storage/inventory/" . $photo);
+                                    }
+
+                                    echo "<script>swal({
+                                            title: 'Success!',
+                                            text: 'Inventory Item Updated Successfully!',
+                                            icon: 'success',
+                                            button: false,
+                                        });</script>";
+                                    ?>
+                                    <meta http-equiv="Refresh" content="3; url=owner-inventory-list">
+                                    <?php
+                                } else {
+                                    echo "<script>swal({
+                                            title: 'Oops!',
+                                            text: 'Something went wrong. Please try again later.',
+                                            icon: 'warning',
+                                            button: 'Done!',
+                                        });</script>";
+                                }
+
+                                // Close statement
+                                mysqli_stmt_close($stmt);
+                            }
+                        }
+                        ?>
                         <div class="row my-4">
                             <!-- Small table -->
                             <div class="col-md-12">

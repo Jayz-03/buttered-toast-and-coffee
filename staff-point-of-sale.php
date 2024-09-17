@@ -162,6 +162,10 @@ function getProductsByCategory($link, $categoryName)
                                                     color: #E37083;
                                                     background-color: #2C0F14;
                                                 }
+
+                                                .order-summary h6, h4 {
+                                                    color: #000;
+                                                }
                                             </style>
                                             <div class="text-center mt-3 mb-2">
                                                 <button class="btn btn-danger btn-cancel">CANCEL</button>

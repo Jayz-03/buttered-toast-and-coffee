@@ -29,16 +29,21 @@ $active_page = "sales";
                 <div class="row justify-content-center">
                     <div class="col-12">
                         <h2 class="page-title">Sales</h2>
-                        <div class="row mb-3">
-                            <div class="col-md-12 d-flex justify-content-between">
-                                <div class="text-right">
-                                    <div id="filterMessage" class="mt-2 text-right text-muted">
-                                        Click the filter button to select date range.
+                        <div class="row align-items-center my-2">
+                            <div class="col-auto ml-auto">
+                                <form class="form-inline">
+                                    <div class="form-group">
+                                        <div class="px-2 py-2 text-muted">
+                                            <span class="small" id="filterMessage">
+                                            Click the filter button to select date range.</span>
+                                        </div>
                                     </div>
-                                </div>
-                                <button class="btn btn-primary" data-toggle="modal" data-target="#filterModal">
-                                    <i class="fe fe-filter"></i> Filter
-                                </button>
+                                    <div class="form-group">
+                                        <button type="button" class="btn btn-sm" data-toggle="modal"
+                                            data-target="#filterModal">
+                                            <i class="fe fe-filter"></i></button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                         <div class="row my-4">
@@ -194,11 +199,11 @@ $active_page = "sales";
                     var formattedTransactionDate = new Date(hiddenDate);
 
                     if (startDate !== "" && formattedTransactionDate < new Date(startDate)) {
-                        return false; 
+                        return false;
                     }
 
                     if (endDate !== "" && formattedTransactionDate > new Date(endDate)) {
-                        return false; 
+                        return false;
                     }
                 }
 

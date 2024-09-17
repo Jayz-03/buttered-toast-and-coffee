@@ -11,11 +11,111 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="card shadow">
-                    <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    <div class="row justify-content-center m-3">
+                        <div class="col-5">
+                            <div class="card shadow mb-4">
+                                <div class="card-header">
+                                    <strong class="card-title">Inventory Photo</strong>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group mb-3">
+                                                <input type="hidden" name="inventory_id"
+                                                    value="<?php echo $row1['inventory_id']; ?>">
+                                                <input type="hidden" name="no_photo"
+                                                    value="<?php echo $row1['photo']; ?>">
+                                                <div class="text-center">
+                                                    <img src="storage/inventory/<?php echo $row1['photo']; ?>"
+                                                        class="avatar img-thumbnail mb-2" alt="avatar" height="250px"
+                                                        width="250px">
+                                                </div>
+                                                <br>
+                                                <label for="customFile">Choose Inventory Photo</label>
+                                                <div class="custom-file">
+                                                    <input type="file" id="customFile" accept="image/*" name="photo"
+                                                        class="custom-file-input form-control <?php echo (!empty($photo_err)) ? 'is-invalid' : ''; ?> file-upload mb-3"
+                                                        value="<?php echo $row1['photo']; ?>">
+                                                    <span class="invalid-feedback"><?php echo $photo_err; ?></span>
+                                                    <label class="custom-file-label" for="customFile">Choose
+                                                        file</label>
+                                                </div>
+                                                <script>
+                                                    $(document).ready(function () {
 
-                    </div>
-                </div>
+                                                        var readURL = function (input) {
+                                                            if (input.files && input.files[0]) {
+                                                                var reader = new FileReader();
+
+                                                                reader.onload = function (e) {
+                                                                    $('.avatar').attr('src', e.target.result);
+                                                                }
+
+                                                                reader.readAsDataURL(input.files[0]);
+                                                            }
+                                                        }
+
+
+                                                        $(".file-upload").on('change', function () {
+                                                            readURL(this);
+                                                        });
+                                                    });
+                                                </script>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-7">
+                            <div class="card shadow mb-4">
+                                <div class="card-header">
+                                    <strong class="card-title">Inventory Item Information</strong>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group mb-3">
+                                                <label for="example-item">Item Name</label>
+                                                <input type="text" id="example-item" name="item"
+                                                    class="form-control <?php echo (!empty($item_err)) ? 'is-invalid' : ''; ?>"
+                                                    placeholder="Please enter an item." value="<?php echo $row1['item']; ?>">
+                                                <span class="invalid-feedback"><?php echo $item_err; ?></span>
+                                            </div>
+                                            <div class="form-group mb-3">
+                                                <label for="example-quantity">Quantity</label>
+                                                <input type="number" id="example-quantity" name="quantity"
+                                                    class="form-control <?php echo (!empty($quantity_err)) ? 'is-invalid' : ''; ?>"
+                                                    placeholder="Please enter quantity."
+                                                    value="<?php echo $row1['quantity']; ?>">
+                                                <span class="invalid-feedback"><?php echo $quantity_err; ?></span>
+                                            </div>
+                                            <div class="form-group mb-3">
+                                                <label for="example-status">Status</label>
+                                                <select name="status"
+                                                    class="form-control select <?php echo (!empty($status_err)) ? 'is-invalid' : ''; ?>">
+                                                    <option value="">Please select a status:</option>
+                                                    <optgroup label="Status:">
+                                                        <option value="0" <?php if ($row1['status'] == 0)
+                                                            echo 'selected'; ?>>In Stock</option>
+                                                        <option value="1" <?php if ($row1['status'] == 1)
+                                                            echo 'selected'; ?>>Low Stock</option>
+                                                        <option value="2" <?php if ($row1['status'] == 2)
+                                                            echo 'selected'; ?>>Out of Stock</option>
+                                                    </optgroup>
+                                                </select>
+
+                                                <span class="invalid-feedback"><?php echo $status_err; ?></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> <!-- / .card -->
+                        </div> <!-- .col-12 -->
+                    </div> <!-- .row -->
+                    <button class="btn btn-lg btn-primary btn-block" type="submit" name="update">Update</button>
+                </form>
             </div>
         </div>
     </div>

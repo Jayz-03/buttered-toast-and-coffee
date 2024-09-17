@@ -23,6 +23,14 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
+                                <label>Category:</label>
+                                <input type="text" class="form-control" value="<?php echo $row1['category_name']; ?>"
+                                    disabled>
+                                <label class="mt-4">Last updated:</label>
+                                <input type="text" class="form-control" value="<?php $formattedDate = date("l, F j Y - h:i A", strtotime($row1["last_updated"]));
+                                echo $formattedDate; ?>" disabled>
+                            </div>
+                            <div class="col-md-6">
                                 <label>Managed by:</label>
                                 <div class="d-flex align-items-center">
                                     <img src="storage/profile/<?php if ($row3["photo"] != "") {
@@ -47,14 +55,6 @@
                                 } elseif ($row1['status'] == 1) {
                                     echo '<span class="badge badge-danger rounded-pill d-inline px-3">Inactive</span>';
                                 } ?>
-                            </div>
-                            <div class="col-md-6">
-                                <label>Category:</label>
-                                <input type="text" class="form-control" value="<?php echo $row1['category_name']; ?>"
-                                    disabled>
-                                <label class="mt-4">Last updated:</label>
-                                <input type="text" class="form-control" value="<?php $formattedDate = date("l, F j Y - h:i A", strtotime($row1["last_updated"]));
-                                echo $formattedDate; ?>" disabled>
                             </div>
                         </div>
                     </div>

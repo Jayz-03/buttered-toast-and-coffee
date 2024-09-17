@@ -23,6 +23,17 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
+                                <label>Product:</label>
+                                <input type="text" class="form-control" value="<?php echo $row1['category_name']; ?>"
+                                    disabled>
+                                <label class="mt-2">Price:</label>
+                                <input type="text" class="form-control" value="<?php echo $row1['price']; ?>"
+                                    disabled>
+                                <label class="mt-2">Last updated:</label>
+                                <input type="text" class="form-control" value="<?php $formattedDate = date("l, F j Y - h:i A", strtotime($row1["last_updated"]));
+                                echo $formattedDate; ?>" disabled>
+                            </div>
+                            <div class="col-md-6">
                                 <label>Managed by:</label>
                                 <div class="d-flex align-items-center">
                                     <img src="storage/profile/<?php if ($row3["photo"] != "") {
@@ -43,21 +54,10 @@
                                 <label class="mt-4">Status:</label>
                                 <br>
                                 <?php if ($row1['status'] == 0) {
-                                    echo '<span class="badge badge-success rounded-pill d-inline px-3">Active</span>';
+                                    echo '<span class="badge badge-success rounded-pill d-inline px-3">Available</span>';
                                 } elseif ($row1['status'] == 1) {
-                                    echo '<span class="badge badge-danger rounded-pill d-inline px-3">Inactive</span>';
+                                    echo '<span class="badge badge-danger rounded-pill d-inline px-3">Unavailable</span>';
                                 } ?>
-                            </div>
-                            <div class="col-md-6">
-                                <label>Product:</label>
-                                <input type="text" class="form-control" value="<?php echo $row1['category_name']; ?>"
-                                    disabled>
-                                <label class="mt-2">Price:</label>
-                                <input type="text" class="form-control" value="<?php echo $row1['price']; ?>"
-                                    disabled>
-                                <label class="mt-2">Last updated:</label>
-                                <input type="text" class="form-control" value="<?php $formattedDate = date("l, F j Y - h:i A", strtotime($row1["last_updated"]));
-                                echo $formattedDate; ?>" disabled>
                             </div>
                         </div>
                     </div>

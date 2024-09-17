@@ -6,7 +6,6 @@
     href="https://fonts.googleapis.com/css2?family=Overpass:ital,wght@0,100;0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap"
     rel="stylesheet">
 <link rel="stylesheet" href="css/feather.css">
-<link rel="stylesheet" href="css/daterangepicker.css">
 <link rel="stylesheet" href="css/app-light.css" id="lightTheme">
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
@@ -18,7 +17,7 @@
     }
 
     .navbar-light .navbar-nav .nav-link {
-        color: #000000 !important;
+        color: #000 !important;
     }
 
     .badge {
@@ -41,27 +40,27 @@
     }
 
     .action-icon {
-        color: #000000;
+        color: #000;
     }
 
     .action-icon:hover {
-        color: #000000;
+        color: #000;
         text-decoration: none;
     }
 
     .page-item.active .page-link {
-        background-color: #000000 !important;
-        border-color: #000000 !important;
+        background-color: #000 !important;
+        border-color: #000 !important;
     }
 
     .page-title,
     .card-title {
-        color: #000000;
+        color: #000;
     }
 
     .btn-primary {
-        background-color: #000000;
-        border-color: #000000;
+        background-color: #000;
+        border-color: #000;
     }
 
     .btn-primary:hover {
@@ -71,5 +70,9 @@
 
     .modal-title {
         color: #000;
+    }
+
+    .bg-primary {
+        background-color: #000 !important;
     }
 </style>

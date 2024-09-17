@@ -18,6 +18,7 @@ $active_page = "staff";
     <title>Staff List</title>
     <?php include 'partials/header.php'; ?>
     <link rel="stylesheet" href="css/dataTables.bootstrap4.css">
+    <script src="js/jquery.slim.min.js"></script>
 </head>
 
 <body class="vertical  light">
@@ -29,6 +30,97 @@ $active_page = "staff";
                 <div class="row justify-content-center">
                     <div class="col-12">
                         <h2 class="page-title">Staff - Staff List</h2>
+
+                        <?php
+                        $firstname_err = $lastname_err = $email_err = $contact_number_err = $photo_err = $status_err = "";
+
+                        if (isset($_POST["update"])) {
+                            $staff_id = $_POST['staff_id'];
+
+                            if (empty(trim($_POST["firstname"]))) {
+                                $firstname_err = "Please enter firstname.";
+                            } else {
+                                $firstname = mysqli_real_escape_string($link, $_POST["firstname"]);
+                            }
+
+                            if (empty(trim($_POST["lastname"]))) {
+                                $lastname_err = "Please enter lastname.";
+                            } else {
+                                $lastname = mysqli_real_escape_string($link, $_POST["lastname"]);
+                            }
+
+                            if (empty(trim($_POST["email"]))) {
+                                $email_err = "Please enter email.";
+                            } else {
+                                $email = mysqli_real_escape_string($link, ($_POST["email"]));
+                            }
+
+                            if (empty(trim($_POST["contact_number"]))) {
+                                $contact_number_err = "Please enter contact number.";
+                            } else {
+                                $contact_number = mysqli_real_escape_string($link, ($_POST["contact_number"]));
+                            }
+
+                            if (!isset($_POST["status"])) {
+                                $status_err = "Please select a status.";
+                            } else {
+                                $status = mysqli_real_escape_string($link, trim($_POST["status"]));
+                            }
+
+                            if (empty($_FILES['photo']['name'])) {
+                                $photo = $_POST['no_photo'];
+                            } else {
+                                $old_photo = "storage/profile/" . $_POST['no_photo'];
+
+                                if (file_exists($old_photo)) {
+                                    unlink($old_photo);
+                                }
+                                $photo = ($_FILES["photo"]["name"]);
+                                $photo_tmp_name = $_FILES["photo"]["tmp_name"];
+                                $photo_size = $_FILES["photo"]["size"];
+                                $photo_new_name = rand() . $photo;
+                                $photo = $photo_new_name;
+                            }
+
+                            if (empty($firstname_err) && empty($lastname_err) && empty($email_err) && empty($contact_number_err) && empty($photo_err) && empty($status_err)) {
+                                $sql = "UPDATE staff SET status=?, email=?, firstname=?, lastname=?, contact_number=?, photo=? WHERE staff_id=?";
+                                $stmt = mysqli_prepare($link, $sql);
+                                // Bind the parameters
+                                mysqli_stmt_bind_param($stmt, "isssssi", $status, $email, $firstname, $lastname, $contact_number, $photo, $staff_id);
+
+                                // Execute the prepared statement
+                                if (mysqli_stmt_execute($stmt)) {
+                                    if (!empty($_FILES['photo']['name'])) {
+                                        move_uploaded_file($photo_tmp_name, "storage/profile/" . $photo);
+                                    }
+                                    
+                                    echo "<script>swal({
+                                            title: 'Success!',
+                                            text: 'Staff Account Updated Successfully!',
+                                            icon: 'success',
+                                            closeOnClickOutside: false,
+                                            button: false
+                                        });</script>";
+                                    ?>
+                                    <meta http-equiv="Refresh" content="3; url=owner-staff-list">
+                                    <?php
+                                } else {
+                                    echo "<script>swal({
+                                            title: 'Oops!',
+                                            text: 'Something went wrong. Please try again later.',
+                                            icon: 'warning',
+                                            button: 'Done!',
+                                        });</script>";
+                                }
+
+                                // Close the statement
+                                mysqli_stmt_close($stmt);
+                            }
+                        }
+
+
+
+                        ?>
                         <div class="row my-4">
                             <!-- Small table -->
                             <div class="col-md-12">
