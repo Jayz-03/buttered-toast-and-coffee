@@ -37,6 +37,12 @@ if ($result && mysqli_num_rows($result) > 0) {
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 </head>
 
+<style>
+    div.dataTables_wrapper div.dataTables_filter input {
+        width: 80px !important;
+    }
+</style>
+
 <body class="vertical  light">
     <div class="wrapper">
         <?php include 'partials/owner-navbar.php'; ?>
@@ -106,14 +112,20 @@ if ($result && mysqli_num_rows($result) > 0) {
                             <div class="col-12">
                                 <div class="card shadow">
                                     <div class="card-header">
-                                        <strong class="card-title mb-0">Sales Data Visualization</strong>
-                                        <!-- Filter Dropdown -->
-                                        <select id="timeFilter" class="form-control mt-2">
-                                            <option value="day">Daily</option>
-                                            <option value="week">Weekly</option>
-                                            <option value="month">Monthly</option>
-                                            <option value="year">Yearly</option>
-                                        </select>
+                                        <div class="row">
+                                            <div class="col-md-6 mt-2">
+                                                <strong class="card-title">Sales Data Visualization</strong>
+                                            </div>
+                                            <div class="col-md-6 d-flex justify-content-end"> <!-- Added text-end to align to the right -->
+                                                <select id="timeFilter" class="form-control" style="width: 200px;">
+                                                    <option value="day">Daily</option>
+                                                    <option value="week">Weekly</option>
+                                                    <option value="month">Monthly</option>
+                                                    <option value="year">Yearly</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
                                     </div>
                                     <div class="card-body">
                                         <div id="lineChart"></div>
@@ -121,7 +133,6 @@ if ($result && mysqli_num_rows($result) > 0) {
                                 </div>
                             </div>
                         </div>
-
                     </div>
                     <div class="col-4">
                         <div class="card shadow">
@@ -145,16 +156,16 @@ if ($result && mysqli_num_rows($result) > 0) {
 
                                                 if ($r->num_rows > 0) {
                                                     while ($row1 = mysqli_fetch_assoc($r)) {
-                                                        ?>
+                                                ?>
 
                                                         <tr class="text-center">
                                                             <td>
                                                                 <div class="d-flex align-items-center">
                                                                     <img src="storage/inventory/<?php if ($row1["photo"] != "") {
-                                                                        echo $row1["photo"];
-                                                                    } else {
-                                                                        echo 'default_image.png';
-                                                                    } ?>" alt="" style="width: 45px; height: 45px"
+                                                                                                    echo $row1["photo"];
+                                                                                                } else {
+                                                                                                    echo 'default_image.png';
+                                                                                                } ?>" alt="" style="width: 45px; height: 45px"
                                                                         class="rounded-circle" />
                                                                     <div class="ms-3 text-left mx-2">
                                                                         <p class="fw-bold mb-1">
@@ -175,7 +186,7 @@ if ($result && mysqli_num_rows($result) > 0) {
                                                         </tr>
 
 
-                                                        <?php
+                                                <?php
 
                                                     }
                                                 }
@@ -232,11 +243,12 @@ if ($result && mysqli_num_rows($result) > 0) {
 
         </main> <!-- main -->
     </div> <!-- .wrapper -->
+
     <?php include 'partials/jscripts.php'; ?>
     <script src='js/jquery.dataTables.min.js'></script>
     <script src='js/dataTables.bootstrap4.min.js'></script>
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             var table = $('#dataTable-1').DataTable({
                 autoWidth: true,
                 "lengthMenu": [
@@ -245,7 +257,7 @@ if ($result && mysqli_num_rows($result) > 0) {
                 ]
             });
 
-            $('#applyFilterBtn').click(function () {
+            $('#applyFilterBtn').click(function() {
                 var startDate = $('#startDate').val();
                 var endDate = $('#endDate').val();
                 var paymentMethod = $('#paymentMethod').val();
@@ -278,10 +290,12 @@ if ($result && mysqli_num_rows($result) > 0) {
                         endDate: endDate,
                         paymentMethod: paymentMethod
                     },
-                    success: function (response) {
+                    success: function(response) {
                         var data = JSON.parse(response);
 
-                        $('#totalIncome').text(data.total_income.toLocaleString('en-US', { minimumFractionDigits: 2 }));
+                        $('#totalIncome').text(data.total_income.toLocaleString('en-US', {
+                            minimumFractionDigits: 2
+                        }));
                         $('#totalOrders').text(data.total_orders);
 
                         $('#filterModal').modal('hide');
@@ -325,11 +339,77 @@ if ($result && mysqli_num_rows($result) > 0) {
 
         // Initial chart load
         updateChart();
-
     </script>
 
     <script src="js/apexcharts.min.js"></script>
-    <script src="js/linechartapex.js"></script>
+    <script>
+        var lineChartoptions = {
+            series: [],
+            chart: {
+                height: 356,
+                type: "line",
+                background: !1,
+                zoom: {
+                    enabled: !1
+                },
+                toolbar: {
+                    show: !1
+                }
+            },
+            stroke: {
+                show: !0,
+                curve: "smooth",
+                lineCap: "round",
+                width: [3],
+            },
+            dataLabels: {
+                enabled: !1
+            },
+            xaxis: {
+                type: "datetime",
+                categories: [],
+                labels: {
+                    show: !0,
+                    style: {
+                        colors: '#000',
+                        cssClass: "text-muted",
+                        fontFamily: 'Arial'
+                    }
+                },
+                axisBorder: {
+                    show: !1
+                }
+            },
+            yaxis: {
+                labels: {
+                    show: !0,
+                    style: {
+                        colors: '#000',
+                        cssClass: "text-muted",
+                        fontFamily: 'Arial'
+                    }
+                }
+            },
+            legend: {
+                position: "top",
+                fontFamily: 'Arial',
+                fontWeight: 400,
+                markers: {
+                    radius: 6
+                },
+                itemMargin: {
+                    horizontal: 10
+                }
+            },
+            grid: {
+                show: !0,
+                borderColor: '#e0e0e0'
+            }
+        };
+
+        lineChart = new ApexCharts(document.querySelector("#lineChart"), lineChartoptions);
+        lineChart.render();
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 </body>
 
