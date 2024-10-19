@@ -81,36 +81,65 @@ function getProductsByCategory($link, $categoryName)
                                                 color: #72C894;
                                                 background-color: #04210F;
                                             }
-                                        </style>
-                                        <!-- Category Tabs -->
-                                        <ul class="nav nav-pills nav-fill mb-3" id="category-tabs" role="tablist">
-                                            <li class="nav-item">
-                                                <a class="nav-link active" id="category-all-tab" data-toggle="pill"
-                                                    href="#category-all" role="tab" aria-controls="category-all"
-                                                    data-category="all">
-                                                    ALL
-                                                </a>
-                                            </li>
-                                            <?php
-                                            while ($category = mysqli_fetch_assoc($categoryResult)) {
-                                                echo '
-                                                <li class="nav-item">
-                                                    <a class="nav-link" id="category-' . $category['category_id'] . '-tab" data-toggle="pill"
-                                                    href="#category-' . $category['category_id'] . '" role="tab"
-                                                    aria-controls="category-' . $category['category_id'] . '"
-                                                    data-category="' . $category['category_name'] . '">
-                                                        ' . $category['category_name'] . '
-                                                    </a>
-                                                </li>';
+
+                                            /* Add custom horizontal scrolling */
+                                            .category-scroll {
+                                                white-space: nowrap;
+                                                overflow-x: auto;
+                                                -webkit-overflow-scrolling: touch;
+                                                /* smooth scrolling on iOS */
                                             }
-                                            ?>
-                                        </ul>
+
+                                            .nav-item {
+                                                display: inline-block;
+                                                white-space: nowrap;
+                                            }
+
+                                            /* Hide scrollbar but keep functionality */
+                                            .category-scroll::-webkit-scrollbar {
+                                                display: none;
+                                            }
+
+                                            .category-scroll {
+                                                -ms-overflow-style: none;
+                                                /* IE and Edge */
+                                                scrollbar-width: none;
+                                                /* Firefox */
+                                            }
+                                        </style>
+
+                                        <!-- Category Tabs with horizontal scrolling -->
+                                        <div class="category-scroll">
+                                            <ul class="nav nav-pills nav-fill mb-3" id="category-tabs" role="tablist">
+                                                <li class="nav-item">
+                                                    <a class="nav-link active" id="category-all-tab" data-toggle="pill"
+                                                        href="#category-all" role="tab" aria-controls="category-all"
+                                                        data-category="all">
+                                                        ALL
+                                                    </a>
+                                                </li>
+                                                <?php
+                                                while ($category = mysqli_fetch_assoc($categoryResult)) {
+                                                    echo '
+                    <li class="nav-item">
+                        <a class="nav-link" id="category-' . $category['category_id'] . '-tab" data-toggle="pill"
+                        href="#category-' . $category['category_id'] . '" role="tab"
+                        aria-controls="category-' . $category['category_id'] . '"
+                        data-category="' . $category['category_name'] . '">
+                            ' . $category['category_name'] . '
+                        </a>
+                    </li>';
+                                                }
+                                                ?>
+                                            </ul>
+                                        </div>
 
                                         <div class="row" id="product-list">
                                             <!-- Products will be loaded here dynamically via AJAX -->
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
                     </div>
@@ -163,7 +192,8 @@ function getProductsByCategory($link, $categoryName)
                                                     background-color: #2C0F14;
                                                 }
 
-                                                .order-summary h6, h4 {
+                                                .order-summary h6,
+                                                h4 {
                                                     color: #000;
                                                 }
                                             </style>
@@ -187,7 +217,7 @@ function getProductsByCategory($link, $categoryName)
     </div> <!-- .wrapper -->
     <?php include 'partials/jscripts.php'; ?>
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
             function loadProducts(categoryName) {
                 const productList = document.getElementById('product-list');
                 productList.innerHTML = '';
@@ -195,7 +225,7 @@ function getProductsByCategory($link, $categoryName)
                 const xhr = new XMLHttpRequest();
                 xhr.open("POST", "get-products.php", true);
                 xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                xhr.onload = function () {
+                xhr.onload = function() {
                     if (xhr.status === 200) {
                         productList.innerHTML = xhr.responseText;
                         attachAddToCartEvents();
@@ -203,7 +233,7 @@ function getProductsByCategory($link, $categoryName)
                         console.error('Error loading products');
                     }
                 };
-                xhr.onerror = function () {
+                xhr.onerror = function() {
                     console.error('Request failed');
                 };
                 xhr.send("category_name=" + encodeURIComponent(categoryName));
@@ -211,7 +241,7 @@ function getProductsByCategory($link, $categoryName)
 
             function attachAddToCartEvents() {
                 document.querySelectorAll('.btn-add-cart').forEach(button => {
-                    button.addEventListener('click', function () {
+                    button.addEventListener('click', function() {
                         const productId = this.getAttribute('data-id');
                         const productName = this.getAttribute('data-name');
                         const productPrice = parseFloat(this.getAttribute('data-price'));
@@ -223,7 +253,7 @@ function getProductsByCategory($link, $categoryName)
             const customerPayInput = document.getElementById('customer-pay');
             const changeAmountDisplay = document.getElementById('change-amount');
 
-            customerPayInput.addEventListener('input', function () {
+            customerPayInput.addEventListener('input', function() {
                 const totalAmount = parseFloat(document.getElementById('total-amount').textContent.replace('₱', ''));
                 const customerPay = parseFloat(this.value);
 
@@ -297,7 +327,7 @@ function getProductsByCategory($link, $categoryName)
 
             function attachCartEvents() {
                 document.querySelectorAll('.btn-minus').forEach(button => {
-                    button.addEventListener('click', function () {
+                    button.addEventListener('click', function() {
                         const productId = this.getAttribute('data-id');
                         if (cart[productId].quantity > 1) {
                             cart[productId].quantity--;
@@ -309,7 +339,7 @@ function getProductsByCategory($link, $categoryName)
                 });
 
                 document.querySelectorAll('.btn-plus').forEach(button => {
-                    button.addEventListener('click', function () {
+                    button.addEventListener('click', function() {
                         const productId = this.getAttribute('data-id');
                         cart[productId].quantity++;
                         updateCartUI();
@@ -317,7 +347,7 @@ function getProductsByCategory($link, $categoryName)
                 });
 
                 document.querySelectorAll('.btn-delete').forEach(button => {
-                    button.addEventListener('click', function () {
+                    button.addEventListener('click', function() {
                         const productId = this.getAttribute('data-id');
                         delete cart[productId];
                         updateCartUI();
@@ -328,13 +358,13 @@ function getProductsByCategory($link, $categoryName)
             loadProducts('all');
 
             document.querySelectorAll('.nav-link').forEach(tab => {
-                tab.addEventListener('click', function () {
+                tab.addEventListener('click', function() {
                     const categoryName = this.getAttribute('data-category');
                     loadProducts(categoryName);
                 });
             });
 
-            document.querySelector('.btn-confirm').addEventListener('click', function () {
+            document.querySelector('.btn-confirm').addEventListener('click', function() {
                 const paymentMethod = document.getElementById('payment-method').value;
                 const totalAmount = parseFloat(document.getElementById('total-amount').textContent.replace('₱', ''));
                 const customerPay = parseFloat(document.getElementById('customer-pay').value);
@@ -344,7 +374,7 @@ function getProductsByCategory($link, $categoryName)
                     const xhr = new XMLHttpRequest();
                     xhr.open("POST", "save-order.php", true);
                     xhr.setRequestHeader("Content-Type", "application/json");
-                    xhr.onload = function () {
+                    xhr.onload = function() {
                         if (xhr.status === 200) {
                             swal({
                                 title: 'Success!',
@@ -352,13 +382,16 @@ function getProductsByCategory($link, $categoryName)
                                 icon: 'success',
                                 confirmButtonText: 'OK'
                             }).then(() => {
+                                // Reset cart and other fields
                                 cart = {};
                                 updateCartUI();
                                 document.getElementById('customer-pay').value = '';
                                 document.getElementById('change-amount').textContent = '₱0.00';
                                 document.getElementById('total-amount').textContent = '₱0.00';
-                            });
 
+                                // Generate and print the invoice
+                                printInvoice(paymentMethod, totalAmount, customerPay, change, cart);
+                            });
                         } else {
                             swal({
                                 title: 'Oops!',
@@ -384,6 +417,83 @@ function getProductsByCategory($link, $categoryName)
                     });
                 }
             });
+
+            // Function to generate and print the invoice
+            function printInvoice(paymentMethod, totalAmount, customerPay, change, cart) {
+                let invoiceWindow = window.open('', '', 'width=400,height=600');
+                let invoiceContent = `
+        <html>
+        <head>
+            <style>
+                body { font-family: Arial, sans-serif; font-size: 12px; }
+                .container { width: 58mm; padding: 5px; }
+                .header, .footer { text-align: center; }
+                .header img { max-width: 50px; }
+                .table { width: 100%; margin-bottom: 10px; }
+                .table th, .table td { text-align: left; padding: 3px; }
+                .table th { border-bottom: 1px solid #000; }
+                .table td { border-bottom: 1px dotted #000; }
+                .table .right { text-align: right; }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <!-- Header Section -->
+                <div class="header">
+                    <img src="logo.png" alt="Logo">
+                    <h2>INVOICE</h2>
+                    <p>Thank you for your order!</p>
+                </div>
+
+                <!-- Invoice Info -->
+                <div>
+                    <p><strong>Payment Method:</strong> ${paymentMethod}</p>
+                    <p><strong>Total Amount:</strong> ₱${totalAmount.toFixed(2)}</p>
+                    <p><strong>Customer Paid:</strong> ₱${customerPay.toFixed(2)}</p>
+                    <p><strong>Change:</strong> ₱${change.toFixed(2)}</p>
+                </div>
+
+                <!-- Item Table -->
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Description</th>
+                            <th class="right">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>`;
+
+                // Loop through cart items
+                Object.keys(cart).forEach((itemId, index) => {
+                    const item = cart[itemId]; // assuming each cart item contains a description and price
+                    invoiceContent += `
+            <tr>
+                <td>${index + 1}</td>
+                <td>${item.description}</td>
+                <td class="right">₱${item.price.toFixed(2)}</td>
+            </tr>`;
+                });
+
+                invoiceContent += `
+                    </tbody>
+                </table>
+
+                <!-- Footer Section -->
+                <div class="footer">
+                    <p>For support, contact us at (478) 446-9234</p>
+                    <p>Visit again soon!</p>
+                </div>
+            </div>
+        </body>
+        </html>`;
+
+                invoiceWindow.document.write(invoiceContent);
+                invoiceWindow.document.close();
+                invoiceWindow.focus();
+                invoiceWindow.print();
+                invoiceWindow.close();
+            }
 
         });
     </script>

@@ -21,6 +21,26 @@ if ($data) {
         $stmt = $link->prepare($itemQuery);
         $stmt->bind_param('iisid', $orderId, $productId, $product['name'], $product['quantity'], $product['price']);
         $stmt->execute();
+
+        $ingredientQuery = "SELECT product_ingredients FROM product WHERE product_id = ?";
+        $stmt = $link->prepare($ingredientQuery);
+        $stmt->bind_param('i', $productId);
+        $stmt->execute();
+        $stmt->bind_result($productIngredientsJson);
+        $stmt->fetch();
+        $stmt->close();
+
+        $productIngredients = json_decode($productIngredientsJson, true);
+
+        foreach ($productIngredients as $ingredient) {
+            $inventoryId = $ingredient['inventory_id'];
+            $ingredientQuantity = $ingredient['quantity'] * $product['quantity'];
+
+            $updateInventoryQuery = "UPDATE inventory SET quantity = quantity - ? WHERE inventory_id = ?";
+            $stmt = $link->prepare($updateInventoryQuery);
+            $stmt->bind_param('ii', $ingredientQuantity, $inventoryId);
+            $stmt->execute();
+        }
     }
 
     echo json_encode(['status' => 'success']);

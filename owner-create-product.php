@@ -87,13 +87,29 @@ $active_page = "product";
                         $photo_new_name = rand() . "_" . $photo;
                     }
 
+                    $product_ingredients = [];
+
+                    // Process product ingredients
+                    if (!empty($_POST['inventory_id']) && !empty($_POST['quantity'])) {
+                        foreach ($_POST['inventory_id'] as $index => $inventory_id) {
+                            $quantity = $_POST['quantity'][$index];
+                            if (!empty($inventory_id) && !empty($quantity)) {
+                                $product_ingredients[] = [
+                                    'inventory_id' => $inventory_id,
+                                    'quantity' => $quantity
+                                ];
+                            }
+                        }
+                    }
+
+                    // Convert product ingredients array to JSON for storage
+                    $product_ingredients_json = json_encode($product_ingredients);
+
                     if (empty($product_name_err) && empty($category_name_err) && empty($price_err) && empty($photo_err)) {
-
-
-                        $sql = "INSERT INTO product (owner_id, product_name, category_name, price, status, photo) VALUES (?, ?, ?, ?, ?, ?)";
+                        $sql = "INSERT INTO product (owner_id, product_name, category_name, price, status, photo, product_ingredients) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
                         if ($stmt = mysqli_prepare($link, $sql)) {
-                            mysqli_stmt_bind_param($stmt, "issiis", $param_owner_id, $param_product_name, $param_category_name, $param_price, $param_status, $param_photo);
+                            mysqli_stmt_bind_param($stmt, "issiiss", $param_owner_id, $param_product_name, $param_category_name, $param_price, $param_status, $param_photo, $param_product_ingredients);
 
                             $param_owner_id = $owner_id;
                             $param_product_name = $product_name;
@@ -101,13 +117,14 @@ $active_page = "product";
                             $param_price = $price;
                             $param_status = $status;
                             $param_photo = $photo_new_name;
+                            $param_product_ingredients = $product_ingredients_json;  // Store JSON-encoded ingredients
 
                             if (mysqli_stmt_execute($stmt)) {
                                 if ($photo_new_name !== "default_image.png") {
                                     move_uploaded_file($photo_tmp_name, "storage/products/" . $photo_new_name);
                                 }
 
-                                $product_name = $category_name = $price = $status = $photo_new_name = "";
+                                // Success feedback
                                 echo "<script>swal({
                                     title: 'Success!',
                                     text: 'Product Added Successfully!',
@@ -115,12 +132,9 @@ $active_page = "product";
                                     closeOnClickOutside: false,
                                     button: false
                                 });</script>";
-
-                                ?>
+                ?>
                                 <meta http-equiv="Refresh" content="3; url=owner-product-list">
-                                <?php
-
-
+                <?php
                             } else {
                                 echo "<script>swal({
                                     title: 'Oops!',
@@ -164,13 +178,13 @@ $active_page = "product";
                                                         file</label>
                                                 </div>
                                                 <script>
-                                                    $(document).ready(function () {
+                                                    $(document).ready(function() {
 
-                                                        var readURL = function (input) {
+                                                        var readURL = function(input) {
                                                             if (input.files && input.files[0]) {
                                                                 var reader = new FileReader();
 
-                                                                reader.onload = function (e) {
+                                                                reader.onload = function(e) {
                                                                     $('.avatar').attr('src', e.target.result);
                                                                 }
 
@@ -179,7 +193,7 @@ $active_page = "product";
                                                         }
 
 
-                                                        $(".file-upload").on('change', function () {
+                                                        $(".file-upload").on('change', function() {
                                                             readURL(this);
                                                         });
                                                     });
@@ -243,32 +257,71 @@ $active_page = "product";
                                     <strong class="card-title">Product Item Ingredients</strong>
                                 </div>
                                 <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group mb-3">
-                                                <label for="example-select">Select Inventory Item</label>
-                                                <select class="form-control" id="example-select" name="item">
-                                                    <option value="">Select Inventory Item:</option>
-                                                    <?php
-                                                    $sql1 = "SELECT * FROM inventory";
-                                                    $r = mysqli_query($link, $sql1);
+                                    <div id="ingredients-container">
+                                        <div class="ingredient-row">
+                                            <div class="row">
+                                                <div class="col-7">
+                                                    <div class="form-group mb-3">
+                                                        <label for="inventory-item">Select Inventory Item</label>
+                                                        <select class="form-control inventory-select" name="inventory_id[]">
+                                                            <option value="">Select Inventory Item:</option>
+                                                            <?php
+                                                            $sql1 = "SELECT * FROM inventory";
+                                                            $r = mysqli_query($link, $sql1);
 
-                                                    if ($r->num_rows > 0) {
-                                                        while ($row1 = mysqli_fetch_assoc($r)) {
-                                                            echo "<option value=\"" . $row1["item"] . "\">" . $row1["item"] . "</option>";
-                                                        }
-                                                    } else {
-                                                        echo "<option value=\"\">No inventory available</option>";
-                                                    }
-                                                    ?>
-                                                </select>
-                                                <span class="invalid-feedback"><?php echo $item_err; ?></span>
+                                                            if ($r->num_rows > 0) {
+                                                                while ($row1 = mysqli_fetch_assoc($r)) {
+                                                                    echo "<option value=\"" . $row1["inventory_id"] . "\">" . $row1["item"] . "</option>";
+                                                                }
+                                                            } else {
+                                                                echo "<option value=\"\">No inventory available</option>";
+                                                            }
+                                                            ?>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-5">
+                                                    <div class="form-group mb-3">
+                                                        <label for="quantity">Quantity</label>
+                                                        <input type="number" class="form-control" name="quantity[]" placeholder="Enter quantity">
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
+                                    <button type="button" id="add-ingredient" class="btn btn-secondary">Add Another Ingredient</button>
                                 </div>
                             </div>
                         </div>
+
+                        <script>
+                            const addedIngredients = new Set(); // Store the added ingredients
+
+                            document.getElementById('add-ingredient').addEventListener('click', function() {
+                                const selectedIngredient = document.querySelector('.ingredient-row:last-child select').value;
+
+                                if (!selectedIngredient) {
+                                    alert('Please select an inventory item before adding another ingredient.');
+                                    return;
+                                }
+
+                                if (addedIngredients.has(selectedIngredient)) {
+                                    alert('This ingredient has already been added.');
+                                } else {
+                                    addedIngredients.add(selectedIngredient); // Add the selected ingredient to the set
+                                    const container = document.getElementById('ingredients-container');
+                                    const newIngredient = document.querySelector('.ingredient-row').cloneNode(true);
+
+                                    // Clear the selection and quantity in the cloned row
+                                    newIngredient.querySelector('select').value = '';
+                                    newIngredient.querySelector('input').value = '';
+
+                                    container.appendChild(newIngredient);
+                                }
+                            });
+                        </script>
+
+
                     </div>
                     <button class="btn btn-lg btn-primary btn-block" type="submit" name="submit">Create</button>
                 </form>

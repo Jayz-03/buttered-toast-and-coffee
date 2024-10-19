@@ -151,7 +151,7 @@ if ($result && mysqli_num_rows($result) > 0) {
                                             </thead>
                                             <tbody>
                                                 <?php
-                                                $sql1 = "SELECT * FROM inventory";
+                                                $sql1 = "SELECT * FROM inventory LIMIT 10";
                                                 $r = mysqli_query($link, $sql1);
 
                                                 if ($r->num_rows > 0) {
@@ -175,11 +175,11 @@ if ($result && mysqli_num_rows($result) > 0) {
                                                                 </div>
                                                             </td>
                                                             <td>
-                                                                <?php if ($row1['status'] == 0) {
+                                                                <?php if ($row1['quantity'] > $row1['low_stock']) {
                                                                     echo '<span class="badge badge-success rounded-pill d-inline px-3">In Stock</span>';
-                                                                } elseif ($row1['status'] == 1) {
+                                                                } elseif ($row1['quantity'] < $row1['low_stock']) {
                                                                     echo '<span class="badge badge-warning rounded-pill d-inline px-3">Low Stock</span>';
-                                                                } elseif ($row1['status'] == 2) {
+                                                                } elseif ($row1['quantity'] == 0) {
                                                                     echo '<span class="badge badge-danger rounded-pill d-inline px-3">Out of Stock</span>';
                                                                 } ?>
                                                             </td>
@@ -195,6 +195,9 @@ if ($result && mysqli_num_rows($result) > 0) {
                                         </table>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="card-footer text-center">
+                                <a href="#">View All</a>
                             </div>
                         </div>
                     </div>
