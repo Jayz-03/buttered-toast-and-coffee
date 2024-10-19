@@ -66,12 +66,13 @@ $active_page = "category";
                     }
 
                     if (empty($_FILES['photo']['name'])) {
-                        $photo_err = "Please upload a photo.";
+                        $photo = "default_image.png";
+                        $photo_new_name = "default_image.png";
                     } else {
-                        $photo = ($_FILES["photo"]["name"]);
+                        $photo = $_FILES["photo"]["name"];
                         $photo_tmp_name = $_FILES["photo"]["tmp_name"];
                         $photo_size = $_FILES["photo"]["size"];
-                        $photo_new_name = rand() . $photo;
+                        $photo_new_name = rand() . "_" . $photo;
                     }
 
                     if (empty($category_name_err) && empty($photo_err)) {
@@ -88,8 +89,10 @@ $active_page = "category";
                             $param_photo = $photo_new_name;
 
                             if (mysqli_stmt_execute($stmt)) {
-                                move_uploaded_file($photo_tmp_name, "storage/category/" . $photo_new_name);
-                                // Clear all inputs
+                                if ($photo_new_name !== "default_image.png") {
+                                    move_uploaded_file($photo_tmp_name, "storage/category/" . $photo_new_name);
+                                }
+                                
                                 $category_name = $status = $photo_new_name = "";
                                 echo "<script>swal({
                                     title: 'Success!',
@@ -125,7 +128,7 @@ $active_page = "category";
                         <div class="col-5">
                             <div class="card shadow mb-4">
                                 <div class="card-header">
-                                    <strong class="card-title">Category Photo</strong>
+                                    <strong class="card-title">Category Photo <span style="color: #6c757d;">(Optional)</span></strong>
                                 </div>
                                 <div class="card-body">
                                     <div class="row">
@@ -185,7 +188,8 @@ $active_page = "category";
                                                 <label for="example-category_name">Category Name</label>
                                                 <input type="text" id="example-category_name" name="category_name"
                                                     class="form-control <?php echo (!empty($category_name_err)) ? 'is-invalid' : ''; ?>"
-                                                    placeholder="Please enter category name." value="<?php echo $category_name; ?>">
+                                                    placeholder="Please enter category name."
+                                                    value="<?php echo $category_name; ?>">
                                                 <span class="invalid-feedback"><?php echo $category_name_err; ?></span>
                                             </div>
                                         </div>

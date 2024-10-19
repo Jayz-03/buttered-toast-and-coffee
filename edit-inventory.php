@@ -92,21 +92,12 @@
                                                 <span class="invalid-feedback"><?php echo $quantity_err; ?></span>
                                             </div>
                                             <div class="form-group mb-3">
-                                                <label for="example-status">Status</label>
-                                                <select name="status"
-                                                    class="form-control select <?php echo (!empty($status_err)) ? 'is-invalid' : ''; ?>">
-                                                    <option value="">Please select a status:</option>
-                                                    <optgroup label="Status:">
-                                                        <option value="0" <?php if ($row1['status'] == 0)
-                                                            echo 'selected'; ?>>In Stock</option>
-                                                        <option value="1" <?php if ($row1['status'] == 1)
-                                                            echo 'selected'; ?>>Low Stock</option>
-                                                        <option value="2" <?php if ($row1['status'] == 2)
-                                                            echo 'selected'; ?>>Out of Stock</option>
-                                                    </optgroup>
-                                                </select>
-
-                                                <span class="invalid-feedback"><?php echo $status_err; ?></span>
+                                                <label for="example-low_stock">Low Stock Quantity</label>
+                                                <input type="number" id="example-low_stock" name="low_stock"
+                                                    class="form-control <?php echo (!empty($low_stock_err)) ? 'is-invalid' : ''; ?>"
+                                                    placeholder="Please enter low stock quantity."
+                                                    value="<?php echo $row1['low_stock']; ?>">
+                                                <span class="invalid-feedback"><?php echo $low_stock_err; ?></span>
                                             </div>
                                         </div>
                                     </div>

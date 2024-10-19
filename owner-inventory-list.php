@@ -31,7 +31,7 @@ $active_page = "inventory";
                     <div class="col-12">
                         <h2 class="page-title">Inventory - Inventory List</h2>
                         <?php
-                        $item_err = $quantity_err = $photo_err = $status_err = "";
+                        $item_err = $quantity_err = $photo_err = $low_stock_err = "";
                         if (isset($_POST["update"])) {
                             $inventory_id = $_POST['inventory_id'];
 
@@ -72,10 +72,15 @@ $active_page = "inventory";
                                 $quantity = mysqli_real_escape_string($link, $_POST["quantity"]);
                             }
 
-                            if (!isset($_POST["status"])) {
-                                $status_err = "Please select a status.";
+                            if (empty(trim($_POST["low_stock"]))) {
+                                $low_stock_err = "Please enter low stock quantity.";
                             } else {
-                                $status = mysqli_real_escape_string($link, trim($_POST["status"]));
+                                $low_stock = mysqli_real_escape_string($link, $_POST["low_stock"]);
+                                if ($low_stock >= $quantity) {
+                                    $low_stock_err = "Low stock quantity should not be equal or greater than to quantity.";
+                                } else {
+                                    $low_stock = mysqli_real_escape_string($link, $_POST["low_stock"]);
+                                }
                             }
 
                             if (empty($_FILES['photo']['name'])) {
@@ -93,11 +98,11 @@ $active_page = "inventory";
                                 $photo = $photo_new_name;
                             }
 
-                            if (empty($item_err) && empty($quantity_err) && empty($photo_err) && empty($status_err)) {
-                                $sql = "UPDATE inventory SET owner_id=?, item=?, quantity=?, status=?, photo=? WHERE inventory_id=?";
+                            if (empty($item_err) && empty($quantity_err) && empty($photo_err) && empty($low_stock_err)) {
+                                $sql = "UPDATE inventory SET owner_id=?, item=?, quantity=?, low_stock=?, photo=? WHERE inventory_id=?";
                                 $stmt = mysqli_prepare($link, $sql);
 
-                                mysqli_stmt_bind_param($stmt, "isiisi", $owner_id, $item, $quantity, $status, $photo, $inventory_id);
+                                mysqli_stmt_bind_param($stmt, "isiisi", $owner_id, $item, $quantity, $low_stock, $photo, $inventory_id);
 
                                 if (mysqli_stmt_execute($stmt)) {
                                     if (!empty($_FILES['photo']['name'])) {

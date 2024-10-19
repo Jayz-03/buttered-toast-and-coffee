@@ -78,12 +78,13 @@ $active_page = "product";
                     }
 
                     if (empty($_FILES['photo']['name'])) {
-                        $photo_err = "Please upload a photo.";
+                        $photo = "default_image.png";
+                        $photo_new_name = "default_image.png";
                     } else {
-                        $photo = ($_FILES["photo"]["name"]);
+                        $photo = $_FILES["photo"]["name"];
                         $photo_tmp_name = $_FILES["photo"]["tmp_name"];
                         $photo_size = $_FILES["photo"]["size"];
-                        $photo_new_name = rand() . $photo;
+                        $photo_new_name = rand() . "_" . $photo;
                     }
 
                     if (empty($product_name_err) && empty($category_name_err) && empty($price_err) && empty($photo_err)) {
@@ -102,8 +103,10 @@ $active_page = "product";
                             $param_photo = $photo_new_name;
 
                             if (mysqli_stmt_execute($stmt)) {
-                                move_uploaded_file($photo_tmp_name, "storage/products/" . $photo_new_name);
-                                // Clear all inputs
+                                if ($photo_new_name !== "default_image.png") {
+                                    move_uploaded_file($photo_tmp_name, "storage/products/" . $photo_new_name);
+                                }
+
                                 $product_name = $category_name = $price = $status = $photo_new_name = "";
                                 echo "<script>swal({
                                     title: 'Success!',
@@ -127,7 +130,6 @@ $active_page = "product";
                                 });</script>";
                             }
 
-                            // Close statement
                             mysqli_stmt_close($stmt);
                         }
                     }
@@ -136,10 +138,11 @@ $active_page = "product";
                 ?>
                 <form method="post" enctype="multipart/form-data">
                     <div class="row justify-content-center">
-                        <div class="col-5">
+                        <div class="col-4">
                             <div class="card shadow mb-4">
                                 <div class="card-header">
-                                    <strong class="card-title">Product Photo</strong>
+                                    <strong class="card-title">Product Photo <span
+                                            style="color: #6c757d;">(Optional)</span></strong>
                                 </div>
                                 <div class="card-body">
                                     <div class="row">
@@ -187,7 +190,7 @@ $active_page = "product";
                                 </div>
                             </div>
                         </div>
-                        <div class="col-7">
+                        <div class="col-4">
                             <div class="card shadow mb-4">
                                 <div class="card-header">
                                     <strong class="card-title">Product Information</strong>
@@ -206,7 +209,7 @@ $active_page = "product";
                                             <div class="form-group mb-3">
                                                 <label for="example-select">Select Category</label>
                                                 <select class="form-control" id="example-select" name="category_name">
-                                                <option value="">Select Category:</option>
+                                                    <option value="">Select Category:</option>
                                                     <?php
                                                     $sql1 = "SELECT * FROM category";
                                                     $r = mysqli_query($link, $sql1);
@@ -226,24 +229,55 @@ $active_page = "product";
                                                 <label for="example-price">Price</label>
                                                 <input type="number" id="example-price" name="price"
                                                     class="form-control <?php echo (!empty($price_err)) ? 'is-invalid' : ''; ?>"
-                                                    placeholder="Please enter price."
-                                                    value="<?php echo $price; ?>">
+                                                    placeholder="Please enter price." value="<?php echo $price; ?>">
                                                 <span class="invalid-feedback"><?php echo $price_err; ?></span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div> <!-- / .card -->
-                        </div> <!-- .col-12 -->
-                    </div> <!-- .row -->
+                        </div>
+                        <div class="col-4">
+                            <div class="card shadow mb-4">
+                                <div class="card-header">
+                                    <strong class="card-title">Product Item Ingredients</strong>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group mb-3">
+                                                <label for="example-select">Select Inventory Item</label>
+                                                <select class="form-control" id="example-select" name="item">
+                                                    <option value="">Select Inventory Item:</option>
+                                                    <?php
+                                                    $sql1 = "SELECT * FROM inventory";
+                                                    $r = mysqli_query($link, $sql1);
+
+                                                    if ($r->num_rows > 0) {
+                                                        while ($row1 = mysqli_fetch_assoc($r)) {
+                                                            echo "<option value=\"" . $row1["item"] . "\">" . $row1["item"] . "</option>";
+                                                        }
+                                                    } else {
+                                                        echo "<option value=\"\">No inventory available</option>";
+                                                    }
+                                                    ?>
+                                                </select>
+                                                <span class="invalid-feedback"><?php echo $item_err; ?></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <button class="btn btn-lg btn-primary btn-block" type="submit" name="submit">Create</button>
                 </form>
-            </div> <!-- .container-fluid -->
+            </div>
 
             <?php include 'partials/owner-modals.php'; ?>
 
-        </main> <!-- main -->
-    </div> <!-- .wrapper -->
+        </main>
+    </div>
     <?php include 'partials/jscripts.php'; ?>
 </body>
 

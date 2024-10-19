@@ -84,12 +84,12 @@ $active_page = "inventory";
 
                     if (empty($_FILES['photo']['name'])) {
                         $photo = "default_image.png";
-                        $photo_new_name = "default_image.png"; // Set default photo name
+                        $photo_new_name = "default_image.png";
                     } else {
                         $photo = $_FILES["photo"]["name"];
                         $photo_tmp_name = $_FILES["photo"]["tmp_name"];
                         $photo_size = $_FILES["photo"]["size"];
-                        $photo_new_name = rand() . "_" . $photo; // Generate new name with random prefix
+                        $photo_new_name = rand() . "_" . $photo;
                     }
                     
                     if (empty($item_err) && empty($quantity_err) && empty($low_stock_err) && empty($photo_err)) {
@@ -97,24 +97,19 @@ $active_page = "inventory";
                         $sql = "INSERT INTO inventory (owner_id, item, quantity, low_stock, photo) VALUES (?, ?, ?, ?, ?)";
                     
                         if ($stmt = mysqli_prepare($link, $sql)) {
-                            // Bind parameters
                             mysqli_stmt_bind_param($stmt, "isiis", $param_owner_id, $param_item, $param_quantity, $param_low_stock, $param_photo);
                     
-                            // Set parameters
                             $param_owner_id = $owner_id;
                             $param_item = $item;
                             $param_quantity = $quantity;
                             $param_low_stock = $low_stock;
-                            $param_photo = $photo_new_name; // Use the new photo name
+                            $param_photo = $photo_new_name;
                     
-                            // Execute statement
                             if (mysqli_stmt_execute($stmt)) {
-                                // Move uploaded file if it's not the default image
                                 if ($photo_new_name !== "default_image.png") {
                                     move_uploaded_file($photo_tmp_name, "storage/inventory/" . $photo_new_name);
                                 }
                     
-                                // Clear all inputs
                                 $item = $quantity = $low_stock = "";
                                 echo "<script>swal({
                                     title: 'Success!',
