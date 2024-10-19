@@ -185,11 +185,11 @@ $active_page = "inventory";
                                                                 </p>
                                                             </td>
                                                             <td>
-                                                                <?php if ($row1['status'] == 0) {
+                                                                <?php if ($row1['quantity'] > $row1['low_stock']) {
                                                                     echo '<span class="badge badge-success rounded-pill d-inline px-3">In Stock</span>';
-                                                                } elseif ($row1['status'] == 1) {
+                                                                } elseif ($row1['quantity'] < $row1['low_stock']) {
                                                                     echo '<span class="badge badge-warning rounded-pill d-inline px-3">Low Stock</span>';
-                                                                } elseif ($row1['status'] == 2) {
+                                                                } elseif ($row1['quantity'] == 0) {
                                                                     echo '<span class="badge badge-danger rounded-pill d-inline px-3">Out of Stock</span>';
                                                                 } ?>
                                                             </td>

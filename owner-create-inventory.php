@@ -28,9 +28,9 @@ $active_page = "inventory";
                 <h2 class="page-title">Inventory - Add Inventory</h2>
 
                 <?php
-                $item = $quantity = $photo = "";
-                $item_err = $quantity_err = $photo_err = "";
-                $status = 0;
+                $item = $quantity = $low_stock = $photo = "";
+                $item_err = $quantity_err = $low_stock_err = $photo_err = "";
+
 
                 if (isset($_POST["submit"])) {
 
@@ -71,33 +71,51 @@ $active_page = "inventory";
                         $quantity = mysqli_real_escape_string($link, $_POST["quantity"]);
                     }
 
-                    if (empty($_FILES['photo']['name'])) {
-                        $photo_err = "Please upload a photo.";
+                    if (empty(trim($_POST["low_stock"]))) {
+                        $low_stock_err = "Please enter low stock quantity.";
                     } else {
-                        $photo = ($_FILES["photo"]["name"]);
-                        $photo_tmp_name = $_FILES["photo"]["tmp_name"];
-                        $photo_size = $_FILES["photo"]["size"];
-                        $photo_new_name = rand() . $photo;
+                        $low_stock = mysqli_real_escape_string($link, $_POST["low_stock"]);
+                        if ($low_stock >= $quantity) {
+                            $low_stock_err = "Low stock quantity should not be equal or greater than to quantity.";
+                        } else {
+                            $low_stock = mysqli_real_escape_string($link, $_POST["low_stock"]);
+                        }
                     }
 
-                    if (empty($item_err) && empty($quantity_err) && empty($photo_err)) {
-
-
-                        $sql = "INSERT INTO inventory (owner_id, item, quantity, status, photo) VALUES (?, ?, ?, ?, ?)";
-
+                    if (empty($_FILES['photo']['name'])) {
+                        $photo = "default_image.png";
+                        $photo_new_name = "default_image.png"; // Set default photo name
+                    } else {
+                        $photo = $_FILES["photo"]["name"];
+                        $photo_tmp_name = $_FILES["photo"]["tmp_name"];
+                        $photo_size = $_FILES["photo"]["size"];
+                        $photo_new_name = rand() . "_" . $photo; // Generate new name with random prefix
+                    }
+                    
+                    if (empty($item_err) && empty($quantity_err) && empty($low_stock_err) && empty($photo_err)) {
+                    
+                        $sql = "INSERT INTO inventory (owner_id, item, quantity, low_stock, photo) VALUES (?, ?, ?, ?, ?)";
+                    
                         if ($stmt = mysqli_prepare($link, $sql)) {
-                            mysqli_stmt_bind_param($stmt, "isiis", $param_owner_id, $param_item, $param_quantity, $param_status, $param_photo);
-
+                            // Bind parameters
+                            mysqli_stmt_bind_param($stmt, "isiis", $param_owner_id, $param_item, $param_quantity, $param_low_stock, $param_photo);
+                    
+                            // Set parameters
                             $param_owner_id = $owner_id;
                             $param_item = $item;
                             $param_quantity = $quantity;
-                            $param_status = $status;
-                            $param_photo = $photo_new_name;
-
+                            $param_low_stock = $low_stock;
+                            $param_photo = $photo_new_name; // Use the new photo name
+                    
+                            // Execute statement
                             if (mysqli_stmt_execute($stmt)) {
-                                move_uploaded_file($photo_tmp_name, "storage/inventory/" . $photo_new_name);
+                                // Move uploaded file if it's not the default image
+                                if ($photo_new_name !== "default_image.png") {
+                                    move_uploaded_file($photo_tmp_name, "storage/inventory/" . $photo_new_name);
+                                }
+                    
                                 // Clear all inputs
-                                $item = $quantity = $status = $photo_new_name = "";
+                                $item = $quantity = $low_stock = "";
                                 echo "<script>swal({
                                     title: 'Success!',
                                     text: 'Inventory Item Added Successfully!',
@@ -105,12 +123,10 @@ $active_page = "inventory";
                                     closeOnClickOutside: false,
                                     button: false
                                 });</script>";
-
                                 ?>
                                 <meta http-equiv="Refresh" content="3; url=owner-inventory-list">
                                 <?php
-
-
+                    
                             } else {
                                 echo "<script>swal({
                                     title: 'Oops!',
@@ -119,11 +135,12 @@ $active_page = "inventory";
                                     button: 'Done!',
                                 });</script>";
                             }
-
+                    
                             // Close statement
                             mysqli_stmt_close($stmt);
                         }
                     }
+                    
                 }
 
                 ?>
@@ -132,7 +149,7 @@ $active_page = "inventory";
                         <div class="col-5">
                             <div class="card shadow mb-4">
                                 <div class="card-header">
-                                    <strong class="card-title">Inventory Photo</strong>
+                                    <strong class="card-title">Inventory Item Photo <span style="color: #6c757d;">(Optional)</span></strong>
                                 </div>
                                 <div class="card-body">
                                     <div class="row">
@@ -144,11 +161,10 @@ $active_page = "inventory";
                                                         width="250px">
                                                 </div>
                                                 <br>
-                                                <label for="customFile">Choose Inventory Photo</label>
+                                                <label for="customFile">Choose Inventory Item Photo</label>
                                                 <div class="custom-file">
                                                     <input type="file" id="customFile" accept="image/*" name="photo"
-                                                        class="custom-file-input form-control <?php echo (!empty($photo_err)) ? 'is-invalid' : ''; ?> file-upload mb-3"
-                                                        value="<?php echo $row['photo']; ?>">
+                                                        class="custom-file-input form-control <?php echo (!empty($photo_err)) ? 'is-invalid' : ''; ?> file-upload mb-3">
                                                     <span class="invalid-feedback"><?php echo $photo_err; ?></span>
                                                     <label class="custom-file-label" for="customFile">Choose
                                                         file</label>
@@ -202,6 +218,14 @@ $active_page = "inventory";
                                                     placeholder="Please enter quantity."
                                                     value="<?php echo $quantity; ?>">
                                                 <span class="invalid-feedback"><?php echo $quantity_err; ?></span>
+                                            </div>
+                                            <div class="form-group mb-3">
+                                                <label for="example-low_stock">Low Stock Quantity</label>
+                                                <input type="number" id="example-low_stock" name="low_stock"
+                                                    class="form-control <?php echo (!empty($low_stock_err)) ? 'is-invalid' : ''; ?>"
+                                                    placeholder="Please enter low stock quantity."
+                                                    value="<?php echo $low_stock; ?>">
+                                                <span class="invalid-feedback"><?php echo $low_stock_err; ?></span>
                                             </div>
                                         </div>
                                     </div>

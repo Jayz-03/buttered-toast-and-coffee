@@ -4,9 +4,9 @@
         <h3 class="column lg-12 section-header__pretitle pretitle text-pretitle">Who We Are</h3>
         <div class="column lg-6 stack-on-1100 section-header__primary">
             <h2 class="title text-display-1">
-                Mueller is a branding agency based in Somewhere.
-                We shape brand identities and design thoughtful
-                digital experiences.
+                Deleniti dolorem reiciendis repellat labore velit dolor nihil qui.
+                Deserunt sapiente odio quos quisquam dolorem cumque et omnis.
+                Minima quibusdam sequi consequatur magni non sunt est.
             </h2>
         </div>
         <div class="column lg-6 stack-on-1100 section-header__secondary">
@@ -22,7 +22,7 @@
 
         <div class="column list-block__item">
             <div class="list-block__title">
-                <h3 class="h5">Define</h3>
+                <h3 class="h5">Lorem</h3>
             </div>
             <div class="list-block__text">
                 <p>
@@ -35,7 +35,7 @@
 
         <div class="column list-block__item">
             <div class="list-block__title">
-                <h3 class="h5">Design</h3>
+                <h3 class="h5">Lorem</h3>
             </div>
             <div class="list-block__text">
                 <p>
@@ -44,11 +44,11 @@
                     magnam. Cumque ducimus laborum doloribus facere maxime vel earum quidem enim suscipit.
                 </p>
             </div>
-        </div> <!-- end list-block__item -->
+        </div>
 
         <div class="column list-block__item">
             <div class="list-block__title">
-                <h3 class="h5">Build</h3>
+                <h3 class="h5">Lorem</h3>
             </div>
             <div class="list-block__text">
                 <p>
@@ -58,11 +58,11 @@
                     illum nemo rerum voluptate.
                 </p>
             </div>
-        </div> <!-- end list-block__item -->
+        </div>
 
         <div class="column list-block__item">
             <div class="list-block__title">
-                <h3 class="h5">Launch</h3>
+                <h3 class="h5">Lorem</h3>
             </div>
             <div class="list-block__text">
                 <p>
@@ -71,8 +71,8 @@
                     Quas at illum. Dolores itaque architecto. Magnam voluptatem aperiam. Velit omnis est.
                 </p>
             </div>
-        </div> <!-- end list-block__item -->
+        </div>
 
-    </div> <!-- end process-list -->
+    </div>
 
-</section> <!-- end s-about -->
+</section>

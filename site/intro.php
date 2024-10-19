@@ -4,9 +4,8 @@
         <div class="s-intro__content-bg"></div>
         <div class="column lg-12 s-intro__content-inner">
             <h1 class="s-intro__content-title">
-                We're looking forward to <br>
-                serve you our toast & coffee, <br>
-                to more coffee date with us.
+                To be happy is <br>
+                to drink coffee. <br>
             </h1>
             <div class="s-intro__content-buttons">
                 <a href="#download" class="btn btn--stroke s-intro__content-btn smoothscroll">More About Us</a>
@@ -23,4 +22,4 @@
             <span>Scroll Down</span>
         </a>
     </div>
-</section> <!-- end s-intro -->
+</section>

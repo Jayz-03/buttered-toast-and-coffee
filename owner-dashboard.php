@@ -116,7 +116,7 @@ if ($result && mysqli_num_rows($result) > 0) {
                                             <div class="col-md-6 mt-2">
                                                 <strong class="card-title">Sales Data Visualization</strong>
                                             </div>
-                                            <div class="col-md-6 d-flex justify-content-end"> <!-- Added text-end to align to the right -->
+                                            <div class="col-md-6 d-flex justify-content-end">
                                                 <select id="timeFilter" class="form-control" style="width: 200px;">
                                                     <option value="day">Daily</option>
                                                     <option value="week">Weekly</option>
