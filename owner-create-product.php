@@ -263,7 +263,7 @@ $active_page = "product";
                                                 <div class="col-7">
                                                     <div class="form-group mb-3">
                                                         <label for="inventory-item">Select Inventory Item</label>
-                                                        <select class="form-control inventory-select select2" id="simple-select2" name="inventory_id[]">
+                                                        <select class="form-control inventory-select" name="inventory_id[]">
                                                             <option value="">Select Inventory Item:</option>
                                                             <?php
                                                             $sql1 = "SELECT * FROM inventory";
@@ -332,15 +332,6 @@ $active_page = "product";
         </main>
     </div>
     <?php include 'partials/jscripts.php'; ?>
-    <script>
-        $('.select2').select2({
-            theme: 'bootstrap4',
-        });
-        $('.select2-multi').select2({
-            multiple: true,
-            theme: 'bootstrap4',
-        });
-    </script>
 </body>
 
 </html>
