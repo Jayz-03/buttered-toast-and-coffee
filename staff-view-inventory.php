@@ -44,6 +44,7 @@ $active_page = "inventory";
                                                     <th>Status</th>
                                                     <th>Managed By</th>
                                                     <th>Last Updated</th>
+                                                    <th>Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -86,11 +87,11 @@ $active_page = "inventory";
                                                                 </p>
                                                             </td>
                                                             <td>
-                                                                <?php if ($row1['status'] == 0) {
+                                                                <?php if ($row1['quantity'] > $row1['low_stock']) {
                                                                     echo '<span class="badge badge-success rounded-pill d-inline px-3">In Stock</span>';
-                                                                } elseif ($row1['status'] == 1) {
+                                                                } elseif ($row1['quantity'] < $row1['low_stock']) {
                                                                     echo '<span class="badge badge-warning rounded-pill d-inline px-3">Low Stock</span>';
-                                                                } elseif ($row1['status'] == 2) {
+                                                                } elseif ($row1['quantity'] == 0) {
                                                                     echo '<span class="badge badge-danger rounded-pill d-inline px-3">Out of Stock</span>';
                                                                 } ?>
                                                             </td>
@@ -116,10 +117,21 @@ $active_page = "inventory";
                                                                 <?php $formattedDate = date("l, F j Y - h:i A", strtotime($row1["last_updated"]));
                                                                 echo $formattedDate; ?>
                                                             </td>
+                                                            <td>
+                                                                <div class="d-inline">
+                                                                    <a class="ml-1 action-icon" href="#" data-toggle="modal"
+                                                                        type="button"
+                                                                        data-target="#view-inventory-<?php echo $row1['inventory_id'] ?>">
+                                                                        <i class="fe fe-eye fe-16"></i>
+                                                                    </a>
+                                                                </div>
+                                                            </td>
                                                         </tr>
 
 
                                                         <?php
+
+                                                        include 'view-inventory.php';
 
                                                     }
                                                 }

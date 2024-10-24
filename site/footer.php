@@ -23,8 +23,8 @@
                 <div class="contact-block">
                     <h6>Contact Infos</h6>
                     <ul class="contact-list">
-                        <li><a href="tel:197-543-2345">+197 543 2345</a></li>
-                        <li><a href="tel:197-123-9876">+197 123 9876</a></li>
+                        <li><a href="tel:197-543-2345">0938-872-9449</a></li>
+                        <li><a href="tel:197-123-9876">0917-148-8501</a></li>
                     </ul>
                 </div>
 

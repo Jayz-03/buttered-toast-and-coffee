@@ -118,7 +118,7 @@ $active_page = "product";
                             $param_status = $status;
                             $param_photo = $photo_new_name;
                             $param_product_ingredients = $product_ingredients_json;  // Store JSON-encoded ingredients
-
+                
                             if (mysqli_stmt_execute($stmt)) {
                                 if ($photo_new_name !== "default_image.png") {
                                     move_uploaded_file($photo_tmp_name, "storage/products/" . $photo_new_name);
@@ -132,9 +132,9 @@ $active_page = "product";
                                     closeOnClickOutside: false,
                                     button: false
                                 });</script>";
-                ?>
+                                ?>
                                 <meta http-equiv="Refresh" content="3; url=owner-product-list">
-                <?php
+                                <?php
                             } else {
                                 echo "<script>swal({
                                     title: 'Oops!',
@@ -178,13 +178,13 @@ $active_page = "product";
                                                         file</label>
                                                 </div>
                                                 <script>
-                                                    $(document).ready(function() {
+                                                    $(document).ready(function () {
 
-                                                        var readURL = function(input) {
+                                                        var readURL = function (input) {
                                                             if (input.files && input.files[0]) {
                                                                 var reader = new FileReader();
 
-                                                                reader.onload = function(e) {
+                                                                reader.onload = function (e) {
                                                                     $('.avatar').attr('src', e.target.result);
                                                                 }
 
@@ -193,7 +193,7 @@ $active_page = "product";
                                                         }
 
 
-                                                        $(".file-upload").on('change', function() {
+                                                        $(".file-upload").on('change', function () {
                                                             readURL(this);
                                                         });
                                                     });
@@ -263,7 +263,8 @@ $active_page = "product";
                                                 <div class="col-7">
                                                     <div class="form-group mb-3">
                                                         <label for="inventory-item">Select Inventory Item</label>
-                                                        <select class="form-control inventory-select" name="inventory_id[]">
+                                                        <select class="form-control inventory-select"
+                                                            name="inventory_id[]">
                                                             <option value="">Select Inventory Item:</option>
                                                             <?php
                                                             $sql1 = "SELECT * FROM inventory";
@@ -283,30 +284,54 @@ $active_page = "product";
                                                 <div class="col-5">
                                                     <div class="form-group mb-3">
                                                         <label for="quantity">Quantity</label>
-                                                        <input type="number" class="form-control" name="quantity[]" placeholder="Enter quantity">
+                                                        <input type="number" class="form-control" name="quantity[]"
+                                                            placeholder="Enter quantity">
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <button type="button" id="add-ingredient" class="btn btn-secondary">Add Another Ingredient</button>
+                                    <button type="button" id="add-ingredient" class="btn btn-secondary">Add Another
+                                        Ingredient</button>
                                 </div>
                             </div>
                         </div>
 
+                        <style>
+                            .swal-button {
+                                color: #72C894;
+                                background-color: #04210F;
+                            }
+
+                            .swal-button:not([disabled]):hover {
+                                color: #72C894;
+                                background-color: #04210F;
+                            }
+                        </style>
+
                         <script>
                             const addedIngredients = new Set(); // Store the added ingredients
 
-                            document.getElementById('add-ingredient').addEventListener('click', function() {
+                            document.getElementById('add-ingredient').addEventListener('click', function () {
                                 const selectedIngredient = document.querySelector('.ingredient-row:last-child select').value;
 
                                 if (!selectedIngredient) {
-                                    alert('Please select an inventory item before adding another ingredient.');
+                                    swal({
+                                        title: 'Warning!',
+                                        text: 'Please select an inventory item before adding another ingredient.',
+                                        icon: 'warning',
+                                        confirmButtonText: 'OK'
+                                    });
                                     return;
                                 }
 
                                 if (addedIngredients.has(selectedIngredient)) {
-                                    alert('This ingredient has already been added.');
+                                    swal({
+                                        title: 'Invalid!',
+                                        text: 'This ingredient has already been added.',
+                                        icon: 'error',
+                                        confirmButtonText: 'OK'
+                                    });
                                 } else {
                                     addedIngredients.add(selectedIngredient); // Add the selected ingredient to the set
                                     const container = document.getElementById('ingredients-container');

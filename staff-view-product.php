@@ -45,6 +45,7 @@ $active_page = "product";
                                                     <th>Status</th>
                                                     <th>Managed by</th>
                                                     <th>Last Updated</th>
+                                                    <th>Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -120,10 +121,20 @@ $active_page = "product";
                                                                 <?php $formattedDate = date("l, F j Y - h:i A", strtotime($row1["last_updated"]));
                                                                 echo $formattedDate; ?>
                                                             </td>
+                                                            <td>
+                                                                <div class="d-inline">
+                                                                    <a class="ml-1 action-icon" href="#" data-toggle="modal"
+                                                                        type="button"
+                                                                        data-target="#view-product-<?php echo $row1['product_id'] ?>">
+                                                                        <i class="fe fe-eye fe-16"></i>
+                                                                    </a>
+                                                                </div>
+                                                            </td>
                                                         </tr>
 
-
                                                         <?php
+
+                                                        include 'view-product.php';
 
                                                     }
                                                 }

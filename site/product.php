@@ -103,10 +103,28 @@
 
             <div class="modal-popup__desc">
                 <h5>Buttered Toast & Coffee</h5>
-                <p>
-                    We're looking forward to
-                    serve you our toast & coffee,
-                    to more coffee date with us.</p>
+                <div class="row process-list list-block block-lg-one-half block-tab-whole">
+                    <div class="column list-block__item">
+                        <div class="list-block__title">
+                            <h5 class="h5"><b>Alangilan Branch:</b></h5>
+                        </div>
+                        <div class="list-block__text">
+                            <p style="margin-top: -20px; font-size: 14px;">
+                                <b>Sun-Mon:</b> 6:00 PM – 11:00 PM <br>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="column list-block__item">
+                        <div class="list-block__title">
+                            <h5 class="h5"><b>Hilltop Branch:</b></h5>
+                        </div>
+                        <div class="list-block__text">
+                            <p style="margin-top: -20px; font-size: 14px;">
+                                <b>Sun-Mon:</b> 8:00 AM – 12:00 AM
+                            </p>
+                        </div>
+                    </div>
+                </div>
                 <ul class="modal-popup__cat">
                     <li>Buttered Toast & Coffee</li>
                     <li>In-store</li>
@@ -123,10 +141,34 @@
 
             <div class="modal-popup__desc">
                 <h5>Buttered Toast & Coffee</h5>
-                <p>
-                    We're looking forward to
-                    serve you our toast & coffee,
-                    to more coffee date with us.</p>
+                <div class="row process-list list-block block-lg-one-half block-tab-whole">
+                    <div class="column list-block__item">
+                        <div class="list-block__title">
+                            <h5 class="h5"><b>Coffee & Milktea:</b></h5>
+                        </div>
+                        <div class="list-block__text">
+                            <p style="margin-top: -20px; font-size: 14px;">
+                                Cart Packages: <br>
+                                50 Pax - ₱6,500 <br>
+                                100 Pax - ₱11,000 <br>
+                                120 Pax - ₱16,000
+                            </p>
+                        </div>
+                    </div>
+                    <div class="column list-block__item">
+                        <div class="list-block__title">
+                            <h5 class="h5"><b>Inclusions:</b></h5>
+                        </div>
+                        <div class="list-block__text">
+                            <p style="margin-top: -20px; font-size: 14px;">
+                                Unlimited Iced (16oz) <br>
+                                Hot Coffee (12oz) <br>
+                                Full Coffee Bar Setup <br>
+                                2-3 Experienced Baristas
+                            </p>
+                        </div>
+                    </div>
+                </div>
                 <ul class="modal-popup__cat">
                     <li>Buttered Toast & Coffee</li>
                     <li>In-store</li>
