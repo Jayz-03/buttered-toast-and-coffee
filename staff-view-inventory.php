@@ -30,11 +30,9 @@ $active_page = "inventory";
                     <div class="col-12">
                         <h2 class="page-title">Inventory List</h2>
                         <div class="row my-4">
-                            <!-- Small table -->
                             <div class="col-md-12">
                                 <div class="card shadow">
                                     <div class="card-body">
-                                        <!-- table -->
                                         <table class="table datatables" id="dataTable-1">
                                             <thead>
                                                 <tr class="text-center">
@@ -83,7 +81,7 @@ $active_page = "inventory";
                                                             </td>
                                                             <td>
                                                                 <p class="fw-normal mb-1">
-                                                                    <?php echo $row1['quantity']; ?>
+                                                                    <?php echo number_format($row1['quantity']); ?>
                                                                 </p>
                                                             </td>
                                                             <td>
@@ -140,16 +138,16 @@ $active_page = "inventory";
                                         </table>
                                     </div>
                                 </div>
-                            </div> <!-- simple table -->
-                        </div> <!-- end section -->
-                    </div> <!-- .col-12 -->
-                </div> <!-- .row -->
-            </div> <!-- .container-fluid -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <?php include 'partials/staff-modals.php'; ?>
 
-        </main> <!-- main -->
-    </div> <!-- .wrapper -->
+        </main>
+    </div>
     <?php include 'partials/jscripts.php'; ?>
     <script src='js/jquery.dataTables.min.js'></script>
     <script src='js/dataTables.bootstrap4.min.js'></script>

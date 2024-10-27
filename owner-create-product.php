@@ -89,7 +89,6 @@ $active_page = "product";
 
                     $product_ingredients = [];
 
-                    // Process product ingredients
                     if (!empty($_POST['inventory_id']) && !empty($_POST['quantity'])) {
                         foreach ($_POST['inventory_id'] as $index => $inventory_id) {
                             $quantity = $_POST['quantity'][$index];
@@ -102,7 +101,6 @@ $active_page = "product";
                         }
                     }
 
-                    // Convert product ingredients array to JSON for storage
                     $product_ingredients_json = json_encode($product_ingredients);
 
                     if (empty($product_name_err) && empty($category_name_err) && empty($price_err) && empty($photo_err)) {
@@ -117,14 +115,13 @@ $active_page = "product";
                             $param_price = $price;
                             $param_status = $status;
                             $param_photo = $photo_new_name;
-                            $param_product_ingredients = $product_ingredients_json;  // Store JSON-encoded ingredients
+                            $param_product_ingredients = $product_ingredients_json;
                 
                             if (mysqli_stmt_execute($stmt)) {
                                 if ($photo_new_name !== "default_image.png") {
                                     move_uploaded_file($photo_tmp_name, "storage/products/" . $photo_new_name);
                                 }
 
-                                // Success feedback
                                 echo "<script>swal({
                                     title: 'Success!',
                                     text: 'Product Added Successfully!',
@@ -249,7 +246,7 @@ $active_page = "product";
                                         </div>
                                     </div>
                                 </div>
-                            </div> <!-- / .card -->
+                            </div>
                         </div>
                         <div class="col-4">
                             <div class="card shadow mb-4">
@@ -310,7 +307,7 @@ $active_page = "product";
                         </style>
 
                         <script>
-                            const addedIngredients = new Set(); // Store the added ingredients
+                            const addedIngredients = new Set();
 
                             document.getElementById('add-ingredient').addEventListener('click', function () {
                                 const selectedIngredient = document.querySelector('.ingredient-row:last-child select').value;
@@ -333,11 +330,10 @@ $active_page = "product";
                                         confirmButtonText: 'OK'
                                     });
                                 } else {
-                                    addedIngredients.add(selectedIngredient); // Add the selected ingredient to the set
+                                    addedIngredients.add(selectedIngredient);
                                     const container = document.getElementById('ingredients-container');
                                     const newIngredient = document.querySelector('.ingredient-row').cloneNode(true);
 
-                                    // Clear the selection and quantity in the cloned row
                                     newIngredient.querySelector('select').value = '';
                                     newIngredient.querySelector('input').value = '';
 

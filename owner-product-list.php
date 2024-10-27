@@ -129,7 +129,6 @@ $active_page = "product";
                                         });</script>";
                                 }
 
-                                // Close statement
                                 mysqli_stmt_close($stmt);
                             }
                         }
@@ -138,11 +137,9 @@ $active_page = "product";
 
                         ?>
                         <div class="row my-4">
-                            <!-- Small table -->
                             <div class="col-md-12">
                                 <div class="card shadow">
                                     <div class="card-body">
-                                        <!-- table -->
                                         <table class="table datatables" id="dataTable-1">
                                             <thead>
                                                 <tr class="text-center">
@@ -197,7 +194,7 @@ $active_page = "product";
                                                             </td>
                                                             <td>
                                                                 <p class="fw-normal mb-1">
-                                                                    <?php echo $row1['price']; ?>
+                                                                    ₱<?php echo number_format($row1['price'], 2); ?>
                                                                 </p>
                                                             </td>
                                                             <td>
@@ -257,16 +254,16 @@ $active_page = "product";
                                         </table>
                                     </div>
                                 </div>
-                            </div> <!-- simple table -->
-                        </div> <!-- end section -->
-                    </div> <!-- .col-12 -->
-                </div> <!-- .row -->
-            </div> <!-- .container-fluid -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <?php include 'partials/owner-modals.php'; ?>
 
-        </main> <!-- main -->
-    </div> <!-- .wrapper -->
+        </main>
+    </div>
     <?php include 'partials/jscripts.php'; ?>
     <script src='js/jquery.dataTables.min.js'></script>
     <script src='js/dataTables.bootstrap4.min.js'></script>

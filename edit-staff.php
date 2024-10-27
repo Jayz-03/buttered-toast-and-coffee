@@ -147,8 +147,8 @@
                                     </div>
                                 </div>
                             </div>
-                        </div> <!-- / .card -->
-                    </div> <!-- .row -->
+                        </div>
+                    </div>
                     <button class="btn btn-lg btn-primary btn-block" type="submit" name="update">Update</button>
                 </form>
             </div>

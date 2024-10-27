@@ -72,19 +72,16 @@
 </head>
 <body>
     <div class="container">
-        <!-- Header Section -->
         <div class="header">
             <img src="logo.png" alt="Logo">
             <h2>INVOICE</h2>
         </div>
 
-        <!-- Address Section -->
         <div class="address">
             <p>Altavista</p>
             <p>9022 Suspendisse Rd.</p>
         </div>
 
-        <!-- Invoice Info -->
         <div class="info">
             <p><strong>Invoice from:</strong> Imani Lara</p>
             <p>Asset Management</p>
@@ -104,7 +101,6 @@
             <p><strong>Due date:</strong> April 20, 2020</p>
         </div>
 
-        <!-- Item Table -->
         <table class="table">
             <thead>
                 <tr>
@@ -132,14 +128,12 @@
             </tbody>
         </table>
 
-        <!-- Totals Section -->
         <div class="total-section">
             <p>Subtotal: $285.00</p>
             <p>VAT (10%): $28.50</p>
             <p><strong>Total: $313.50</strong></p>
         </div>
 
-        <!-- Footer Section -->
         <div class="footer">
             <p>Thank you for your business!</p>
             <p>For support, contact us at (478) 446-9234</p>

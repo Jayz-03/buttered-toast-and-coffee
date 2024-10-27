@@ -227,8 +227,8 @@ if ($result_sales_data && mysqli_num_rows($result_sales_data) > 0) {
                             </div>
                         </div>
                     </div>
-                </div> <!-- .row -->
-            </div> <!-- .container-fluid -->
+                </div>
+            </div>
 
             <?php include 'partials/staff-modals.php'; ?>
 
@@ -268,10 +268,53 @@ if ($result_sales_data && mysqli_num_rows($result_sales_data) > 0) {
                 </div>
             </div>
 
+            <style>
+                .swal-button {
+                    color: #72C894;
+                    background-color: #04210F;
+                }
 
+                .swal-button:not([disabled]):hover {
+                    color: #72C894;
+                    background-color: #04210F;
+                }
+            </style>
 
-        </main> <!-- main -->
-    </div> <!-- .wrapper -->
+            <script>
+                const today = new Date().toISOString().split('T')[0];
+                const startDateInput = document.getElementById('startDate');
+                const endDateInput = document.getElementById('endDate');
+
+                endDateInput.max = today;
+                startDateInput.max = today;
+
+                startDateInput.addEventListener('change', function () {
+                    let startDate = new Date(startDateInput.value);
+                    let nextDay = new Date(startDate);
+                    nextDay.setDate(startDate.getDate() + 1);
+                    endDateInput.min = nextDay.toISOString().split('T')[0];
+
+                    if (endDateInput.value <= startDateInput.value) {
+                        endDateInput.value = '';
+                    }
+                });
+
+                endDateInput.addEventListener('change', function () {
+                    if (endDateInput.value === startDateInput.value) {
+                        swal({
+                            title: 'Warning!',
+                            text: 'End date cannot be the same as the start date. Please select a different date.',
+                            icon: 'warning',
+                            closeOnClickOutside: false,
+                            confirmButtonText: 'OK'
+                        })
+                        endDateInput.value = '';
+                    }
+                });
+            </script>
+
+        </main>
+    </div>
 
     <?php include 'partials/jscripts.php'; ?>
     <script src='js/jquery.dataTables.min.js'></script>
@@ -305,13 +348,13 @@ if ($result_sales_data && mysqli_num_rows($result_sales_data) > 0) {
                 }
 
                 if (paymentMethod) {
-                    messageParts.push(`and Payment Method '${paymentMethod}'`);
+                    messageParts.push(`with Payment Method '${paymentMethod}'`);
                 }
 
                 if (messageParts.length > 0) {
                     $('#filterMessage').text(`Filtered ${messageParts.join(' ')}`);
                 } else {
-                    $('#filterMessage').text('Showing all sales data.');
+                    $('#filterMessage').text('All sales data filtered.');
                 }
 
                 $.ajax({

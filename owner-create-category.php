@@ -116,7 +116,6 @@ $active_page = "category";
                                 });</script>";
                             }
 
-                            // Close statement
                             mysqli_stmt_close($stmt);
                         }
                     }
@@ -195,17 +194,17 @@ $active_page = "category";
                                         </div>
                                     </div>
                                 </div>
-                            </div> <!-- / .card -->
-                        </div> <!-- .col-12 -->
-                    </div> <!-- .row -->
+                            </div>
+                        </div>
+                    </div>
                     <button class="btn btn-lg btn-primary btn-block" type="submit" name="submit">Create</button>
                 </form>
-            </div> <!-- .container-fluid -->
+            </div>
 
             <?php include 'partials/owner-modals.php'; ?>
 
-        </main> <!-- main -->
-    </div> <!-- .wrapper -->
+        </main>
+    </div>
     <?php include 'partials/jscripts.php'; ?>
 </body>
 

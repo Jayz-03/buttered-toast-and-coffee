@@ -28,14 +28,14 @@ $active_page = "kitchen";
                 <h2 class="page-title">Kitchen Process</h2>
                 <div class="row justify-content-center">
                     <div class="col-12">
-                    </div> <!-- .col-12 -->
-                </div> <!-- .row -->
-            </div> <!-- .container-fluid -->
+                    </div>
+                </div>
+            </div>
 
             <?php include 'partials/staff-modals.php'; ?>
 
-        </main> <!-- main -->
-    </div> <!-- .wrapper -->
+        </main>
+    </div>
     <?php include 'partials/jscripts.php'; ?>
 </body>
 

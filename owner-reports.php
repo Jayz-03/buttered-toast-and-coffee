@@ -28,14 +28,14 @@ $active_page = "reports";
                 <h2 class="page-title">Reports</h2>
                 <div class="row justify-content-center">
                     <div class="col-12">
-                    </div> <!-- .col-12 -->
-                </div> <!-- .row -->
-            </div> <!-- .container-fluid -->
+                    </div>
+                </div>
+            </div>
 
             <?php include 'partials/owner-modals.php'; ?>
 
-        </main> <!-- main -->
-    </div> <!-- .wrapper -->
+        </main>
+    </div>
     <?php include 'partials/jscripts.php'; ?>
 </body>
 

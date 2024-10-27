@@ -48,7 +48,7 @@ $active_page = "category";
                                     if (mysqli_stmt_execute($stmt)) {
                                         mysqli_stmt_store_result($stmt);
 
-                                        if (mysqli_stmt_num_rows($stmt) > 0) {  // Changed from 2 to > 0
+                                        if (mysqli_stmt_num_rows($stmt) > 0) {
                                             $category_name_err = "This category already exists.";
                                         } else {
                                             $category_name = trim($_POST["category_name"]);
@@ -123,7 +123,6 @@ $active_page = "category";
                             <div class="col-md-12">
                                 <div class="card shadow">
                                     <div class="card-body">
-                                        <!-- table -->
                                         <table class="table datatables" id="dataTable-1">
                                             <thead>
                                                 <tr class="text-center">
@@ -226,16 +225,16 @@ $active_page = "category";
                                         </table>
                                     </div>
                                 </div>
-                            </div> <!-- simple table -->
-                        </div> <!-- end section -->
-                    </div> <!-- .col-12 -->
-                </div> <!-- .row -->
-            </div> <!-- .container-fluid -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <?php include 'partials/owner-modals.php'; ?>
 
-        </main> <!-- main -->
-    </div> <!-- .wrapper -->
+        </main>
+    </div>
     <?php include 'partials/jscripts.php'; ?>
     <script src='js/jquery.dataTables.min.js'></script>
     <script src='js/dataTables.bootstrap4.min.js'></script>

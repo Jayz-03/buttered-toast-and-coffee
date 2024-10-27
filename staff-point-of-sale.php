@@ -108,16 +108,15 @@ function getProductsByCategory($link, $categoryName)
                                             }
                                         </style>
 
-                                        <!-- Category Tabs with horizontal scrolling -->
                                         <div class="category-scroll">
                                             <ul class="nav nav-pills nav-fill mb-3" id="category-tabs" role="tablist">
                                                 <li class="nav-item">
-                                                    <a class="nav-link active mb-2" id="category-all-tab" data-toggle="pill"
-                                                        href="#category-all" role="tab" aria-controls="category-all"
-                                                        data-category="all">
+                                                    <a class="nav-link active mb-2" id="category-all-tab"
+                                                        data-toggle="pill" href="#category-all" role="tab"
+                                                        aria-controls="category-all" data-category="all">
                                                         ALL
                                                     </a>
-                                                </li>   
+                                                </li>
                                                 <?php
                                                 while ($category = mysqli_fetch_assoc($categoryResult)) {
                                                     echo '
@@ -144,7 +143,6 @@ function getProductsByCategory($link, $categoryName)
                         </div>
                     </div>
 
-                    <!-- Order Summary Column -->
                     <div class="col-5">
                         <div class="row">
                             <div class="col-12">
@@ -211,13 +209,13 @@ function getProductsByCategory($link, $categoryName)
                         </div>
                     </div>
 
-                </div> <!-- .row -->
-            </div> <!-- .container-fluid -->
+                </div>
+            </div>
 
             <?php include 'partials/staff-modals.php'; ?>
 
-        </main> <!-- main -->
-    </div> <!-- .wrapper -->
+        </main>
+    </div>
     <?php include 'partials/jscripts.php'; ?>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
@@ -393,7 +391,6 @@ function getProductsByCategory($link, $categoryName)
                                     document.getElementById('change-amount').textContent = '₱0.00';
                                     document.getElementById('total-amount').textContent = '₱0.00';
 
-                                    // Pass the queue number to printInvoice
                                     printInvoice(paymentMethod, totalAmount, customerPay, change, cart, response.queue_no);
                                 });
                             } else {
@@ -424,7 +421,6 @@ function getProductsByCategory($link, $categoryName)
             });
 
 
-            // Function to generate and print the invoice
             function printInvoice(paymentMethod, totalAmount, customerPay, change, cart, queueNo) {
                 let invoiceWindow = window.open('', '', 'width=400,height=600');
                 let invoiceContent = `
@@ -444,7 +440,6 @@ function getProductsByCategory($link, $categoryName)
         </head>
         <body>
             <div class="container">
-                <!-- Header Section -->
                 <div class="header">
                     <img src="assets/images/logo.png" alt="Logo">
                     <h2>INVOICE</h2>
@@ -452,7 +447,6 @@ function getProductsByCategory($link, $categoryName)
                     <p>Thank you for your order!</p>
                 </div>
 
-                <!-- Invoice Info -->
                 <div>
                     <p><strong>Payment Method:</strong> ${paymentMethod}</p>
                     <p><strong>Total Amount:</strong> ₱${totalAmount.toFixed(2)}</p>
@@ -460,7 +454,6 @@ function getProductsByCategory($link, $categoryName)
                     <p><strong>Change:</strong> ₱${change.toFixed(2)}</p>
                 </div>
 
-                <!-- Item Table -->
                 <table class="table">
                     <thead>
                         <tr>
@@ -471,7 +464,6 @@ function getProductsByCategory($link, $categoryName)
                     </thead>
                     <tbody>`;
 
-                // Loop through cart items
                 Object.keys(cart).forEach((itemId) => {
                     const item = cart[itemId];
                     invoiceContent += `
@@ -486,7 +478,6 @@ function getProductsByCategory($link, $categoryName)
                     </tbody>
                 </table>
 
-                <!-- Footer Section -->
                 <div class="footer">
                     <p>For support, contact us at (478) 446-9234</p>
                     <p>Visit again soon!</p>

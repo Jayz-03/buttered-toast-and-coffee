@@ -22,46 +22,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="list-group-item bg-transparent">
-                        <div class="row align-items-center">
-                            <div class="col-auto">
-                                <span class="fe fe-download fe-24"></span>
-                            </div>
-                            <div class="col">
-                                <small><strong>Widgets are updated successfull</strong></small>
-                                <div class="my-0 text-muted small">Just create new layout Index, form, table
-                                </div>
-                                <small class="badge badge-pill badge-light text-muted">2m ago</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="list-group-item bg-transparent">
-                        <div class="row align-items-center">
-                            <div class="col-auto">
-                                <span class="fe fe-inbox fe-24"></span>
-                            </div>
-                            <div class="col">
-                                <small><strong>Notifications have been sent</strong></small>
-                                <div class="my-0 text-muted small">Fusce dapibus, tellus ac cursus commodo
-                                </div>
-                                <small class="badge badge-pill badge-light text-muted">30m ago</small>
-                            </div>
-                        </div> <!-- / .row -->
-                    </div>
-                    <div class="list-group-item bg-transparent">
-                        <div class="row align-items-center">
-                            <div class="col-auto">
-                                <span class="fe fe-link fe-24"></span>
-                            </div>
-                            <div class="col">
-                                <small><strong>Link was attached to menu</strong></small>
-                                <div class="my-0 text-muted small">New layout has been attached to the menu
-                                </div>
-                                <small class="badge badge-pill badge-light text-muted">1h ago</small>
-                            </div>
-                        </div>
-                    </div> <!-- / .row -->
-                </div> <!-- / .list-group -->
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary btn-block" data-dismiss="modal">Clear

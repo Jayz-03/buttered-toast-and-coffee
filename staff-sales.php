@@ -35,7 +35,7 @@ $active_page = "sales";
                                     <div class="form-group">
                                         <div class="px-2 py-2 text-muted">
                                             <span class="small" id="filterMessage">
-                                                Click the filter button to select date range.</span>
+                                                Click the filter button to select date range and payment method.</span>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -47,11 +47,9 @@ $active_page = "sales";
                             </div>
                         </div>
                         <div class="row my-4">
-                            <!-- Small table -->
                             <div class="col-md-12">
                                 <div class="card shadow">
                                     <div class="card-body">
-                                        <!-- table -->
                                         <table class="table datatables" id="dataTable-1">
                                             <thead>
                                                 <tr class="text-center">
@@ -86,24 +84,22 @@ $active_page = "sales";
                                                             </td>
                                                             <td>
                                                                 <p class="fw-normal mb-1">
-                                                                    ₱<?php echo $row1['customer_pay']; ?>
+                                                                    ₱<?php echo number_format($row1['customer_pay'], 2); ?>
                                                                 </p>
                                                             </td>
                                                             <td>
                                                                 <p class="fw-normal mb-1">
-                                                                    ₱<?php echo $row1['change_amount']; ?>
+                                                                    ₱<?php echo number_format($row1['change_amount'], 2); ?>
                                                                 </p>
                                                             </td>
                                                             <td>
                                                                 <p class="fw-normal mb-1">
-                                                                    ₱<?php echo $row1['total_amount']; ?>
+                                                                    ₱<?php echo number_format($row1['total_amount'], 2); ?>
                                                                 </p>
                                                             </td>
                                                             <td>
                                                                 <?php
-                                                                // Display the human-readable date
                                                                 $formattedDate = date("l, F j Y - h:i A", strtotime($row1["transaction_date"]));
-                                                                // Create a hidden date with Y-m-d format for JavaScript comparison
                                                                 $hiddenDate = date("Y-m-d", strtotime($row1["transaction_date"]));
                                                                 ?>
                                                                 <span
@@ -133,19 +129,18 @@ $active_page = "sales";
                                         </table>
                                     </div>
                                 </div>
-                            </div> <!-- simple table -->
-                        </div> <!-- end section -->
-                    </div> <!-- .col-12 -->
-                </div> <!-- .row -->
-            </div> <!-- .container-fluid -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-            <!-- Modal for Date Range Filter -->
             <div class="modal fade" id="filterModal" tabindex="-1" role="dialog" aria-labelledby="filterModalLabel"
                 aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="filterModalLabel">Filter by Date Range</h5>
+                            <h5 class="modal-title" id="filterModalLabel">Filter by Date Range and Payment Method</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -159,6 +154,14 @@ $active_page = "sales";
                                 <label for="endDate">End Date:</label>
                                 <input type="date" id="endDate" class="form-control">
                             </div>
+                            <div class="form-group">
+                                <label for="paymentMethod">Payment Method:</label>
+                                <select id="paymentMethod" class="form-control">
+                                    <option value="">All</option>
+                                    <option value="Cash">Cash</option>
+                                    <option value="Card">Card</option>
+                                </select>
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -168,74 +171,130 @@ $active_page = "sales";
                 </div>
             </div>
 
+            <style>
+                .swal-button {
+                    color: #72C894;
+                    background-color: #04210F;
+                }
+
+                .swal-button:not([disabled]):hover {
+                    color: #72C894;
+                    background-color: #04210F;
+                }
+            </style>
+
+            <script>
+                const today = new Date().toISOString().split('T')[0];
+                const startDateInput = document.getElementById('startDate');
+                const endDateInput = document.getElementById('endDate');
+
+                endDateInput.max = today;
+                startDateInput.max = today;
+
+                startDateInput.addEventListener('change', function () {
+                    let startDate = new Date(startDateInput.value);
+                    let nextDay = new Date(startDate);
+                    nextDay.setDate(startDate.getDate() + 1);
+                    endDateInput.min = nextDay.toISOString().split('T')[0];
+
+                    if (endDateInput.value <= startDateInput.value) {
+                        endDateInput.value = '';
+                    }
+                });
+
+                endDateInput.addEventListener('change', function () {
+                    if (endDateInput.value === startDateInput.value) {
+                        swal({
+                            title: 'Warning!',
+                            text: 'End date cannot be the same as the start date. Please select a different date.',
+                            icon: 'warning',
+                            closeOnClickOutside: false,
+                            confirmButtonText: 'OK'
+                        })
+                        endDateInput.value = '';
+                    }
+                });
+            </script>
+
             <?php include 'partials/staff-modals.php'; ?>
 
-        </main> <!-- main -->
-    </div> <!-- .wrapper -->
+        </main>
+    </div>
+
     <?php include 'partials/jscripts.php'; ?>
     <script src='js/jquery.dataTables.min.js'></script>
     <script src='js/dataTables.bootstrap4.min.js'></script>
     <script>
-        $(document).ready(function () {
-            var table = $('#dataTable-1').DataTable({
+        document.addEventListener('DOMContentLoaded', function () {
+            const startDateInput = document.getElementById('startDate');
+            const endDateInput = document.getElementById('endDate');
+            const paymentMethodInput = document.getElementById('paymentMethod');
+            const applyFilterBtn = document.getElementById('applyFilterBtn');
+            const filterMessage = document.getElementById('filterMessage');
+
+            const today = new Date().toISOString().split('T')[0];
+            startDateInput.max = today;
+            endDateInput.max = today;
+
+            startDateInput.addEventListener('change', function () {
+                endDateInput.min = startDateInput.value;
+                if (endDateInput.value === startDateInput.value) {
+                    endDateInput.value = '';
+                }
+            });
+
+            const table = $('#dataTable-1').DataTable({
                 autoWidth: true,
-                "lengthMenu": [
-                    [16, 32, 64, -1],
-                    [16, 32, 64, "All"]
-                ]
+                "lengthMenu": [[16, 32, 64, -1], [16, 32, 64, "All"]]
             });
 
             $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
-                var startDate = $('#startDate').val();
-                var endDate = $('#endDate').val();
+                const startDate = startDateInput.value;
+                const endDate = endDateInput.value;
+                const paymentMethod = paymentMethodInput.value;
+                const hiddenDate = $(table.row(dataIndex).node()).find('.hidden-date').text();
+                const rowPaymentMethod = data[1];
 
-                var hiddenDate = $(table.row(dataIndex).node()).find('.hidden-date').text();
-
-                if (startDate === "" && endDate === "") {
-                    return true;
+                if (startDate || endDate) {
+                    const transactionDate = new Date(hiddenDate);
+                    if (startDate && transactionDate < new Date(startDate)) return false;
+                    if (endDate && transactionDate > new Date(endDate)) return false;
                 }
 
-                if (hiddenDate) {
-                    var formattedTransactionDate = new Date(hiddenDate);
-
-                    if (startDate !== "" && formattedTransactionDate < new Date(startDate)) {
-                        return false;
-                    }
-
-                    if (endDate !== "" && formattedTransactionDate > new Date(endDate)) {
-                        return false;
-                    }
-                }
+                if (paymentMethod && rowPaymentMethod !== paymentMethod) return false;
 
                 return true;
             });
 
-            $('#applyFilterBtn').click(function () {
-                var startDate = $('#startDate').val();
-                var endDate = $('#endDate').val();
-                var filterMessage = $('#filterMessage');
+            applyFilterBtn.addEventListener('click', function () {
+                const startDate = startDateInput.value;
+                const endDate = endDateInput.value;
+                const paymentMethod = paymentMethodInput.value;
+                let message = `Filtered from ${startDate} to ${endDate}`;
 
-                if (startDate && endDate) {
-                    filterMessage.text(`Filtered from ${startDate} to ${endDate}`);
-                } else if (startDate) {
-                    filterMessage.text(`Filtered from ${startDate}`);
-                } else if (endDate) {
-                    filterMessage.text(`Filtered until ${endDate}`);
-                } else {
-                    filterMessage.text('You can filter dates here');
+                if (paymentMethod) {
+                    message += ` with Payment Method '${paymentMethod}'`;
                 }
 
-                $('#filterModal').modal('hide');
-                table.draw();
+                if (!startDate || !endDate) {
+                    swal({
+                        title: 'Warning!',
+                        text: 'Please select both start and end dates to filter.',
+                        icon: 'warning',
+                        closeOnClickOutside: false,
+                        confirmButtonText: 'OK'
+                    });
+                } else {
+                    filterMessage.textContent = message;
+                    $('#filterModal').modal('hide');
+                    table.draw();
+                }
             });
 
-            $('#filterModal').on('hidden.bs.modal', function () {
-                var startDate = $('#startDate').val();
-                var endDate = $('#endDate').val();
-                var filterMessage = $('#filterMessage');
 
-                if (!startDate && !endDate) {
-                    filterMessage.text('Click the filter button to select date range.');
+            $('#filterModal').on('hidden.bs.modal', function () {
+                if (!startDateInput.value && !endDateInput.value) {
+                    filterMessage.textContent = 'Click the filter button to select date range and payment method.';
                 }
             });
         });

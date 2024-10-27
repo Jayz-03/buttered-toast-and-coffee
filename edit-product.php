@@ -135,9 +135,9 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div> <!-- / .card -->
-                        </div> <!-- .col-12 -->
-                    </div> <!-- .row -->
+                            </div>
+                        </div>
+                    </div>
                     <button class="btn btn-lg btn-primary btn-block" type="submit" name="update">Submit</button>
                 </form>
             </div>
