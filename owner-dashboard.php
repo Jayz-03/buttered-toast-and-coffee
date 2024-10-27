@@ -97,7 +97,7 @@ if ($result_sales_data && mysqli_num_rows($result_sales_data) > 0) {
                                                 </span>
                                             </div>
                                             <div class="col pr-0">
-                                                <p class="small text-muted mb-0">Income</p>
+                                                <p class="small text-muted mb-0">Sales</p>
                                                 <span id="totalIncome"
                                                     class="h3 mb-0">₱<?php echo number_format($total_income, 2); ?></span>
                                             </div>
@@ -223,7 +223,8 @@ if ($result_sales_data && mysqli_num_rows($result_sales_data) > 0) {
                                 </div>
                             </div>
                             <div class="card-footer text-center">
-                                <a href="#">View All</a>
+                                <button type="button" class="btn btn-sm" data-toggle="modal"
+                                    data-target="#inventoryModal">View All</button>
                             </div>
                         </div>
                     </div>
@@ -232,86 +233,174 @@ if ($result_sales_data && mysqli_num_rows($result_sales_data) > 0) {
 
             <?php include 'partials/owner-modals.php'; ?>
 
-            <div class="modal fade" id="filterModal" tabindex="-1" role="dialog" aria-labelledby="filterModalLabel"
-                aria-hidden="true">
-                <div class="modal-dialog" role="document">
+            <div class="modal fade" id="inventoryModal" tabindex="-1" role="dialog"
+                aria-labelledby="inventoryModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-xl" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="filterModalLabel">Filter by Date Range and Payment Method</h5>
+                            <h5 class="modal-title" id="inventoryModalLabel">Inventory Stock Alert</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
-                            <div class="form-group">
-                                <label for="startDate">Start Date:</label>
-                                <input type="date" id="startDate" class="form-control">
+                            <div class="d-flex justify-content-end mb-3">
+                                <a href="owner-inventory-list" class="btn btn-primary">Manage Inventory</a>
                             </div>
-                            <div class="form-group">
-                                <label for="endDate">End Date:</label>
-                                <input type="date" id="endDate" class="form-control">
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <table class="table datatables" id="dataTable-2">
+                                        <thead>
+                                            <tr class="text-center">
+                                                <th>Item</th>
+                                                <th>Status</th>
+                                                <th>Insights</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php
+                                            $sql1 = "SELECT * FROM inventory";
+                                            $r = mysqli_query($link, $sql1);
+
+                                            if ($r->num_rows > 0) {
+                                                while ($row1 = mysqli_fetch_assoc($r)) {
+                                                    ?>
+
+                                                    <tr class="text-center">
+                                                        <td>
+                                                            <div class="d-flex align-items-center">
+                                                                <img src="storage/inventory/<?php if ($row1["photo"] != "") {
+                                                                    echo $row1["photo"];
+                                                                } else {
+                                                                    echo 'default_image.png';
+                                                                } ?>" alt="" style="width: 45px; height: 45px"
+                                                                    class="rounded-circle" />
+                                                                <div class="ms-3 text-left mx-2">
+                                                                    <p class="fw-bold mb-1">
+                                                                        <?php echo $row1['item']; ?>
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <?php if ($row1['quantity'] > $row1['low_stock']) {
+                                                                echo '<span class="badge badge-success rounded-pill d-inline px-3">In Stock</span>';
+                                                            } elseif ($row1['quantity'] < $row1['low_stock']) {
+                                                                echo '<span class="badge badge-warning rounded-pill d-inline px-3">Low Stock</span>';
+                                                            } elseif ($row1['quantity'] <= 0) {
+                                                                echo '<span class="badge badge-danger rounded-pill d-inline px-3">Out of Stock</span>';
+                                                            } ?>
+                                                        </td>
+                                                        <td>
+                                                            <?php if ($row1['quantity'] > $row1['low_stock']) {
+                                                                echo '<p class="fw-bold mb-1">The stock is sufficient.</p>';
+                                                            } elseif ($row1['quantity'] < $row1['low_stock']) {
+                                                                echo '<p class="fw-bold mb-1">The stock is running low.</p>';
+                                                            } elseif ($row1['quantity'] <= 0) {
+                                                                echo '<p class="fw-bold mb-1">The stock needs replenisment.</p>';
+                                                            } ?>
+                                                        </td>
+                                                    </tr>
+
+                                                    <?php
+
+                                                }
+                                            }
+                                            ?>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="paymentMethod">Payment Method:</label>
-                                <select id="paymentMethod" class="form-control">
-                                    <option value="">All</option>
-                                    <option value="Cash">Cash</option>
-                                    <option value="Card">Card</option>
-                                </select>
+                            </>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                             </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary" id="applyFilterBtn">Apply Filter</button>
                         </div>
                     </div>
                 </div>
-            </div>
+                
+                <div class="modal fade" id="filterModal" tabindex="-1" role="dialog" aria-labelledby="filterModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="filterModalLabel">Filter by Date Range and Payment Method
+                                </h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label for="startDate">Start Date:</label>
+                                    <input type="date" id="startDate" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label for="endDate">End Date:</label>
+                                    <input type="date" id="endDate" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label for="paymentMethod">Payment Method:</label>
+                                    <select id="paymentMethod" class="form-control">
+                                        <option value="">All</option>
+                                        <option value="Cash">Cash</option>
+                                        <option value="Card">Card</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary" id="applyFilterBtn">Apply Filter</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-            <style>
-                .swal-button {
-                    color: #72C894;
-                    background-color: #04210F;
-                }
-
-                .swal-button:not([disabled]):hover {
-                    color: #72C894;
-                    background-color: #04210F;
-                }
-            </style>
-
-            <script>
-                const today = new Date().toISOString().split('T')[0];
-                const startDateInput = document.getElementById('startDate');
-                const endDateInput = document.getElementById('endDate');
-
-                endDateInput.max = today;
-                startDateInput.max = today;
-
-                startDateInput.addEventListener('change', function () {
-                    let startDate = new Date(startDateInput.value);
-                    let nextDay = new Date(startDate);
-                    nextDay.setDate(startDate.getDate() + 1);
-                    endDateInput.min = nextDay.toISOString().split('T')[0];
-
-                    if (endDateInput.value <= startDateInput.value) {
-                        endDateInput.value = '';
+                <style>
+                    .swal-button {
+                        color: #72C894;
+                        background-color: #04210F;
                     }
-                });
 
-                endDateInput.addEventListener('change', function () {
-                    if (endDateInput.value === startDateInput.value) {
-                        swal({
-                            title: 'Warning!',
-                            text: 'End date cannot be the same as the start date. Please select a different date.',
-                            icon: 'warning',
-                            closeOnClickOutside: false,
-                            confirmButtonText: 'OK'
-                        })
-                        endDateInput.value = '';
+                    .swal-button:not([disabled]):hover {
+                        color: #72C894;
+                        background-color: #04210F;
                     }
-                });
-            </script>
+                </style>
+
+                <script>
+                    const today = new Date().toISOString().split('T')[0];
+                    const startDateInput = document.getElementById('startDate');
+                    const endDateInput = document.getElementById('endDate');
+
+                    endDateInput.max = today;
+                    startDateInput.max = today;
+
+                    startDateInput.addEventListener('change', function () {
+                        let startDate = new Date(startDateInput.value);
+                        let nextDay = new Date(startDate);
+                        nextDay.setDate(startDate.getDate() + 1);
+                        endDateInput.min = nextDay.toISOString().split('T')[0];
+
+                        if (endDateInput.value <= startDateInput.value) {
+                            endDateInput.value = '';
+                        }
+                    });
+
+                    endDateInput.addEventListener('change', function () {
+                        if (endDateInput.value === startDateInput.value) {
+                            swal({
+                                title: 'Warning!',
+                                text: 'End date cannot be the same as the start date. Please select a different date.',
+                                icon: 'warning',
+                                closeOnClickOutside: false,
+                                confirmButtonText: 'OK'
+                            })
+                            endDateInput.value = '';
+                        }
+                    });
+                </script>
 
         </main>
     </div>
@@ -323,6 +412,13 @@ if ($result_sales_data && mysqli_num_rows($result_sales_data) > 0) {
     <script>
         $(document).ready(function () {
             var table = $('#dataTable-1').DataTable({
+                autoWidth: true,
+                "lengthMenu": [
+                    [16, 32, 64, -1],
+                    [16, 32, 64, "All"]
+                ]
+            });
+            var table = $('#dataTable-2').DataTable({
                 autoWidth: true,
                 "lengthMenu": [
                     [16, 32, 64, -1],

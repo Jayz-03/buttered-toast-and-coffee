@@ -184,7 +184,7 @@ $active_page = "inventory";
                                                             </td>
                                                             <td>
                                                                 <p class="fw-normal mb-1">
-                                                                    <?php echo $row1['quantity']; ?>
+                                                                    <?php echo number_format($row1['quantity']); ?>
                                                                 </p>
                                                             </td>
                                                             <td>

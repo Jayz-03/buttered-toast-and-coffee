@@ -199,7 +199,6 @@ function getProductsByCategory($link, $categoryName)
                                                 }
                                             </style>
                                             <div class="text-center mt-3 mb-2">
-                                                <button class="btn btn-danger btn-cancel">CANCEL</button>
                                                 <button class="btn btn-success btn-confirm">CONFIRM</button>
                                             </div>
                                         </div>
@@ -254,9 +253,11 @@ function getProductsByCategory($link, $categoryName)
             const customerPayInput = document.getElementById('customer-pay');
             const changeAmountDisplay = document.getElementById('change-amount');
 
-            customerPayInput.addEventListener('input', function () {
+            customerPayInput.addEventListener('input', calculateChange);
+
+            function calculateChange() {
                 const totalAmount = parseFloat(document.getElementById('total-amount').textContent.replace('₱', ''));
-                const customerPay = parseFloat(this.value);
+                const customerPay = parseFloat(customerPayInput.value);
 
                 if (!isNaN(customerPay) && customerPay >= 0) {
                     const change = customerPay - totalAmount;
@@ -264,7 +265,7 @@ function getProductsByCategory($link, $categoryName)
                 } else {
                     changeAmountDisplay.textContent = '₱0.00';
                 }
-            });
+            }
 
             let cart = {};
 
@@ -285,13 +286,13 @@ function getProductsByCategory($link, $categoryName)
             function showAlert(message, type) {
                 const alertContainer = document.getElementById('alert-container');
                 const alertHtml = `
-                                    <div class="alert alert-${type} alert-dismissible fade show" role="alert">
-                                        <span class="fe fe-layers fe-16 mr-2"></span> ${message}
-                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                `;
+                <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                    <span class="fe fe-layers fe-16 mr-2"></span> ${message}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            `;
                 alertContainer.innerHTML = alertHtml;
 
                 setTimeout(() => {
@@ -309,21 +310,22 @@ function getProductsByCategory($link, $categoryName)
                     totalAmount += product.price * product.quantity;
 
                     cartTable.innerHTML += `
-                    <tr class="text-center">
-                        <td>${product.name}</td>
-                        <td>
-                            <button class="btn btn-sm btn-dark btn-minus" data-id="${productId}">-</button>
-                            <span class="ml-2 mr-2"> ${product.quantity} </span>
-                            <button class="btn btn-sm btn-dark btn-plus" data-id="${productId}">+</button>
-                        </td>
-                        <td>₱${(product.price * product.quantity).toFixed(2)}</td>
-                        <td><button class="btn btn-sm btn-danger btn-delete" data-id="${productId}">Delete</button></td>
-                    </tr>
-                `;
+                <tr class="text-center">
+                    <td>${product.name}</td>
+                    <td>
+                        <button class="btn btn-sm btn-dark btn-minus" data-id="${productId}">-</button>
+                        <span class="ml-2 mr-2"> ${product.quantity} </span>
+                        <button class="btn btn-sm btn-dark btn-plus" data-id="${productId}">+</button>
+                    </td>
+                    <td>₱${(product.price * product.quantity).toFixed(2)}</td>
+                    <td><button class="btn btn-sm btn-danger btn-delete" data-id="${productId}">Delete</button></td>
+                </tr>
+            `;
                 });
 
                 document.getElementById('total-amount').textContent = `₱${totalAmount.toFixed(2)}`;
                 attachCartEvents();
+                calculateChange(); // Update change display after cart updates
             }
 
             function attachCartEvents() {
@@ -420,80 +422,78 @@ function getProductsByCategory($link, $categoryName)
                 }
             });
 
-
             function printInvoice(paymentMethod, totalAmount, customerPay, change, cart, queueNo) {
                 let invoiceWindow = window.open('', '', 'width=400,height=600');
                 let invoiceContent = `
-        <html>
-        <head>
-            <style>
-                body { font-family: Arial, sans-serif; font-size: 12px; }
-                .container { width: 58mm; padding: 5px; }
-                .header, .footer { text-align: center; }
-                .header img { max-width: 120px; }
-                .table { width: 100%; margin-bottom: 10px; }
-                .table th, .table td { text-align: left; padding: 3px; }
-                .table th { border-bottom: 1px solid #000; }
-                .table td { border-bottom: 1px dotted #000; }
-                .table .right { text-align: right; }
-            </style>
-        </head>
-        <body>
-            <div class="container">
-                <div class="header">
-                    <img src="assets/images/logo.png" alt="Logo">
-                    <h2>INVOICE</h2>
-                    <p>Queue Number: ${queueNo}</p>
-                    <p>Thank you for your order!</p>
-                </div>
+            <html>
+            <head>
+                <style>
+                    body { font-family: Arial, sans-serif; font-size: 12px; }
+                    .container { width: 58mm; padding: 5px; }
+                    .header, .footer { text-align: center; }
+                    .header img { max-width: 120px; }
+                    .table { width: 100%; margin-bottom: 10px; }
+                    .table th, .table td { text-align: left; padding: 3px; }
+                    .table th { border-bottom: 1px solid #000; }
+                    .table td { border-bottom: 1px dotted #000; }
+                    .table .right { text-align: right; }
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    <div class="header">
+                        <img src="assets/images/logo.png" alt="Logo">
+                        <h2>INVOICE</h2>
+                        <p>Queue Number: ${queueNo}</p>
+                        <p>Thank you for your order!</p>
+                    </div>
 
-                <div>
-                    <p><strong>Payment Method:</strong> ${paymentMethod}</p>
-                    <p><strong>Total Amount:</strong> ₱${totalAmount.toFixed(2)}</p>
-                    <p><strong>Customer Paid:</strong> ₱${customerPay.toFixed(2)}</p>
-                    <p><strong>Change:</strong> ₱${change.toFixed(2)}</p>
-                </div>
+                    <div>
+                        <p><strong>Payment Method:</strong> ${paymentMethod}</p>
+                        <p><strong>Total Amount:</strong> ₱${totalAmount.toFixed(2)}</p>
+                        <p><strong>Customer Pay:</strong> ₱${customerPay.toFixed(2)}</p>
+                        <p><strong>Change:</strong> ₱${change.toFixed(2)}</p>
+                    </div>
 
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Item</th>
-                            <th>Qty</th>
-                            <th class="right">Price</th>
-                        </tr>
-                    </thead>
-                    <tbody>`;
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Qty</th>
+                                <th class="right">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
 
-                Object.keys(cart).forEach((itemId) => {
-                    const item = cart[itemId];
+                Object.keys(cart).forEach(productId => {
+                    const product = cart[productId];
+                    const amount = product.price * product.quantity;
                     invoiceContent += `
-            <tr>
-                <td>${item.name}</td>
-                <td>${item.quantity}</td>
-                <td class="right">₱${(item.price * item.quantity).toFixed(2)}</td>
-            </tr>`;
+                <tr>
+                    <td>${product.name}</td>
+                    <td>${product.quantity}</td>
+                    <td class="right">₱${amount.toFixed(2)}</td>
+                </tr>`;
                 });
 
                 invoiceContent += `
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
 
-                <div class="footer">
-                    <p>For support, contact us at (478) 446-9234</p>
-                    <p>Visit again soon!</p>
+                    <div class="footer">
+                        <p>Thank you for shopping with us!</p>
+                    </div>
                 </div>
-            </div>
-        </body>
-        </html>`;
+            </body>
+            </html>
+            `;
 
+                invoiceWindow.document.open();
                 invoiceWindow.document.write(invoiceContent);
                 invoiceWindow.document.close();
-                invoiceWindow.focus();
                 invoiceWindow.print();
-                invoiceWindow.close();
             }
-
-
         });
     </script>
 </body>

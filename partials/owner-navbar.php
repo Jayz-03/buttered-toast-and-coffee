@@ -15,7 +15,7 @@ $owner_id = $row["owner_id"];
     </button>
     <ul class="nav">
         <li class="nav-item">
-            <a class="nav-link text-muted" href="./#">
+            <a class="nav-link text-muted" href="#">
                 <span class="avatar avatar-sm">
                     <img src="storage/profile/<?php if ($row["photo"] != "" ) { echo $row["photo"]; } else { echo 'default_image.png'; } ?>" alt="..." class="avatar-img rounded-circle">
                 </span>
