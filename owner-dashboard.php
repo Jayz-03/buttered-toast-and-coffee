@@ -312,95 +312,95 @@ if ($result_sales_data && mysqli_num_rows($result_sales_data) > 0) {
                                     </table>
                                 </div>
                             </div>
-                            </>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         </div>
                     </div>
                 </div>
-                
-                <div class="modal fade" id="filterModal" tabindex="-1" role="dialog" aria-labelledby="filterModalLabel"
-                    aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="filterModalLabel">Filter by Date Range and Payment Method
-                                </h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
+            </div>
+
+            <div class="modal fade" id="filterModal" tabindex="-1" role="dialog" aria-labelledby="filterModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="filterModalLabel">Filter by Date Range and Payment Method
+                            </h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="startDate">Start Date:</label>
+                                <input type="date" id="startDate" class="form-control">
                             </div>
-                            <div class="modal-body">
-                                <div class="form-group">
-                                    <label for="startDate">Start Date:</label>
-                                    <input type="date" id="startDate" class="form-control">
-                                </div>
-                                <div class="form-group">
-                                    <label for="endDate">End Date:</label>
-                                    <input type="date" id="endDate" class="form-control">
-                                </div>
-                                <div class="form-group">
-                                    <label for="paymentMethod">Payment Method:</label>
-                                    <select id="paymentMethod" class="form-control">
-                                        <option value="">All</option>
-                                        <option value="Cash">Cash</option>
-                                        <option value="Card">Card</option>
-                                    </select>
-                                </div>
+                            <div class="form-group">
+                                <label for="endDate">End Date:</label>
+                                <input type="date" id="endDate" class="form-control">
                             </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary" id="applyFilterBtn">Apply Filter</button>
+                            <div class="form-group">
+                                <label for="paymentMethod">Payment Method:</label>
+                                <select id="paymentMethod" class="form-control">
+                                    <option value="">All</option>
+                                    <option value="Cash">Cash</option>
+                                    <option value="Card">Card</option>
+                                </select>
                             </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" id="applyFilterBtn">Apply Filter</button>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <style>
-                    .swal-button {
-                        color: #72C894;
-                        background-color: #04210F;
+            <style>
+                .swal-button {
+                    color: #72C894;
+                    background-color: #04210F;
+                }
+
+                .swal-button:not([disabled]):hover {
+                    color: #72C894;
+                    background-color: #04210F;
+                }
+            </style>
+
+            <script>
+                const today = new Date().toISOString().split('T')[0];
+                const startDateInput = document.getElementById('startDate');
+                const endDateInput = document.getElementById('endDate');
+
+                endDateInput.max = today;
+                startDateInput.max = today;
+
+                startDateInput.addEventListener('change', function () {
+                    let startDate = new Date(startDateInput.value);
+                    let nextDay = new Date(startDate);
+                    nextDay.setDate(startDate.getDate() + 1);
+                    endDateInput.min = nextDay.toISOString().split('T')[0];
+
+                    if (endDateInput.value <= startDateInput.value) {
+                        endDateInput.value = '';
                     }
+                });
 
-                    .swal-button:not([disabled]):hover {
-                        color: #72C894;
-                        background-color: #04210F;
+                endDateInput.addEventListener('change', function () {
+                    if (endDateInput.value === startDateInput.value) {
+                        swal({
+                            title: 'Warning!',
+                            text: 'End date cannot be the same as the start date. Please select a different date.',
+                            icon: 'warning',
+                            closeOnClickOutside: false,
+                            confirmButtonText: 'OK'
+                        })
+                        endDateInput.value = '';
                     }
-                </style>
-
-                <script>
-                    const today = new Date().toISOString().split('T')[0];
-                    const startDateInput = document.getElementById('startDate');
-                    const endDateInput = document.getElementById('endDate');
-
-                    endDateInput.max = today;
-                    startDateInput.max = today;
-
-                    startDateInput.addEventListener('change', function () {
-                        let startDate = new Date(startDateInput.value);
-                        let nextDay = new Date(startDate);
-                        nextDay.setDate(startDate.getDate() + 1);
-                        endDateInput.min = nextDay.toISOString().split('T')[0];
-
-                        if (endDateInput.value <= startDateInput.value) {
-                            endDateInput.value = '';
-                        }
-                    });
-
-                    endDateInput.addEventListener('change', function () {
-                        if (endDateInput.value === startDateInput.value) {
-                            swal({
-                                title: 'Warning!',
-                                text: 'End date cannot be the same as the start date. Please select a different date.',
-                                icon: 'warning',
-                                closeOnClickOutside: false,
-                                confirmButtonText: 'OK'
-                            })
-                            endDateInput.value = '';
-                        }
-                    });
-                </script>
+                });
+            </script>
 
         </main>
     </div>
@@ -850,8 +850,6 @@ if ($result_sales_data && mysqli_num_rows($result_sales_data) > 0) {
             });
         });
     </script>
-
-    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 </body>
 
 </html>
