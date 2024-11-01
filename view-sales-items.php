@@ -64,10 +64,10 @@
                             <?php
                             $sale_id = $row1['sale_id'];
                             $sql1 = "SELECT * FROM sale_items WHERE sale_id = $sale_id";
-                            $r = mysqli_query($link, $sql1);
+                            $r2 = mysqli_query($link, $sql1);
 
-                            if ($r->num_rows > 0) {
-                                while ($row1 = mysqli_fetch_assoc($r)) {
+                            if ($r2->num_rows > 0) {
+                                while ($row1 = mysqli_fetch_assoc($r2)) {
                                     $product_id = $row1['product_id'];
                                     $sql3 = "SELECT * FROM product WHERE product_id = $product_id";
                                     $result3 = mysqli_query($link, $sql3);

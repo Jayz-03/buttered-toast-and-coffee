@@ -387,13 +387,13 @@ function getProductsByCategory($link, $categoryName)
                                     icon: 'success',
                                     confirmButtonText: 'OK'
                                 }).then(() => {
+                                    printInvoice(paymentMethod, totalAmount, customerPay, change, { ...cart }, response.queue_no);
+
                                     cart = {};
                                     updateCartUI();
                                     document.getElementById('customer-pay').value = '';
                                     document.getElementById('change-amount').textContent = '₱0.00';
                                     document.getElementById('total-amount').textContent = '₱0.00';
-
-                                    printInvoice(paymentMethod, totalAmount, customerPay, change, cart, response.queue_no);
                                 });
                             } else {
                                 swal({
@@ -423,76 +423,86 @@ function getProductsByCategory($link, $categoryName)
             });
 
             function printInvoice(paymentMethod, totalAmount, customerPay, change, cart, queueNo) {
-                let invoiceWindow = window.open('', '', 'width=400,height=600');
+                let iframe = document.createElement('iframe');
+                document.body.appendChild(iframe);
+                iframe.style.position = 'absolute';
+                iframe.style.width = '0';
+                iframe.style.height = '0';
+                iframe.style.border = 'none';
+
                 let invoiceContent = `
-            <html>
-            <head>
-                <style>
-                    body { font-family: Arial, sans-serif; font-size: 12px; }
-                    .container { width: 58mm; padding: 5px; }
-                    .header, .footer { text-align: center; }
-                    .header img { max-width: 120px; }
-                    .table { width: 100%; margin-bottom: 10px; }
-                    .table th, .table td { text-align: left; padding: 3px; }
-                    .table th { border-bottom: 1px solid #000; }
-                    .table td { border-bottom: 1px dotted #000; }
-                    .table .right { text-align: right; }
-                </style>
-            </head>
-            <body>
-                <div class="container">
-                    <div class="header">
-                        <img src="assets/images/logo.png" alt="Logo">
-                        <h2>INVOICE</h2>
-                        <p>Queue Number: ${queueNo}</p>
-                        <p>Thank you for your order!</p>
+                <html>
+                <head>
+                    <style>
+                        body { font-family: Arial, sans-serif; font-size: 12px; }
+                        .container { width: 58mm; padding: 5px; }
+                        .header, .footer { text-align: center; }
+                        .header img { max-width: 150px; }
+                        .table { width: 100%; margin-bottom: 10px; }
+                        .table th, .table td { text-align: left; padding: 3px; font-size: 10px; }
+                        .table th { border-bottom: 1px solid #000; }
+                        .table td { border-bottom: 1px dotted #000; font-size: 10px; }
+                        .table .right { text-align: right; }
+                    </style>
+                </head>
+                <body>
+                    <div class="container">
+                        <div class="header">
+                            <img src="assets/images/logo.png" alt="Logo">
+                            <h2>INVOICE</h2>
+                            <p>Queue Number: ${queueNo}</p>
+                            <p>Thank you for your order!</p>
+                        </div>
+
+                        <div>
+                            <p><strong>Payment Method:</strong> ${paymentMethod}</p>
+                            <p><strong>Total Amount:</strong> ₱${totalAmount.toFixed(2)}</p>
+                            <p><strong>Customer Pay:</strong> ₱${customerPay.toFixed(2)}</p>
+                            <p><strong>Change:</strong> ₱${change.toFixed(2)}</p>
+                        </div>
+
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Item</th>
+                                    <th>Qty</th>
+                                    <th class="right">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                `;
+
+                            Object.keys(cart).forEach(productId => {
+                                const product = cart[productId];
+                                const amount = product.price * product.quantity;
+                                invoiceContent += `
+                                <tr>
+                                    <td>${product.name}</td>
+                                    <td>${product.quantity}</td>
+                                    <td class="right">₱${amount.toFixed(2)}</td>
+                                </tr>`;
+                                    });
+
+                                    invoiceContent += `
+                            </tbody>
+                        </table>
+
+                        <div class="footer">
+                            <p>Thank you for shopping with us!</p>
+                        </div>
                     </div>
+                </body>
+                </html>
+                `;
 
-                    <div>
-                        <p><strong>Payment Method:</strong> ${paymentMethod}</p>
-                        <p><strong>Total Amount:</strong> ₱${totalAmount.toFixed(2)}</p>
-                        <p><strong>Customer Pay:</strong> ₱${customerPay.toFixed(2)}</p>
-                        <p><strong>Change:</strong> ₱${change.toFixed(2)}</p>
-                    </div>
+                let doc = iframe.contentWindow.document;
+                doc.open();
+                doc.write(invoiceContent);
+                doc.close();
 
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Item</th>
-                                <th>Qty</th>
-                                <th class="right">Amount</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-            `;
+                iframe.contentWindow.print();
 
-                Object.keys(cart).forEach(productId => {
-                    const product = cart[productId];
-                    const amount = product.price * product.quantity;
-                    invoiceContent += `
-                <tr>
-                    <td>${product.name}</td>
-                    <td>${product.quantity}</td>
-                    <td class="right">₱${amount.toFixed(2)}</td>
-                </tr>`;
-                });
-
-                invoiceContent += `
-                        </tbody>
-                    </table>
-
-                    <div class="footer">
-                        <p>Thank you for shopping with us!</p>
-                    </div>
-                </div>
-            </body>
-            </html>
-            `;
-
-                invoiceWindow.document.open();
-                invoiceWindow.document.write(invoiceContent);
-                invoiceWindow.document.close();
-                invoiceWindow.print();
+                document.body.removeChild(iframe);
             }
         });
     </script>
