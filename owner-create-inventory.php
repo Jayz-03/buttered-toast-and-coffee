@@ -83,8 +83,8 @@ $active_page = "inventory";
                     }
 
                     if (empty($_FILES['photo']['name'])) {
-                        $photo = "default_image.png";
-                        $photo_new_name = "default_image.png";
+                        $photo = "";
+                        $photo_new_name = "";
                     } else {
                         $photo = $_FILES["photo"]["name"];
                         $photo_tmp_name = $_FILES["photo"]["tmp_name"];
@@ -106,7 +106,7 @@ $active_page = "inventory";
                             $param_photo = $photo_new_name;
                     
                             if (mysqli_stmt_execute($stmt)) {
-                                if ($photo_new_name !== "default_image.png") {
+                                if ($photo_new_name !== "") {
                                     move_uploaded_file($photo_tmp_name, "storage/inventory/" . $photo_new_name);
                                 }
                     
