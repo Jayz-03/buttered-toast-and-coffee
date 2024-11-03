@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 17, 2024 at 02:21 PM
+-- Generation Time: Nov 03, 2024 at 06:55 AM
 -- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- PHP Version: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -41,9 +41,16 @@ CREATE TABLE `category` (
 --
 
 INSERT INTO `category` (`category_id`, `owner_id`, `category_name`, `status`, `photo`, `last_updated`) VALUES
-(1, 1, 'HOT COFFEE', 0, '1532231853hc.jpg', '2024-09-16 18:06:13.147699'),
-(2, 1, 'COFFEE', 0, '613947285amr.jpg', '2024-09-16 18:27:22.857975'),
-(3, 1, 'MLK&TEA', 0, '283112666mlk.webp', '2024-09-17 03:50:29.755953');
+(1, 1, 'OUR SIGNATURE', 0, 'default_image.png', '2024-10-19 14:56:43.544371'),
+(2, 1, 'LATTE SERIES', 0, 'default_image.png', '2024-10-19 14:18:07.271267'),
+(3, 1, 'MATCHA SERIES', 0, 'default_image.png', '2024-10-19 14:18:24.731033'),
+(4, 1, 'HOT COFFEE', 0, 'default_image.png', '2024-10-19 14:18:37.110621'),
+(5, 1, 'SEASONAL DRINKS', 0, 'default_image.png', '2024-10-19 14:18:47.581311'),
+(6, 1, 'BLENDED DRINKS', 0, 'default_image.png', '2024-10-19 14:19:07.241326'),
+(7, 1, 'STARTERS', 0, 'default_image.png', '2024-10-20 10:25:00.340849'),
+(8, 1, 'WEEKDAYS', 0, 'default_image.png', '2024-10-20 10:25:21.848723'),
+(9, 1, 'CROFFLE SERIES', 0, 'default_image.png', '2024-10-20 10:25:45.947201'),
+(10, 1, 'EGG DROP', 0, 'default_image.png', '2024-10-20 10:25:54.993661');
 
 -- --------------------------------------------------------
 
@@ -56,7 +63,7 @@ CREATE TABLE `inventory` (
   `owner_id` int(11) NOT NULL,
   `item` text NOT NULL,
   `quantity` int(11) NOT NULL,
-  `status` int(1) NOT NULL,
+  `low_stock` int(11) NOT NULL,
   `photo` text NOT NULL,
   `last_updated` timestamp(6) NOT NULL DEFAULT current_timestamp(6) ON UPDATE current_timestamp(6)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -65,12 +72,83 @@ CREATE TABLE `inventory` (
 -- Dumping data for table `inventory`
 --
 
-INSERT INTO `inventory` (`inventory_id`, `owner_id`, `item`, `quantity`, `status`, `photo`, `last_updated`) VALUES
-(1, 1, 'sample', 2, 0, '702067629inbox.png', '2024-06-23 14:35:56.646504'),
-(2, 1, 'Sample number 2', 123, 0, '87601931inbox.png', '2024-05-30 16:38:42.414009'),
-(3, 1, 'dsdasd', 123, 0, '396422402Untitled design.png', '2024-06-08 14:22:48.090473'),
-(5, 1, 'sample again', 1, 0, '890288475study.png', '2024-09-04 09:12:31.652537'),
-(6, 1, 'Girl', 2, 0, '1878295758studygif.gif', '2024-09-04 09:13:36.525552');
+INSERT INTO `inventory` (`inventory_id`, `owner_id`, `item`, `quantity`, `low_stock`, `photo`, `last_updated`) VALUES
+(1, 1, 'Doreen', 6975, 500, '702806193Doreen.png', '2024-11-01 16:04:36.837388'),
+(2, 1, 'Milk Syrup', 30105, 3700, '1954975028Milk syrup.jpg', '2024-11-01 16:01:28.683243'),
+(3, 1, 'Milk Arla', 360410, 34500, '2113943345Milk Arla.png', '2024-11-01 16:01:09.924436'),
+(4, 1, 'Coffee', 41766, 8750, '524009733Coffee.jpeg', '2024-11-01 16:04:24.807873'),
+(5, 1, 'Ice', 242165, 22775, '1256192592Ice Cubes.jpg', '2024-11-01 16:20:13.910492'),
+(6, 1, 'Everwhip', 4200, 300, 'default_image.png', '2024-10-19 10:51:58.983339'),
+(7, 1, 'White Chocolate', 1400, 100, '1882457583White Chocolate.jpg', '2024-11-01 16:05:01.834392'),
+(8, 1, 'Toffee', 1380, 100, 'default_image.png', '2024-10-29 07:25:07.844200'),
+(9, 1, 'Whipped Cream', 12270, 900, '2122203380Whipped Cream.jpeg', '2024-11-01 16:02:51.389568'),
+(10, 1, 'Caramel Walling', 12440, 900, '35449025Caramel Walling.jpg', '2024-11-01 15:58:19.635993'),
+(11, 1, 'Seasalt Cream', 5600, 400, 'default_image.png', '2024-10-19 10:53:36.291782'),
+(12, 1, 'Tiramisu Syrup', 1400, 100, 'default_image.png', '2024-10-19 10:54:41.060988'),
+(13, 1, 'Broas', 70, 5, 'default_image.png', '2024-10-19 10:54:59.825507'),
+(14, 1, 'Cocoa Powder', 6300, 354, '1891934419Cocoa Powder.jpeg', '2024-11-01 16:00:42.514037'),
+(15, 1, 'Vanilla Syrup', 1300, 450, '692145424Vanilla Syrup.png', '2024-11-01 16:02:27.853032'),
+(16, 1, 'Caramel Syrup', 2775, 200, '129931675Caramel Syrup.jpeg', '2024-11-01 16:03:51.460105'),
+(17, 1, 'Toffee Syrup', 1400, 100, 'default_image.png', '2024-10-19 10:56:57.931058'),
+(18, 1, 'Honeycomb', 1750, 125, 'default_image.png', '2024-10-19 10:57:09.270350'),
+(19, 1, 'Hazelnut Syrup', 700, 50, 'default_image.png', '2024-10-19 10:57:23.213174'),
+(20, 1, 'Strawberry Jam', 9420, 900, '2046377866Strawberry Jam.jpg', '2024-11-01 16:02:07.897363'),
+(21, 1, 'Strawberry', 3835, 275, 'default_image.png', '2024-10-24 13:18:19.243314'),
+(22, 1, 'Fructose', 2800, 150, '271949627Fructose.jpeg', '2024-11-01 16:20:01.040951'),
+(23, 1, 'Ice Cream', 2450, 175, 'default_image.png', '2024-10-19 10:58:49.690692'),
+(24, 1, 'Nata', 4200, 300, 'default_image.png', '2024-10-19 10:59:00.782999'),
+(25, 1, 'Thai Sala', 3150, 225, 'default_image.png', '2024-10-19 10:59:16.429931'),
+(26, 1, 'Matcha Powder', 3192, 120, '1415667598Matcha Powder.jpeg', '2024-11-01 16:04:49.376838'),
+(27, 1, 'Ube Condensed', 300, 150, '148662521Ube Condensed.jpg', '2024-11-01 16:20:38.349480'),
+(28, 1, 'Chocolate Syrup', 600, 300, '1930241371Choco Syrup.jpeg', '2024-11-01 16:00:29.776628'),
+(29, 1, 'Pink Lemonade', 3360, 2400, '178685725Pink Lemonade.jpg', '2024-11-01 16:21:14.315282'),
+(30, 1, 'Salted Caramel Sauce', 3960, 300, '1058166169Salted Caramel Sauce.jpg', '2024-11-01 16:01:46.300781'),
+(31, 1, 'Choco Chips', 3264, 240, '1109136920Choco Chips.jpg', '2024-11-01 15:59:56.890810'),
+(32, 1, 'Cheese', 20880, 1500, '1052171030Cheese.jpg', '2024-11-01 15:58:54.856622'),
+(33, 1, 'Blueberry Jam', 4080, 300, '1532838908Blueberry Jam.jpeg', '2024-11-01 15:57:57.400839'),
+(34, 1, 'White Chocolate Sauce', 4140, 300, '221466754White Chocolate sauce.jpeg', '2024-11-01 16:03:06.788520'),
+(35, 1, 'Butterscotch Sauce', 4080, 300, 'default_image.png', '2024-10-24 13:37:37.199739'),
+(36, 1, 'Fries', 20900, 2000, '856361939Fries.jpeg', '2024-11-01 16:11:12.105358'),
+(37, 1, 'Sour Cream', 2940, 300, '1190287284Sour Cream.jpeg', '2024-11-01 16:16:41.228983'),
+(38, 1, 'Seasonings', 139, 10, '367302281Seasonings.jpg', '2024-11-01 16:15:23.602106'),
+(39, 1, 'Ground Beef', 5950, 750, '243057177Ground Beef.jpg', '2024-11-01 16:11:24.154075'),
+(40, 1, 'Cheese Sauce', 1950, 250, 'default_image.png', '2024-10-24 20:02:15.160109'),
+(41, 1, 'Nacho Chips', 7000, 500, '1469267716Nacho chips.jpeg', '2024-11-01 16:13:48.120647'),
+(42, 1, 'Onions', 1400, 100, '1670637696Onions.jpeg', '2024-11-01 16:14:01.082532'),
+(43, 1, 'Tomatoes', 1400, 100, '258013716Tomato.jpg', '2024-11-01 16:18:31.810582'),
+(44, 1, 'Cucumbers', 1400, 100, '548653963Cucumber.jpeg', '2024-11-01 16:10:25.336411'),
+(45, 1, 'Salsa', 1470, 150, '1098178018Salsa.jpeg', '2024-11-01 16:15:07.500686'),
+(46, 1, 'Jalapenos', 700, 50, '88830658Jalapenos.jpg', '2024-11-01 16:13:01.641872'),
+(47, 1, 'Lasagna Sheets', 7000, 500, '773340493Lasagna Sheets.jpeg', '2024-11-01 16:13:17.851991'),
+(48, 1, 'Tomato Sauce', 14000, 750, '2064485853Tomato Sauce.jpg', '2024-11-01 16:18:16.914919'),
+(49, 1, 'Ricotta Cheese', 2000, 250, '666725220Ricotta Cheese.jpeg', '2024-11-01 16:14:38.248529'),
+(50, 1, 'Spinach', 2000, 250, '980471996Spinach.jpeg', '2024-11-01 16:17:37.438616'),
+(51, 1, 'Croffle', 23800, 3000, '1559869054croffle.jpg', '2024-11-01 16:09:41.121587'),
+(52, 1, 'Powdered Sugar', 139, 10, '2043228134Powdered Sugar.jpg', '2024-11-01 16:14:22.161256'),
+(53, 1, 'Chocolate Sauce', 137, 10, '1808980848Chocolate Sauce.jpeg', '2024-11-01 16:09:09.132092'),
+(54, 1, 'Sliced Almonds', 690, 10, '871089859Sliced Almonds.jpg', '2024-11-01 16:16:01.590344'),
+(55, 1, 'Crushed Oreos', 340, 50, '1894511401Crushed Oreos.jpg', '2024-11-01 16:10:14.711876'),
+(56, 1, 'Blueberry Syrup', 350, 50, '2042419042Blueberry Syrup.jpg', '2024-11-01 16:08:05.729544'),
+(57, 1, 'Strawberry Syrup', 350, 50, '562669123Strawberry Syrup.jpeg', '2024-11-01 16:17:54.577122'),
+(58, 1, 'Caramel Sauce', 350, 50, 'default_image.png', '2024-10-19 11:10:33.064998'),
+(59, 1, 'Whole Biscoff  Cookie', 69, 5, '1397369084Whole Biscoff Cookie.png', '2024-11-01 16:18:55.435004'),
+(60, 1, 'Brioche Bread', 5850, 750, '1696705689Brioche Bread.png', '2024-11-01 16:08:25.865573'),
+(61, 1, 'Scrambled Egg', 5850, 750, 'default_image.png', '2024-10-24 13:16:54.765757'),
+(62, 1, 'Signature Sauce', 4140, 300, '447137729Signature Sauce.jpg', '2024-11-01 16:15:47.484506'),
+(63, 1, 'Butter', 700, 50, '119005865Butter.jpg', '2024-11-01 16:08:38.837398'),
+(64, 1, 'Spam', 1850, 250, '1286506431Spam.jpg', '2024-11-01 16:17:13.386659'),
+(65, 1, 'Roasted Nori', 670, 50, '1691413221Roasted Nori.jpg', '2024-11-01 16:14:54.520341'),
+(66, 1, 'Mayonnaise', 670, 50, '1834727059Mayo.jpg', '2024-11-01 16:13:31.649671'),
+(67, 1, 'Ham', 2000, 250, '379862287Ham.jpeg', '2024-11-01 16:11:41.062653'),
+(68, 1, 'Avocado', 1400, 100, '347342382Avocado.jpg', '2024-11-01 16:07:50.999168'),
+(69, 1, 'Cup', 484, 50, '1802055352Cup Only.png', '2024-11-01 16:06:29.157746'),
+(70, 1, 'Straw', 487, 50, '122086463Straw.jpeg', '2024-11-01 16:06:47.289123'),
+(71, 1, 'Lid', 484, 50, '1423079393Coffee Lid.png', '2024-11-01 16:06:14.031919'),
+(72, 1, 'Seasalt Sauce', 1000, 200, 'default_image.png', '2024-10-20 07:41:03.761973'),
+(73, 1, 'Soda', 1000, 200, '519393515Soda.jpg', '2024-11-01 16:21:24.494927'),
+(74, 1, 'Cheesecake', 997, 200, '571684407Cheesecake.jpg', '2024-11-01 15:59:12.561892'),
+(75, 1, 'Choco Powder', 1000, 200, 'default_image.png', '2024-10-20 08:58:27.067604'),
+(76, 1, 'Crushed Biscoff', 995, 200, '1884116333Crushed Biscoff.jpeg', '2024-11-01 16:09:57.479297');
 
 -- --------------------------------------------------------
 
@@ -110,6 +188,7 @@ CREATE TABLE `product` (
   `category_name` text NOT NULL,
   `price` int(11) NOT NULL,
   `status` int(1) NOT NULL,
+  `product_ingredients` text NOT NULL,
   `photo` text NOT NULL,
   `last_updated` timestamp(6) NOT NULL DEFAULT current_timestamp(6) ON UPDATE current_timestamp(6)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -118,9 +197,59 @@ CREATE TABLE `product` (
 -- Dumping data for table `product`
 --
 
-INSERT INTO `product` (`product_id`, `owner_id`, `product_name`, `category_name`, `price`, `status`, `photo`, `last_updated`) VALUES
-(1, 1, 'Americano', 'HOT COFFEE', 110, 0, '61059648amr.jpg', '2024-09-16 18:08:05.160426'),
-(2, 1, 'Latte', 'COFFEE', 125, 0, '43359232hc.jpg', '2024-09-17 06:29:11.189768');
+INSERT INTO `product` (`product_id`, `owner_id`, `product_name`, `category_name`, `price`, `status`, `product_ingredients`, `photo`, `last_updated`) VALUES
+(1, 1, 'SPANISH LATTE', 'OUR SIGNATURE', 130, 0, '[{\"inventory_id\":\"1\",\"quantity\":\"25\"},{\"inventory_id\":\"2\",\"quantity\":\"5\"},{\"inventory_id\":\"3\",\"quantity\":\"180\"},{\"inventory_id\":\"4\",\"quantity\":\"18\"},{\"inventory_id\":\"5\",\"quantity\":\"125\"},{\"inventory_id\":\"69\",\"quantity\":\"1\"},{\"inventory_id\":\"71\",\"quantity\":\"1\"},{\"inventory_id\":\"70\",\"quantity\":\"1\"}]', '85106263SpanishLatte.JPG', '2024-11-01 13:33:37.595873'),
+(2, 1, 'BARISTA DRINK', 'OUR SIGNATURE', 120, 0, '[{\"inventory_id\":\"6\",\"quantity\":\"30\"},{\"inventory_id\":\"7\",\"quantity\":\"10\"},{\"inventory_id\":\"3\",\"quantity\":\"50\"},{\"inventory_id\":\"4\",\"quantity\":\"18\"},{\"inventory_id\":\"5\",\"quantity\":\"60\"},{\"inventory_id\":\"69\",\"quantity\":\"1\"},{\"inventory_id\":\"71\",\"quantity\":\"1\"},{\"inventory_id\":\"70\",\"quantity\":\"1\"}]', '80676847BaristaDrink.JPG', '2024-11-01 13:31:22.018717'),
+(3, 1, 'TOFFEE NUT CARAMEL', 'OUR SIGNATURE', 145, 0, '[{\"inventory_id\":\"8\",\"quantity\":\"20\"},{\"inventory_id\":\"2\",\"quantity\":\"5\"},{\"inventory_id\":\"3\",\"quantity\":\"180\"},{\"inventory_id\":\"4\",\"quantity\":\"18\"},{\"inventory_id\":\"9\",\"quantity\":\"20\"},{\"inventory_id\":\"10\",\"quantity\":\"20\"},{\"inventory_id\":\"5\",\"quantity\":\"60\"},{\"inventory_id\":\"69\",\"quantity\":\"1\"},{\"inventory_id\":\"70\",\"quantity\":\"1\"},{\"inventory_id\":\"71\",\"quantity\":\"1\"}]', '1398337807ToffeeNutCaramel.JPG', '2024-11-01 13:34:34.119231'),
+(4, 1, 'TIRAMISU LATTE', 'OUR SIGNATURE', 160, 0, '[{\"inventory_id\":\"11\",\"quantity\":\"40\"},{\"inventory_id\":\"2\",\"quantity\":\"5\"},{\"inventory_id\":\"3\",\"quantity\":\"180\"},{\"inventory_id\":\"12\",\"quantity\":\"20\"},{\"inventory_id\":\"13\",\"quantity\":\"1\"},{\"inventory_id\":\"14\",\"quantity\":\"2\"},{\"inventory_id\":\"4\",\"quantity\":\"18\"},{\"inventory_id\":\"5\",\"quantity\":\"60\"},{\"inventory_id\":\"69\",\"quantity\":\"1\"},{\"inventory_id\":\"71\",\"quantity\":\"1\"},{\"inventory_id\":\"70\",\"quantity\":\"1\"}]', '606902519TiramisuLatte.JPG', '2024-11-01 13:33:52.716901'),
+(5, 1, 'VANI LATTE', 'OUR SIGNATURE', 130, 0, '[{\"inventory_id\":\"15\",\"quantity\":\"20\"},{\"inventory_id\":\"2\",\"quantity\":\"5\"},{\"inventory_id\":\"3\",\"quantity\":\"180\"},{\"inventory_id\":\"4\",\"quantity\":\"18\"},{\"inventory_id\":\"5\",\"quantity\":\"60\"},{\"inventory_id\":\"69\",\"quantity\":\"1\"},{\"inventory_id\":\"71\",\"quantity\":\"1\"},{\"inventory_id\":\"70\",\"quantity\":\"1\"}]', '1457273406VaniLatte.JPG', '2024-11-01 13:34:48.900765'),
+(6, 1, 'CARAMEL LATTE', 'OUR SIGNATURE', 130, 0, '[{\"inventory_id\":\"16\",\"quantity\":\"20\"},{\"inventory_id\":\"2\",\"quantity\":\"5\"},{\"inventory_id\":\"3\",\"quantity\":\"280\"},{\"inventory_id\":\"4\",\"quantity\":\"18\"},{\"inventory_id\":\"10\",\"quantity\":\"20\"},{\"inventory_id\":\"5\",\"quantity\":\"60\"},{\"inventory_id\":\"69\",\"quantity\":\"1\"},{\"inventory_id\":\"71\",\"quantity\":\"1\"},{\"inventory_id\":\"70\",\"quantity\":\"1\"}]', '425915820CaramelLatte.JPG', '2024-11-01 13:31:46.923779'),
+(7, 1, 'TOFFEE LATTE', 'OUR SIGNATURE', 130, 0, '[{\"inventory_id\":\"17\",\"quantity\":\"20\"},{\"inventory_id\":\"2\",\"quantity\":\"5\"},{\"inventory_id\":\"3\",\"quantity\":\"180\"},{\"inventory_id\":\"4\",\"quantity\":\"18\"},{\"inventory_id\":\"5\",\"quantity\":\"60\"},{\"inventory_id\":\"69\",\"quantity\":\"1\"},{\"inventory_id\":\"71\",\"quantity\":\"1\"},{\"inventory_id\":\"70\",\"quantity\":\"1\"}]', '234777159ToffeeLatte.JPG', '2024-11-01 13:34:13.370024'),
+(8, 1, 'MOCAFINO LATTE', 'OUR SIGNATURE', 140, 0, '[{\"inventory_id\":\"28\",\"quantity\":\"20\"},{\"inventory_id\":\"2\",\"quantity\":\"5\"},{\"inventory_id\":\"3\",\"quantity\":\"180\"},{\"inventory_id\":\"4\",\"quantity\":\"18\"},{\"inventory_id\":\"14\",\"quantity\":\"2\"},{\"inventory_id\":\"5\",\"quantity\":\"60\"},{\"inventory_id\":\"69\",\"quantity\":\"1\"},{\"inventory_id\":\"71\",\"quantity\":\"1\"},{\"inventory_id\":\"70\",\"quantity\":\"1\"}]', '411691391MocafinoLatte.JPG', '2024-11-01 13:32:19.246408'),
+(9, 1, 'SEASALT LATTE', 'OUR SIGNATURE', 150, 0, '[{\"inventory_id\":\"11\",\"quantity\":\"40\"},{\"inventory_id\":\"2\",\"quantity\":\"5\"},{\"inventory_id\":\"72\",\"quantity\":\"15\"},{\"inventory_id\":\"3\",\"quantity\":\"180\"},{\"inventory_id\":\"4\",\"quantity\":\"18\"},{\"inventory_id\":\"5\",\"quantity\":\"60\"},{\"inventory_id\":\"69\",\"quantity\":\"1\"},{\"inventory_id\":\"71\",\"quantity\":\"1\"},{\"inventory_id\":\"70\",\"quantity\":\"1\"}]', '269835815SeaSaltLatte.JPG', '2024-11-01 13:33:20.076902'),
+(10, 1, 'HONEYCOMB LATTE', 'OUR SIGNATURE', 145, 0, '[{\"inventory_id\":\"2\",\"quantity\":\"30\"},{\"inventory_id\":\"3\",\"quantity\":\"180\"},{\"inventory_id\":\"4\",\"quantity\":\"18\"},{\"inventory_id\":\"18\",\"quantity\":\"25\"},{\"inventory_id\":\"5\",\"quantity\":\"60\"},{\"inventory_id\":\"69\",\"quantity\":\"1\"},{\"inventory_id\":\"71\",\"quantity\":\"1\"},{\"inventory_id\":\"70\",\"quantity\":\"1\"}]', '2069222003HoneyCombLatte.JPG', '2024-11-01 13:32:03.093745'),
+(11, 1, 'PURPLE LATTE', 'OUR SIGNATURE', 140, 0, '[{\"inventory_id\":\"2\",\"quantity\":\"15\"},{\"inventory_id\":\"3\",\"quantity\":\"180\"},{\"inventory_id\":\"4\",\"quantity\":\"18\"},{\"inventory_id\":\"5\",\"quantity\":\"60\"},{\"inventory_id\":\"27\",\"quantity\":\"30\"},{\"inventory_id\":\"69\",\"quantity\":\"1\"},{\"inventory_id\":\"71\",\"quantity\":\"1\"},{\"inventory_id\":\"70\",\"quantity\":\"1\"}]', '906337839PurpleLatte.JPG', '2024-11-01 13:32:58.880348'),
+(12, 1, 'ON THE HOUSE LATTE', 'OUR SIGNATURE', 140, 0, '[{\"inventory_id\":\"2\",\"quantity\":\"5\"},{\"inventory_id\":\"3\",\"quantity\":\"180\"},{\"inventory_id\":\"4\",\"quantity\":\"18\"},{\"inventory_id\":\"5\",\"quantity\":\"60\"},{\"inventory_id\":\"19\",\"quantity\":\"10\"},{\"inventory_id\":\"15\",\"quantity\":\"10\"},{\"inventory_id\":\"69\",\"quantity\":\"1\"},{\"inventory_id\":\"71\",\"quantity\":\"1\"},{\"inventory_id\":\"70\",\"quantity\":\"1\"}]', '804101713OnTheHouseLatte.JPG', '2024-11-01 13:32:43.051188'),
+(13, 1, 'BERRY LATTE', 'LATTE SERIES', 150, 0, '[{\"inventory_id\":\"20\",\"quantity\":\"60\"},{\"inventory_id\":\"3\",\"quantity\":\"180\"},{\"inventory_id\":\"21\",\"quantity\":\"5\"},{\"inventory_id\":\"5\",\"quantity\":\"125\"},{\"inventory_id\":\"69\",\"quantity\":\"1\"},{\"inventory_id\":\"71\",\"quantity\":\"1\"},{\"inventory_id\":\"70\",\"quantity\":\"1\"}]', '1216232860BerryLatte.JPG', '2024-11-01 13:26:09.845356'),
+(14, 1, 'DOUBLE CHOCO LAVA', 'LATTE SERIES', 140, 0, '[{\"inventory_id\":\"14\",\"quantity\":\"20\"},{\"inventory_id\":\"3\",\"quantity\":\"180\"},{\"inventory_id\":\"2\",\"quantity\":\"60\"},{\"inventory_id\":\"5\",\"quantity\":\"125\"},{\"inventory_id\":\"69\",\"quantity\":\"1\"},{\"inventory_id\":\"71\",\"quantity\":\"1\"},{\"inventory_id\":\"70\",\"quantity\":\"1\"},{\"inventory_id\":\"22\",\"quantity\":\"10\"}]', '1494621505DoubleChocoLava.JPG', '2024-11-01 13:26:49.808724'),
+(15, 1, 'DOUBLE CHOCO FLOAT', 'LATTE SERIES', 155, 0, '[{\"inventory_id\":\"14\",\"quantity\":\"20\"},{\"inventory_id\":\"3\",\"quantity\":\"180\"},{\"inventory_id\":\"2\",\"quantity\":\"60\"},{\"inventory_id\":\"5\",\"quantity\":\"125\"},{\"inventory_id\":\"23\",\"quantity\":\"35\"}]', '1706273194DoubleChocoFloat.JPG', '2024-11-01 13:26:29.562603'),
+(16, 1, 'THAI PINKY', 'LATTE SERIES', 120, 0, '[{\"inventory_id\":\"24\",\"quantity\":\"60\"},{\"inventory_id\":\"25\",\"quantity\":\"45\"},{\"inventory_id\":\"2\",\"quantity\":\"15\"},{\"inventory_id\":\"5\",\"quantity\":\"125\"},{\"inventory_id\":\"3\",\"quantity\":\"180\"},{\"inventory_id\":\"69\",\"quantity\":\"1\"},{\"inventory_id\":\"71\",\"quantity\":\"1\"},{\"inventory_id\":\"70\",\"quantity\":\"1\"}]', '2118240959ThaiPinky.JPG', '2024-11-01 13:28:12.583327'),
+(17, 1, 'ICHIGO COCOA', 'LATTE SERIES', 155, 0, '[{\"inventory_id\":\"20\",\"quantity\":\"60\"},{\"inventory_id\":\"3\",\"quantity\":\"180\"},{\"inventory_id\":\"14\",\"quantity\":\"10\"},{\"inventory_id\":\"2\",\"quantity\":\"30\"},{\"inventory_id\":\"22\",\"quantity\":\"10\"},{\"inventory_id\":\"5\",\"quantity\":\"125\"},{\"inventory_id\":\"69\",\"quantity\":\"1\"},{\"inventory_id\":\"71\",\"quantity\":\"1\"},{\"inventory_id\":\"70\",\"quantity\":\"1\"}]', '165263310IchigoCocoa.JPG', '2024-11-01 13:27:51.068631'),
+(18, 1, 'MATCHA GREEN LATTE', 'MATCHA SERIES', 150, 0, '[{\"inventory_id\":\"26\",\"quantity\":\"4\"},{\"inventory_id\":\"22\",\"quantity\":\"10\"},{\"inventory_id\":\"3\",\"quantity\":\"180\"},{\"inventory_id\":\"5\",\"quantity\":\"125\"},{\"inventory_id\":\"69\",\"quantity\":\"1\"},{\"inventory_id\":\"71\",\"quantity\":\"1\"},{\"inventory_id\":\"70\",\"quantity\":\"1\"}]', '1706098038MatchGreenLatte.JPG', '2024-11-01 13:29:17.339692'),
+(19, 1, 'STRAWBERRY MATCHA', 'MATCHA SERIES', 160, 0, '[{\"inventory_id\":\"20\",\"quantity\":\"60\"},{\"inventory_id\":\"3\",\"quantity\":\"180\"},{\"inventory_id\":\"21\",\"quantity\":\"5\"},{\"inventory_id\":\"5\",\"quantity\":\"125\"},{\"inventory_id\":\"69\",\"quantity\":\"1\"},{\"inventory_id\":\"71\",\"quantity\":\"1\"},{\"inventory_id\":\"70\",\"quantity\":\"1\"},{\"inventory_id\":\"26\",\"quantity\":\"4\"}]', '1221531044StrawberryMatcha.JPG', '2024-11-01 13:30:24.885829'),
+(20, 1, 'PINKY MATCHA', 'MATCHA SERIES', 150, 0, '[{\"inventory_id\":\"3\",\"quantity\":\"180\"},{\"inventory_id\":\"21\",\"quantity\":\"5\"},{\"inventory_id\":\"5\",\"quantity\":\"125\"},{\"inventory_id\":\"69\",\"quantity\":\"1\"},{\"inventory_id\":\"71\",\"quantity\":\"1\"},{\"inventory_id\":\"70\",\"quantity\":\"1\"},{\"inventory_id\":\"26\",\"quantity\":\"4\"}]', '1413806522PinkyMatcha.JPG', '2024-11-01 13:29:39.699617'),
+(21, 1, 'PURPLE MATCHA', 'MATCHA SERIES', 160, 0, '[{\"inventory_id\":\"26\",\"quantity\":\"4\"},{\"inventory_id\":\"3\",\"quantity\":\"180\"},{\"inventory_id\":\"5\",\"quantity\":\"125\"},{\"inventory_id\":\"69\",\"quantity\":\"1\"},{\"inventory_id\":\"71\",\"quantity\":\"1\"},{\"inventory_id\":\"70\",\"quantity\":\"1\"},{\"inventory_id\":\"6\",\"quantity\":\"30\"},{\"inventory_id\":\"27\",\"quantity\":\"15\"}]', '1776600277PurpleMatcha.JPG', '2024-11-01 13:30:07.148384'),
+(22, 1, 'DIRTY MATCHA', 'MATCHA SERIES', 170, 0, '[{\"inventory_id\":\"26\",\"quantity\":\"4\"},{\"inventory_id\":\"3\",\"quantity\":\"180\"},{\"inventory_id\":\"5\",\"quantity\":\"125\"},{\"inventory_id\":\"69\",\"quantity\":\"1\"},{\"inventory_id\":\"71\",\"quantity\":\"1\"},{\"inventory_id\":\"70\",\"quantity\":\"1\"},{\"inventory_id\":\"4\",\"quantity\":\"18\"}]', '1554261404DirtyMatcha.JPG', '2024-11-01 13:28:52.830916'),
+(23, 1, 'AMERICANO', 'HOT COFFEE', 100, 0, '[{\"inventory_id\":\"4\",\"quantity\":\"18\"},{\"inventory_id\":\"69\",\"quantity\":\"1\"},{\"inventory_id\":\"71\",\"quantity\":\"1\"}]', '1165423849Americano.JPG', '2024-11-01 13:23:24.002225'),
+(24, 1, 'LATTE', 'HOT COFFEE', 115, 0, '[{\"inventory_id\":\"3\",\"quantity\":\"150\"},{\"inventory_id\":\"4\",\"quantity\":\"18\"},{\"inventory_id\":\"69\",\"quantity\":\"1\"},{\"inventory_id\":\"71\",\"quantity\":\"1\"}]', 'default_image.png', '2024-10-20 08:11:03.239634'),
+(26, 1, 'DARK MOCHA', 'HOT COFFEE', 120, 0, '[{\"inventory_id\":\"28\",\"quantity\":\"30\"},{\"inventory_id\":\"4\",\"quantity\":\"18\"},{\"inventory_id\":\"14\",\"quantity\":\"5\"},{\"inventory_id\":\"3\",\"quantity\":\"150\"},{\"inventory_id\":\"69\",\"quantity\":\"1\"},{\"inventory_id\":\"71\",\"quantity\":\"1\"}]', '739171511DarkMocha.JPG', '2024-11-01 13:23:45.615446'),
+(27, 1, 'HOT SPANISH LATTE', 'HOT COFFEE', 125, 0, '[{\"inventory_id\":\"1\",\"quantity\":\"25\"},{\"inventory_id\":\"3\",\"quantity\":\"150\"},{\"inventory_id\":\"4\",\"quantity\":\"12\"},{\"inventory_id\":\"69\",\"quantity\":\"1\"},{\"inventory_id\":\"71\",\"quantity\":\"1\"}]', '682425002SpanishLatte.JPG', '2024-11-01 13:25:11.076017'),
+(28, 1, 'WHITE MOCHA', 'HOT COFFEE', 135, 0, '[{\"inventory_id\":\"7\",\"quantity\":\"30\"},{\"inventory_id\":\"4\",\"quantity\":\"18\"},{\"inventory_id\":\"69\",\"quantity\":\"1\"},{\"inventory_id\":\"71\",\"quantity\":\"1\"},{\"inventory_id\":\"3\",\"quantity\":\"150\"}]', '748102268Mocha.JPG', '2024-11-01 13:24:56.010247'),
+(29, 1, 'MACCHIATO', 'HOT COFFEE', 130, 0, '[{\"inventory_id\":\"16\",\"quantity\":\"20\"},{\"inventory_id\":\"4\",\"quantity\":\"18\"},{\"inventory_id\":\"69\",\"quantity\":\"1\"},{\"inventory_id\":\"71\",\"quantity\":\"1\"},{\"inventory_id\":\"3\",\"quantity\":\"150\"}]', '1756698449Machiatto.JPG', '2024-11-01 13:24:08.600672'),
+(30, 1, 'HOT MATCHA GREEN LATTE', 'HOT COFFEE', 145, 0, '[{\"inventory_id\":\"26\",\"quantity\":\"4\"},{\"inventory_id\":\"3\",\"quantity\":\"150\"},{\"inventory_id\":\"69\",\"quantity\":\"1\"},{\"inventory_id\":\"71\",\"quantity\":\"1\"}]', '1586803506MatchaGreen.JPG', '2024-11-01 13:24:35.590927'),
+(31, 1, 'PINK LEMONADE SLUSHIE', 'SEASONAL DRINKS', 160, 0, '[{\"inventory_id\":\"29\",\"quantity\":\"48\"},{\"inventory_id\":\"5\",\"quantity\":\"60\"},{\"inventory_id\":\"69\",\"quantity\":\"1\"},{\"inventory_id\":\"71\",\"quantity\":\"1\"},{\"inventory_id\":\"70\",\"quantity\":\"1\"}]', '1578979235PinkLemonadeSlushie.JPG', '2024-11-01 13:35:29.640202'),
+(32, 1, 'PINK LEMONADE FRIZ', 'SEASONAL DRINKS', 150, 0, '[{\"inventory_id\":\"29\",\"quantity\":\"48\"},{\"inventory_id\":\"73\",\"quantity\":\"180\"},{\"inventory_id\":\"5\",\"quantity\":\"60\"},{\"inventory_id\":\"69\",\"quantity\":\"1\"},{\"inventory_id\":\"70\",\"quantity\":\"1\"},{\"inventory_id\":\"71\",\"quantity\":\"1\"}]', '1354532358PinkLemonadeFriz.JPG', '2024-11-01 13:35:46.299417'),
+(33, 1, 'SALTED CARAMEL', 'BLENDED DRINKS', 155, 0, '[{\"inventory_id\":\"30\",\"quantity\":\"60\"},{\"inventory_id\":\"2\",\"quantity\":\"40\"},{\"inventory_id\":\"3\",\"quantity\":\"100\"},{\"inventory_id\":\"4\",\"quantity\":\"18\"},{\"inventory_id\":\"5\",\"quantity\":\"60\"},{\"inventory_id\":\"9\",\"quantity\":\"20\"},{\"inventory_id\":\"10\",\"quantity\":\"20\"},{\"inventory_id\":\"31\",\"quantity\":\"24\"}]', '881243495SaltedCaramel.JPG', '2024-11-01 13:12:46.653608'),
+(34, 1, 'STRAWBERRIES & CREAM', 'BLENDED DRINKS', 155, 0, '[{\"inventory_id\":\"20\",\"quantity\":\"60\"},{\"inventory_id\":\"15\",\"quantity\":\"25\"},{\"inventory_id\":\"5\",\"quantity\":\"60\"},{\"inventory_id\":\"21\",\"quantity\":\"5\"},{\"inventory_id\":\"69\",\"quantity\":\"1\"},{\"inventory_id\":\"70\",\"quantity\":\"1\"},{\"inventory_id\":\"71\",\"quantity\":\"1\"},{\"inventory_id\":\"9\",\"quantity\":\"20\"},{\"inventory_id\":\"2\",\"quantity\":\"60\"},{\"inventory_id\":\"3\",\"quantity\":\"100\"}]', '1901592446Strawberries&Cream.JPG', '2024-11-01 13:14:58.738667'),
+(35, 1, 'STRAWBERRY CHEESECAKE', 'BLENDED DRINKS', 160, 0, '[{\"inventory_id\":\"20\",\"quantity\":\"60\"},{\"inventory_id\":\"32\",\"quantity\":\"20\"},{\"inventory_id\":\"74\",\"quantity\":\"1\"},{\"inventory_id\":\"5\",\"quantity\":\"60\"},{\"inventory_id\":\"1\",\"quantity\":\"25\"},{\"inventory_id\":\"69\",\"quantity\":\"1\"},{\"inventory_id\":\"70\",\"quantity\":\"1\"},{\"inventory_id\":\"71\",\"quantity\":\"1\"},{\"inventory_id\":\"21\",\"quantity\":\"5\"},{\"inventory_id\":\"9\",\"quantity\":\"20\"}]', '2063445121StrawberryCheesecake.JPG', '2024-11-01 13:15:23.752793'),
+(36, 1, 'BLUEBERRY CHEESECAKE', 'BLENDED DRINKS', 160, 0, '[{\"inventory_id\":\"33\",\"quantity\":\"60\"},{\"inventory_id\":\"32\",\"quantity\":\"20\"},{\"inventory_id\":\"74\",\"quantity\":\"1\"},{\"inventory_id\":\"5\",\"quantity\":\"60\"},{\"inventory_id\":\"69\",\"quantity\":\"1\"},{\"inventory_id\":\"70\",\"quantity\":\"1\"},{\"inventory_id\":\"71\",\"quantity\":\"1\"},{\"inventory_id\":\"1\",\"quantity\":\"25\"},{\"inventory_id\":\"9\",\"quantity\":\"20\"}]', '899585060BlueberryCheesecake.JPG', '2024-11-01 13:10:10.566045'),
+(37, 1, 'JAVA CHIP', 'BLENDED DRINKS', 155, 0, '[{\"inventory_id\":\"28\",\"quantity\":\"20\"},{\"inventory_id\":\"3\",\"quantity\":\"100\"},{\"inventory_id\":\"14\",\"quantity\":\"10\"},{\"inventory_id\":\"31\",\"quantity\":\"24\"},{\"inventory_id\":\"75\",\"quantity\":\"60\"},{\"inventory_id\":\"4\",\"quantity\":\"18\"},{\"inventory_id\":\"5\",\"quantity\":\"60\"},{\"inventory_id\":\"9\",\"quantity\":\"20\"},{\"inventory_id\":\"69\",\"quantity\":\"1\"},{\"inventory_id\":\"70\",\"quantity\":\"1\"},{\"inventory_id\":\"71\",\"quantity\":\"1\"}]', '1327835747JavaChip.JPG', '2024-11-01 13:12:28.507729'),
+(38, 1, 'VANILLA MATCHA CREME', 'BLENDED DRINKS', 155, 0, '[{\"inventory_id\":\"26\",\"quantity\":\"4\"},{\"inventory_id\":\"2\",\"quantity\":\"40\"},{\"inventory_id\":\"15\",\"quantity\":\"25\"},{\"inventory_id\":\"5\",\"quantity\":\"60\"},{\"inventory_id\":\"9\",\"quantity\":\"20\"},{\"inventory_id\":\"3\",\"quantity\":\"100\"},{\"inventory_id\":\"69\",\"quantity\":\"1\"},{\"inventory_id\":\"70\",\"quantity\":\"1\"},{\"inventory_id\":\"71\",\"quantity\":\"1\"}]', '652415703VanillaMatchaCreme.JPG', '2024-11-01 13:15:43.072051'),
+(39, 1, 'WHITE CHOCO MOCHA', 'BLENDED DRINKS', 155, 0, '[{\"inventory_id\":\"34\",\"quantity\":\"60\"},{\"inventory_id\":\"2\",\"quantity\":\"40\"},{\"inventory_id\":\"3\",\"quantity\":\"100\"},{\"inventory_id\":\"4\",\"quantity\":\"18\"},{\"inventory_id\":\"5\",\"quantity\":\"60\"},{\"inventory_id\":\"9\",\"quantity\":\"20\"},{\"inventory_id\":\"69\",\"quantity\":\"1\"},{\"inventory_id\":\"70\",\"quantity\":\"1\"},{\"inventory_id\":\"71\",\"quantity\":\"1\"}]', '45057962WhiteChocoMocha.JPG', '2024-11-01 13:16:04.719665'),
+(40, 1, 'BUTTERSCOTCH', 'BLENDED DRINKS', 155, 0, '[{\"inventory_id\":\"35\",\"quantity\":\"60\"},{\"inventory_id\":\"2\",\"quantity\":\"40\"},{\"inventory_id\":\"3\",\"quantity\":\"100\"},{\"inventory_id\":\"4\",\"quantity\":\"18\"},{\"inventory_id\":\"5\",\"quantity\":\"60\"},{\"inventory_id\":\"9\",\"quantity\":\"20\"},{\"inventory_id\":\"10\",\"quantity\":\"20\"},{\"inventory_id\":\"69\",\"quantity\":\"1\"},{\"inventory_id\":\"70\",\"quantity\":\"1\"},{\"inventory_id\":\"71\",\"quantity\":\"1\"}]', '2068260072Butterscotch.JPG', '2024-11-01 13:11:59.564559'),
+(41, 1, 'FLAVORED FRIES', 'STARTERS', 100, 0, '[{\"inventory_id\":\"36\",\"quantity\":\"100\"},{\"inventory_id\":\"32\",\"quantity\":\"20\"},{\"inventory_id\":\"37\",\"quantity\":\"30\"},{\"inventory_id\":\"38\",\"quantity\":\"1\"}]', '1553949242FlavoredFries.JPG', '2024-11-01 13:20:20.744546'),
+(42, 1, 'CHEESY BEEF FRIES', 'STARTERS', 150, 0, '[{\"inventory_id\":\"36\",\"quantity\":\"100\"},{\"inventory_id\":\"39\",\"quantity\":\"50\"},{\"inventory_id\":\"40\",\"quantity\":\"50\"},{\"inventory_id\":\"38\",\"quantity\":\"1\"}]', '37501886CheesyBeefFries.JPG', '2024-11-01 13:19:07.967495'),
+(43, 1, 'OVERLOAD NACHOS', 'STARTERS', 150, 0, '[{\"inventory_id\":\"41\",\"quantity\":\"100\"},{\"inventory_id\":\"39\",\"quantity\":\"50\"},{\"inventory_id\":\"42\",\"quantity\":\"20\"},{\"inventory_id\":\"43\",\"quantity\":\"20\"},{\"inventory_id\":\"44\",\"quantity\":\"20\"},{\"inventory_id\":\"32\",\"quantity\":\"30\"},{\"inventory_id\":\"45\",\"quantity\":\"30\"},{\"inventory_id\":\"37\",\"quantity\":\"20\"},{\"inventory_id\":\"46\",\"quantity\":\"10\"}]', '1478719318OverloadNachos.JPG', '2024-11-01 13:21:53.099242'),
+(44, 1, 'LASAGNA', 'WEEKDAYS', 130, 0, '[{\"inventory_id\":\"46\",\"quantity\":\"100\"},{\"inventory_id\":\"39\",\"quantity\":\"150\"},{\"inventory_id\":\"48\",\"quantity\":\"200\"},{\"inventory_id\":\"32\",\"quantity\":\"100\"},{\"inventory_id\":\"49\",\"quantity\":\"50\"},{\"inventory_id\":\"50\",\"quantity\":\"50\"}]', '514318766Lasagna.JPG', '2024-11-01 13:21:09.774317'),
+(45, 1, 'BREAKFAST CROFFLE', 'CROFFLE SERIES', 90, 0, '[{\"inventory_id\":\"51\",\"quantity\":\"50\"},{\"inventory_id\":\"52\",\"quantity\":\"1\"}]', '1151291481BreakfastCroffle.JPG', '2024-11-01 13:18:44.355617'),
+(46, 1, 'DARK CHOCOLATE ALMONDS', 'CROFFLE SERIES', 125, 0, '[{\"inventory_id\":\"51\",\"quantity\":\"50\"},{\"inventory_id\":\"53\",\"quantity\":\"1\"},{\"inventory_id\":\"54\",\"quantity\":\"10\"},{\"inventory_id\":\"52\",\"quantity\":\"1\"}]', '928965236DarkChocolateAlmonds.JPG', '2024-11-01 13:19:53.544026'),
+(47, 1, 'OREO CROFFLE', 'CROFFLE SERIES', 140, 0, '[{\"inventory_id\":\"51\",\"quantity\":\"50\"},{\"inventory_id\":\"53\",\"quantity\":\"1\"},{\"inventory_id\":\"9\",\"quantity\":\"10\"},{\"inventory_id\":\"55\",\"quantity\":\"5\"}]', '483719487OreoCroffle.JPG', '2024-11-01 13:21:31.265898'),
+(48, 1, 'BLUEBERRY CROFFLE', 'CROFFLE SERIES', 140, 0, '[{\"inventory_id\":\"51\",\"quantity\":\"50\"},{\"inventory_id\":\"9\",\"quantity\":\"10\"},{\"inventory_id\":\"56\",\"quantity\":\"5\"}]', '1448352478BlueberryCroffle.JPG', '2024-11-01 13:17:49.047772'),
+(49, 1, 'STRAWBERRY CROFFLE', 'CROFFLE SERIES', 140, 0, '[{\"inventory_id\":\"51\",\"quantity\":\"50\"},{\"inventory_id\":\"9\",\"quantity\":\"10\"},{\"inventory_id\":\"57\",\"quantity\":\"5\"}]', '770380929StrawberryCroffle.JPG', '2024-11-01 13:22:34.826946'),
+(50, 1, 'BISCOFF CROFFLE', 'CROFFLE SERIES', 150, 0, '[{\"inventory_id\":\"51\",\"quantity\":\"50\"},{\"inventory_id\":\"9\",\"quantity\":\"10\"},{\"inventory_id\":\"16\",\"quantity\":\"5\"},{\"inventory_id\":\"76\",\"quantity\":\"5\"},{\"inventory_id\":\"59\",\"quantity\":\"1\"}]', '1379441436BiscoffCroffle.JPG', '2024-11-01 13:17:12.509619'),
+(51, 1, 'CLASSIC EGG TOAST', 'EGG DROP', 130, 0, '[{\"inventory_id\":\"60\",\"quantity\":\"50\"},{\"inventory_id\":\"61\",\"quantity\":\"50\"},{\"inventory_id\":\"32\",\"quantity\":\"20\"},{\"inventory_id\":\"62\",\"quantity\":\"20\"},{\"inventory_id\":\"63\",\"quantity\":\"10\"}]', '175959818ClassicEggToast.JPG', '2024-11-01 13:19:30.268973'),
+(52, 1, 'SPAM NORI', 'EGG DROP', 160, 0, '[{\"inventory_id\":\"60\",\"quantity\":\"50\"},{\"inventory_id\":\"64\",\"quantity\":\"50\"},{\"inventory_id\":\"65\",\"quantity\":\"10\"},{\"inventory_id\":\"61\",\"quantity\":\"50\"},{\"inventory_id\":\"32\",\"quantity\":\"20\"},{\"inventory_id\":\"62\",\"quantity\":\"20\"},{\"inventory_id\":\"66\",\"quantity\":\"10\"}]', '370561624SpamNori.JPG', '2024-11-01 13:22:13.793149'),
+(53, 1, 'HAM AND CHEESE', 'EGG DROP', 140, 0, '[{\"inventory_id\":\"60\",\"quantity\":\"50\"},{\"inventory_id\":\"67\",\"quantity\":\"50\"},{\"inventory_id\":\"61\",\"quantity\":\"50\"},{\"inventory_id\":\"32\",\"quantity\":\"20\"},{\"inventory_id\":\"62\",\"quantity\":\"20\"},{\"inventory_id\":\"68\",\"quantity\":\"20\"}]', '2056284443HamandCheese.JPG', '2024-11-01 13:20:46.179861');
 
 -- --------------------------------------------------------
 
@@ -134,6 +263,8 @@ CREATE TABLE `sales` (
   `customer_pay` decimal(11,2) NOT NULL,
   `change_amount` decimal(11,2) NOT NULL,
   `payment_method` text NOT NULL,
+  `queue_no` text NOT NULL,
+  `status` int(1) NOT NULL,
   `transaction_date` timestamp(6) NOT NULL DEFAULT current_timestamp(6) ON UPDATE current_timestamp(6)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -141,9 +272,21 @@ CREATE TABLE `sales` (
 -- Dumping data for table `sales`
 --
 
-INSERT INTO `sales` (`sale_id`, `total_amount`, `customer_pay`, `change_amount`, `payment_method`, `transaction_date`) VALUES
-(1, 470.00, 500.00, 30.00, 'Cash', '2024-09-17 09:55:44.832126'),
-(2, 110.00, 123.00, 13.00, 'Cash', '2024-09-17 09:55:47.944206');
+INSERT INTO `sales` (`sale_id`, `total_amount`, `customer_pay`, `change_amount`, `payment_method`, `queue_no`, `status`, `transaction_date`) VALUES
+(1, 470.00, 500.00, 30.00, 'Cash', '', 0, '2024-10-24 11:43:16.893072'),
+(2, 155.00, 200.00, 45.00, 'Cash', '', 0, '2024-10-23 11:46:50.507536'),
+(3, 315.00, 500.00, 185.00, 'Cash', '', 0, '2024-10-22 12:27:17.836028'),
+(4, 295.00, 300.00, 5.00, 'Cash', '241530', 0, '2024-10-21 13:04:30.147940'),
+(5, 275.00, 300.00, 25.00, 'Cash', '242148', 0, '2024-10-20 13:16:48.845129'),
+(6, 275.00, 300.00, 25.00, 'Cash', '242150', 0, '2024-10-19 13:16:50.392680'),
+(7, 275.00, 300.00, 25.00, 'Cash', '242154', 0, '2024-09-24 13:16:54.754989'),
+(8, 275.00, 300.00, 25.00, 'Cash', '242117', 0, '2024-09-10 13:17:17.791029'),
+(9, 310.00, 350.00, 40.00, 'Cash', '242119', 0, '2024-08-24 13:18:19.238872'),
+(10, 295.00, 300.00, 5.00, 'Card', '242123', 0, '2024-07-24 13:25:23.553714'),
+(11, 310.00, 400.00, 90.00, 'Cash', '242137', 0, '2024-06-24 13:37:37.188869'),
+(12, 150.00, 200.00, 50.00, 'Cash', '250415', 0, '2024-10-24 20:02:15.155441'),
+(13, 315.00, 400.00, 85.00, 'Cash', '260130', 0, '2024-10-25 17:44:30.106943'),
+(14, 405.00, 500.00, 95.00, 'Cash', '291507', 0, '2024-10-29 07:25:07.835230');
 
 -- --------------------------------------------------------
 
@@ -157,18 +300,41 @@ CREATE TABLE `sale_items` (
   `product_id` int(11) NOT NULL,
   `product_name` text NOT NULL,
   `quantity` int(11) NOT NULL,
-  `price` decimal(11,2) NOT NULL,
-  `transaction_date` timestamp(6) NOT NULL DEFAULT current_timestamp(6) ON UPDATE current_timestamp(6)
+  `price` decimal(11,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `sale_items`
 --
 
-INSERT INTO `sale_items` (`sale_items_id`, `sale_id`, `product_id`, `product_name`, `quantity`, `price`, `transaction_date`) VALUES
-(1, 1, 1, 'Americano', 2, 110.00, '2024-09-17 07:50:20.215835'),
-(2, 1, 2, 'Latte', 2, 125.00, '2024-09-17 07:50:20.216518'),
-(3, 2, 1, 'Americano', 1, 110.00, '2024-09-17 07:53:18.575145');
+INSERT INTO `sale_items` (`sale_items_id`, `sale_id`, `product_id`, `product_name`, `quantity`, `price`) VALUES
+(1, 1, 33, 'SALTED CARAMEL', 2, 155.00),
+(2, 1, 35, 'STRAWBERRY CHEESECAKE', 1, 160.00),
+(3, 2, 33, 'SALTED CARAMEL', 1, 155.00),
+(4, 3, 34, 'STRAWBERRIES & CREAM', 1, 155.00),
+(5, 3, 36, 'BLUEBERRY CHEESECAKE', 1, 160.00),
+(6, 4, 38, 'VANILLA MATCHA CREME', 1, 155.00),
+(7, 4, 47, 'OREO CROFFLE', 1, 140.00),
+(8, 5, 24, 'LATTE', 1, 115.00),
+(9, 5, 52, 'SPAM NORI', 1, 160.00),
+(10, 6, 24, 'LATTE', 1, 115.00),
+(11, 6, 52, 'SPAM NORI', 1, 160.00),
+(12, 7, 24, 'LATTE', 1, 115.00),
+(13, 7, 52, 'SPAM NORI', 1, 160.00),
+(14, 8, 46, 'DARK CHOCOLATE ALMONDS', 1, 125.00),
+(15, 8, 50, 'BISCOFF CROFFLE', 1, 150.00),
+(16, 9, 34, 'STRAWBERRIES & CREAM', 1, 155.00),
+(17, 9, 40, 'BUTTERSCOTCH', 1, 155.00),
+(18, 10, 38, 'VANILLA MATCHA CREME', 1, 155.00),
+(19, 10, 47, 'OREO CROFFLE', 1, 140.00),
+(20, 11, 33, 'SALTED CARAMEL', 1, 155.00),
+(21, 11, 40, 'BUTTERSCOTCH', 1, 155.00),
+(22, 12, 42, 'CHEESY BEEF FRIES', 1, 150.00),
+(23, 13, 36, 'BLUEBERRY CHEESECAKE', 1, 160.00),
+(24, 13, 39, 'WHITE CHOCO MOCHA', 1, 155.00),
+(25, 14, 1, 'SPANISH LATTE', 1, 130.00),
+(26, 14, 3, 'TOFFEE NUT CARAMEL', 1, 145.00),
+(27, 14, 6, 'CARAMEL LATTE', 1, 130.00);
 
 -- --------------------------------------------------------
 
@@ -194,7 +360,7 @@ CREATE TABLE `staff` (
 --
 
 INSERT INTO `staff` (`staff_id`, `status`, `username`, `password`, `email`, `firstname`, `lastname`, `contact_number`, `photo`, `last_updated`) VALUES
-(3, 0, 'staffmanager', '$2y$10$yMpkAqw7P/oU7jdp1JlePOK3t4Qj8oJ/KfJPJkkx03b9KDgPO6r4e', 'juandelacruz@gmail.com', 'Juan', 'Dela Cruz', '+639867837747', '976923868defprof.jpg', '2024-09-04 10:45:24.110470');
+(3, 0, 'staffmanager', '$2y$10$yMpkAqw7P/oU7jdp1JlePOK3t4Qj8oJ/KfJPJkkx03b9KDgPO6r4e', 'juandelacruz@gmail.com', 'Juan', 'Dela Cruz', '+639876543212', '1909312970defaut_image.jpg', '2024-09-17 16:22:01.649448');
 
 --
 -- Indexes for dumped tables
@@ -250,13 +416,13 @@ ALTER TABLE `staff`
 -- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
-  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `inventory`
 --
 ALTER TABLE `inventory`
-  MODIFY `inventory_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `inventory_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
 
 --
 -- AUTO_INCREMENT for table `owner`
@@ -268,19 +434,19 @@ ALTER TABLE `owner`
 -- AUTO_INCREMENT for table `product`
 --
 ALTER TABLE `product`
-  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
 
 --
 -- AUTO_INCREMENT for table `sales`
 --
 ALTER TABLE `sales`
-  MODIFY `sale_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `sale_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `sale_items`
 --
 ALTER TABLE `sale_items`
-  MODIFY `sale_items_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `sale_items_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `staff`
