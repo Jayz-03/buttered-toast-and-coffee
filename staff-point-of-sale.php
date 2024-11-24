@@ -217,7 +217,7 @@ function getProductsByCategory($link, $categoryName)
     </div>
     <?php include 'partials/jscripts.php'; ?>
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
             function loadProducts(categoryName) {
                 const productList = document.getElementById('product-list');
                 productList.innerHTML = '';
@@ -225,7 +225,7 @@ function getProductsByCategory($link, $categoryName)
                 const xhr = new XMLHttpRequest();
                 xhr.open("POST", "get-products.php", true);
                 xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                xhr.onload = function () {
+                xhr.onload = function() {
                     if (xhr.status === 200) {
                         productList.innerHTML = xhr.responseText;
                         attachAddToCartEvents();
@@ -233,7 +233,7 @@ function getProductsByCategory($link, $categoryName)
                         console.error('Error loading products');
                     }
                 };
-                xhr.onerror = function () {
+                xhr.onerror = function() {
                     console.error('Request failed');
                 };
                 xhr.send("category_name=" + encodeURIComponent(categoryName));
@@ -241,7 +241,7 @@ function getProductsByCategory($link, $categoryName)
 
             function attachAddToCartEvents() {
                 document.querySelectorAll('.btn-add-cart').forEach(button => {
-                    button.addEventListener('click', function () {
+                    button.addEventListener('click', function() {
                         const productId = this.getAttribute('data-id');
                         const productName = this.getAttribute('data-name');
                         const productPrice = parseFloat(this.getAttribute('data-price'));
@@ -330,7 +330,7 @@ function getProductsByCategory($link, $categoryName)
 
             function attachCartEvents() {
                 document.querySelectorAll('.btn-minus').forEach(button => {
-                    button.addEventListener('click', function () {
+                    button.addEventListener('click', function() {
                         const productId = this.getAttribute('data-id');
                         if (cart[productId].quantity > 1) {
                             cart[productId].quantity--;
@@ -342,7 +342,7 @@ function getProductsByCategory($link, $categoryName)
                 });
 
                 document.querySelectorAll('.btn-plus').forEach(button => {
-                    button.addEventListener('click', function () {
+                    button.addEventListener('click', function() {
                         const productId = this.getAttribute('data-id');
                         cart[productId].quantity++;
                         updateCartUI();
@@ -350,7 +350,7 @@ function getProductsByCategory($link, $categoryName)
                 });
 
                 document.querySelectorAll('.btn-delete').forEach(button => {
-                    button.addEventListener('click', function () {
+                    button.addEventListener('click', function() {
                         const productId = this.getAttribute('data-id');
                         delete cart[productId];
                         updateCartUI();
@@ -361,7 +361,7 @@ function getProductsByCategory($link, $categoryName)
             loadProducts('all');
 
             document.querySelectorAll('.nav-link').forEach(tab => {
-                tab.addEventListener('click', function () {
+                tab.addEventListener('click', function() {
                     const categoryName = this.getAttribute('data-category');
                     loadProducts(categoryName);
                 });
@@ -523,34 +523,20 @@ function getProductsByCategory($link, $categoryName)
                 let invoiceContent = `
                 <html>
                 <head>
-                    <style>
-                        body { font-family: Arial, sans-serif; font-size: 12px; }
-                        .container { width: 58mm; padding: 5px; }
-                        .header, .footer { text-align: center; }
-                        .header img { max-width: 150px; }
-                        .table { width: 100%; margin-bottom: 10px; }
-                        .table th, .table td { text-align: left; padding: 3px; font-size: 10px; }
-                        .table th { border-bottom: 1px solid #000; }
-                        .table td { border-bottom: 1px dotted #000; font-size: 10px; }
-                        .table .right { text-align: right; }
-                    </style>
                 </head>
                 <body>
                     <div class="container">
-                        <div class="header">
-                            <img src="assets/images/logo.png" alt="Logo">
+                        <div class="header" style='text-align: center;'>
+                            <img src="assets/images/logo.png" alt="Logo" height="90">
                             <h2>INVOICE</h2>
-                            <p>Queue Number: ${queueNo}</p>
-                            <p>Thank you for your order!</p>
+                            <h3 style='margin-top: -10px;'>Queue Number: ${queueNo}</h3>
                         </div>
-
                         <div>
                             <p><strong>Payment Method:</strong> ${paymentMethod}</p>
-                            <p><strong>Total Amount:</strong> ₱${totalAmount.toFixed(2)}</p>
-                            <p><strong>Customer Pay:</strong> ₱${customerPay.toFixed(2)}</p>
-                            <p><strong>Change:</strong> ₱${change.toFixed(2)}</p>
+                            <p style='margin-top: -10px;'><strong>Total Amount:</strong> ₱${totalAmount.toFixed(2)}</p>
+                            <p style='margin-top: -10px;'><strong>Customer Pay:</strong> ₱${customerPay.toFixed(2)}</p>
+                            <p style='margin-top: -10px;'><strong>Change:</strong> ₱${change.toFixed(2)}</p>
                         </div>
-
                         <table class="table">
                             <thead>
                                 <tr>
@@ -576,10 +562,14 @@ function getProductsByCategory($link, $categoryName)
                 invoiceContent += `
                             </tbody>
                         </table>
-
-                        <div class="footer">
-                            <p>Thank you for shopping with us!</p>
-                        </div>
+                        <br>
+                        <div class="footer" style='text-align: center;'>
+                            <h3>To be happy is to drink coffee.</h3>
+                            <h3 style='margin-top: -10px;'>Thank you for your order!</h3>
+                    </div>
+                    <br>
+                    <div class="footer" style='text-align: center;'>
+                            <small>Note: Kindly wait until your queue number is called.</small>
                     </div>
                 </body>
                 </html>
