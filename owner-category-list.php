@@ -185,8 +185,8 @@ $active_page = "category";
                                                                         class="rounded-circle" />
                                                                     <div class="ms-3 text-left mx-2">
                                                                         <p class="fw-bold mb-1">
-                                                                            <?php echo $row3['lastname']; ?>,
-                                                                            <?php echo $row3['firstname']; ?>
+                                                                            <?php echo $row3['firstname']; ?> 
+                                                                            <?php echo $row3['lastname']; ?>
                                                                         </p>
                                                                         <p class="text-muted mb-0"><?php echo $row3['email']; ?>
                                                                         </p>

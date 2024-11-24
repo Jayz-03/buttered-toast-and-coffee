@@ -325,7 +325,7 @@ function getProductsByCategory($link, $categoryName)
 
                 document.getElementById('total-amount').textContent = `₱${totalAmount.toFixed(2)}`;
                 attachCartEvents();
-                calculateChange(); // Update change display after cart updates
+                calculateChange();
             }
 
             function attachCartEvents() {
@@ -367,51 +367,86 @@ function getProductsByCategory($link, $categoryName)
                 });
             });
 
+            console.log("DOM fully loaded");
+
             document.querySelector('.btn-confirm').addEventListener('click', function () {
+                console.log("Confirm button clicked");
+
+                // Get the payment method
                 const paymentMethod = document.getElementById('payment-method').value;
+                console.log("Payment Method Selected:", paymentMethod);
+
                 const totalAmount = parseFloat(document.getElementById('total-amount').textContent.replace('₱', ''));
                 const customerPay = parseFloat(document.getElementById('customer-pay').value);
                 const change = customerPay - totalAmount;
 
-                if (totalAmount > 0 && customerPay >= totalAmount) {
-                    const xhr = new XMLHttpRequest();
-                    xhr.open("POST", "save-order.php", true);
-                    xhr.setRequestHeader("Content-Type", "application/json");
-                    xhr.onload = function () {
-                        if (xhr.status === 200) {
-                            const response = JSON.parse(xhr.responseText);
-                            if (response.status === 'success') {
-                                swal({
-                                    title: 'Success!',
-                                    text: 'Order confirmed!',
-                                    icon: 'success',
-                                    confirmButtonText: 'OK'
-                                }).then(() => {
-                                    printInvoice(paymentMethod, totalAmount, customerPay, change, { ...cart }, response.queue_no);
+                console.log("Total Amount:", totalAmount);
+                console.log("Customer Pay:", customerPay);
+                console.log("Change:", change);
 
-                                    cart = {};
-                                    updateCartUI();
-                                    document.getElementById('customer-pay').value = '';
-                                    document.getElementById('change-amount').textContent = '₱0.00';
-                                    document.getElementById('total-amount').textContent = '₱0.00';
-                                });
-                            } else {
+                if (totalAmount > 0 && customerPay >= totalAmount) {
+                    if (paymentMethod === 'Card') {
+                        console.log("Payment method is card, validating card...");
+
+                        const xhr = new XMLHttpRequest();
+                        xhr.open("POST", "validate-card.php", true);
+                        xhr.setRequestHeader("Content-Type", "application/json");
+                        xhr.onload = function () {
+                            try {
+                                const responseText = xhr.responseText.trim();
+                                console.log("Raw server response:", responseText);
+
+                                if (responseText) {
+                                    const cardData = JSON.parse(responseText);
+                                    console.log("Card Validation Response:", cardData);
+
+                                    if (cardData.status === 'error') {
+                                        swal({
+                                            title: 'Card Error!',
+                                            text: 'Card is unavailable or balance is insufficient. Please use cash as a payment method.',
+                                            icon: 'warning',
+                                            buttons: ['Cancel', 'Use Cash'],
+                                        }).then((useCash) => {
+                                            if (useCash) {
+                                                document.getElementById('payment-method').value = 'Cash'; // Switch to cash
+                                                proceedWithOrder('Cash');
+                                            }
+                                        });
+                                        return;
+                                    } else {
+                                        console.log("Card is valid, proceeding with order.");
+                                        proceedWithOrder('Card');
+                                    }
+                                } else {
+                                    console.log("Empty response received from server.");
+                                    swal({
+                                        title: 'Error!',
+                                        text: 'No response from card validation service. Please try again later.',
+                                        icon: 'error',
+                                        confirmButtonText: 'OK'
+                                    });
+                                }
+                            } catch (error) {
+                                console.log("Failed to parse JSON:", error);
                                 swal({
-                                    title: 'Oops!',
-                                    text: 'Something went wrong. Please try again later.',
-                                    icon: 'warning',
-                                    confirmButtonText: 'Done!'
+                                    title: 'Error!',
+                                    text: 'Invalid response from server. Please try again later.',
+                                    icon: 'error',
+                                    confirmButtonText: 'OK'
                                 });
                             }
-                        }
-                    };
-                    xhr.send(JSON.stringify({
-                        cart: cart,
-                        payment_method: paymentMethod,
-                        total_amount: totalAmount,
-                        customer_pay: customerPay,
-                        change: change
-                    }));
+                        };
+                        xhr.onerror = function () {
+                            console.log("Request failed with error");
+                        };
+                        xhr.send(JSON.stringify({
+                            payment_method: paymentMethod,
+                            total_amount: totalAmount
+                        }));
+                    } else {
+                        console.log("Payment method is cash, proceeding with order.");
+                        proceedWithOrder(paymentMethod); // Proceed with cash
+                    }
                 } else {
                     swal({
                         title: 'Invalid!',
@@ -421,6 +456,61 @@ function getProductsByCategory($link, $categoryName)
                     });
                 }
             });
+
+            // Function to proceed with the order (save order)
+            function proceedWithOrder(paymentMethod) {
+                console.log("Proceeding with the order... Payment method:", paymentMethod);
+
+                const totalAmount = parseFloat(document.getElementById('total-amount').textContent.replace('₱', ''));
+                const customerPay = parseFloat(document.getElementById('customer-pay').value);
+                const change = customerPay - totalAmount;
+
+                const xhr = new XMLHttpRequest();
+                xhr.open("POST", "save-order.php", true);
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.onload = function () {
+                    if (xhr.status === 200) {
+                        const response = JSON.parse(xhr.responseText);
+                        console.log("Order Response:", response);
+
+                        if (response.status === 'success') {
+                            swal({
+                                title: 'Success!',
+                                text: 'Order confirmed!',
+                                icon: 'success',
+                                confirmButtonText: 'OK'
+                            }).then(() => {
+                                printInvoice(paymentMethod, totalAmount, customerPay, change, { ...cart }, response.queue_no);
+                                cart = {};
+                                updateCartUI();
+                                document.getElementById('customer-pay').value = '';
+                                document.getElementById('change-amount').textContent = '₱0.00';
+                                document.getElementById('total-amount').textContent = '₱0.00';
+                            });
+                        } else {
+                            swal({
+                                title: 'Oops!',
+                                text: 'Something went wrong. Please try again later.',
+                                icon: 'warning',
+                                confirmButtonText: 'Done!'
+                            });
+                        }
+                    }
+                };
+                xhr.onerror = function () {
+                    console.log("Request failed to save order");
+                };
+                xhr.send(JSON.stringify({
+                    cart: cart,
+                    payment_method: paymentMethod,
+                    total_amount: totalAmount,
+                    customer_pay: customerPay,
+                    change: change
+                }));
+            }
+
+
+
 
             function printInvoice(paymentMethod, totalAmount, customerPay, change, cart, queueNo) {
                 let iframe = document.createElement('iframe');
@@ -472,18 +562,18 @@ function getProductsByCategory($link, $categoryName)
                             <tbody>
                 `;
 
-                            Object.keys(cart).forEach(productId => {
-                                const product = cart[productId];
-                                const amount = product.price * product.quantity;
-                                invoiceContent += `
+                Object.keys(cart).forEach(productId => {
+                    const product = cart[productId];
+                    const amount = product.price * product.quantity;
+                    invoiceContent += `
                                 <tr>
                                     <td>${product.name}</td>
                                     <td>${product.quantity}</td>
                                     <td class="right">₱${amount.toFixed(2)}</td>
                                 </tr>`;
-                                    });
+                });
 
-                                    invoiceContent += `
+                invoiceContent += `
                             </tbody>
                         </table>
 

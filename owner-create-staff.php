@@ -54,12 +54,21 @@ $active_page = "staff";
 
                     if (empty(trim($_POST["password"]))) {
                         $password_err = "Please enter a password.";
-                    } elseif (strlen(trim($_POST["password"])) < 6) {
-                        $password_err = "Password must have at least 6 characters.";
+                    } elseif (strlen(trim($_POST["password"])) < 8) {
+                        $password_err = "Password must have at least 8 characters.";
+                    } elseif (!preg_match("/[A-Z]/", $_POST["password"])) {
+                        $password_err = "Password must contain at least one uppercase letter.";
+                    } elseif (!preg_match("/[a-z]/", $_POST["password"])) {
+                        $password_err = "Password must contain at least one lowercase letter.";
+                    } elseif (!preg_match("/[0-9]/", $_POST["password"])) {
+                        $password_err = "Password must contain at least one number.";
+                    } elseif (!preg_match("/[\W_]/", $_POST["password"])) { // This matches special characters
+                        $password_err = "Password must contain at least one special character.";
                     } else {
                         $password = trim($_POST["password"]);
                     }
-                    
+
+
                     if (empty(trim($_POST["confirm_password"]))) {
                         $confirm_password_err = "Please confirm password.";
                     } else {
@@ -230,8 +239,8 @@ $active_page = "staff";
                                                 <label for="example-email">Username</label>
                                                 <input type="text" id="example-username" name="username"
                                                     class="form-control <?php echo (!empty($username_err)) ? 'is-invalid' : ''; ?>"
-                                                    placeholder="Please enter username"
-                                                    name="password" value="<?php echo $username; ?>">
+                                                    placeholder="Please enter username" name="password"
+                                                    value="<?php echo $username; ?>">
                                                 <span class="invalid-feedback"><?php echo $username_err; ?></span>
                                             </div>
                                         </div>
@@ -273,8 +282,9 @@ $active_page = "staff";
                                                 <label for="example-contact_number">Contact Number</label>
                                                 <input type="text" id="example-contact_number" name="contact_number"
                                                     class="form-control <?php echo (!empty($contact_number_err)) ? 'is-invalid' : ''; ?>"
-                                                    placeholder="Please enter contact number"
-                                                    name="contact_number" value="+63<?php echo $contact_number; ?>" oninput="this.value = this.value.replace(/[^0-9\+]/g, '')" >
+                                                    placeholder="Please enter contact number" name="contact_number"
+                                                    value="+63<?php echo $contact_number; ?>"
+                                                    oninput="this.value = this.value.replace(/[^0-9\+]/g, '')">
                                                 <span class="invalid-feedback"><?php echo $contact_number_err; ?></span>
                                             </div>
                                         </div>
@@ -295,8 +305,8 @@ $active_page = "staff";
                                                 <label for="example-confirm_password">Confirm Password</label>
                                                 <input type="password" id="example-confirm_password"
                                                     class="form-control <?php echo (!empty($confirm_password_err)) ? 'is-invalid' : ''; ?>"
-                                                    placeholder="Please repeat password"
-                                                    name="confirm_password" value="<?php echo $confirm_password; ?>">
+                                                    placeholder="Please repeat password" name="confirm_password"
+                                                    value="<?php echo $confirm_password; ?>">
                                                 <span
                                                     class="invalid-feedback"><?php echo $confirm_password_err; ?></span>
                                             </div>

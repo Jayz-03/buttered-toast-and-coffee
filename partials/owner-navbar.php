@@ -54,7 +54,7 @@ $owner_id = $row["owner_id"];
     </a>
     <nav class="vertnav navbar navbar-light">
         <div class="w-100 mb-4 d-flex">
-            <a class="navbar-brand mx-auto mt-2 flex-fill text-center" href="./index.html">
+            <a class="navbar-brand mx-auto mt-2 flex-fill text-center" href="owner-dashboard">
                 <div class="text-center mb-4">
                     <img src="assets/images/logo.png" alt="" width="150">
                 </div>
@@ -157,6 +157,12 @@ $owner_id = $row["owner_id"];
                                 Product</span></a>
                     </li>
                 </ul>
+            </li>
+            <li class="nav-item w-100 <?php if ($active_page == "card") { echo "active"; } ?>">
+                <a class="nav-link" href="owner-card-management">
+                    <i class="fe fe-credit-card fe-16"></i>
+                    <span class="ml-3 item-text">Card</span>
+                </a>
             </li>
         </ul>
         <p class="text-muted nav-heading mt-3 mb-1">
