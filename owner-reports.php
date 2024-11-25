@@ -91,13 +91,14 @@ if ($result_sales_data && mysqli_num_rows($result_sales_data) > 0) {
                                                 <strong class="card-title">Sales Overview</strong>
                                             </div>
                                             <div class="col-md-6 d-flex justify-content-end">
-                                                <button type="button" class="btn btn-sm" title="Print Overview"
+                                                <button type="button" class="btn btn-sm" id="printOverviewBtn"
+                                                    title="Print Overview"
                                                     style="background-color: black; border: none; color: white; font-size: 14px;">
-                                                    <i class="fe fe-printer" style="color: white; font-size: 14px;"></i> Print Overview
+                                                    <i class="fe fe-printer" style="color: white; font-size: 14px;"></i>
+                                                    Print Overview
                                                 </button>
                                             </div>
                                         </div>
-
                                     </div>
                                     <div class="card-body">
                                         <div id="lineChart"></div>
@@ -105,6 +106,51 @@ if ($result_sales_data && mysqli_num_rows($result_sales_data) > 0) {
                                 </div>
                             </div>
                         </div>
+
+                        <div class="modal fade" id="printModal" tabindex="-1" role="dialog"
+                            aria-labelledby="printModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="printModalLabel">Print Sales Overview</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="d-flex justify-content-center mb-3">
+                                            <button class="btn btn-primary mx-2 filter-btn"
+                                                data-filter="daily">Daily</button>
+                                            <button class="btn btn-primary mx-2 filter-btn"
+                                                data-filter="weekly">Weekly</button>
+                                            <button class="btn btn-primary mx-2 filter-btn"
+                                                data-filter="monthly">Monthly</button>
+                                            <button class="btn btn-primary mx-2 filter-btn"
+                                                data-filter="yearly">Yearly</button>
+                                        </div>
+                                        <div id="printableArea">
+                                            <table id="rankingTable" class="table table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Rank</th>
+                                                        <th>Product Name</th>
+                                                        <th>Period</th>
+                                                        <th>Total Sales</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-success" id="printBtn">Print</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="row mt-2">
                             <div class="col-12">
                                 <div class="card shadow">
@@ -114,13 +160,15 @@ if ($result_sales_data && mysqli_num_rows($result_sales_data) > 0) {
                                                 <strong class="card-title">Inventory Overview</strong>
                                             </div>
                                             <div class="col-md-6 d-flex justify-content-end">
-                                                <button type="button" class="btn btn-sm" title="Print Overview"
-                                                    style="background-color: black; border: none; color: white; font-size: 14px;">
-                                                    <i class="fe fe-printer" style="color: white; font-size: 14px;"></i> Print Overview
+                                                <button type="button" class="btn btn-sm" id="filterBtn"
+                                                    title="Filter Inventory"
+                                                    style="background-color: black; border: none; color: white; font-size: 14px;"
+                                                    data-bs-toggle="modal" data-bs-target="#filterModal">
+                                                    <i class="fe fe-filter" style="color: white; font-size: 14px;"></i>
+                                                    Filter Inventory
                                                 </button>
                                             </div>
                                         </div>
-
                                     </div>
                                     <div class="card-body">
                                         <div id="columnChart"></div>
@@ -128,6 +176,49 @@ if ($result_sales_data && mysqli_num_rows($result_sales_data) > 0) {
                                 </div>
                             </div>
                         </div>
+
+                        <div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="filterModalLabel">Filter Inventory Status</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="d-flex justify-content-center mb-3">
+                                            <button class="btn btn-primary mx-2 filter-btn"
+                                                data-filter="All">All</button>
+                                            <button class="btn btn-primary mx-2 filter-btn" data-filter="In Stock">In
+                                                Stock</button>
+                                            <button class="btn btn-primary mx-2 filter-btn" data-filter="Low Stock">Low
+                                                Stock</button>
+                                            <button class="btn btn-primary mx-2 filter-btn"
+                                                data-filter="Out of Stock">Out of Stock</button>
+                                        </div>
+                                        <div id="inventoryPrintableArea">
+                                            <table id="statusTable" class="table table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Item</th>
+                                                        <th>Quantity</th>
+                                                        <th>Status</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-success" id="printBtn2">Print</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -181,6 +272,51 @@ if ($result_sales_data && mysqli_num_rows($result_sales_data) > 0) {
                     color: #72C894;
                     background-color: #04210F;
                 }
+
+                #rankingTable {
+                    display: none;
+                }
+
+                @media print {
+                    body * {
+                        visibility: hidden;
+                    }
+
+                    #printableArea,
+                    #printableArea * {
+                        visibility: visible;
+                    }
+
+                    #printableArea {
+                        position: absolute;
+                        left: 0;
+                        top: 0;
+                        width: 100%;
+                    }
+                }
+
+                #statusTable {
+                    display: none;
+                }
+
+
+                @media print {
+                    body * {
+                        visibility: hidden;
+                    }
+
+                    #inventoryPrintableArea,
+                    #inventoryPrintableArea * {
+                        visibility: visible;
+                    }
+
+                    #inventoryPrintableArea {
+                        position: absolute;
+                        left: 0;
+                        top: 0;
+                        width: 100%;
+                    }
+                }
             </style>
 
             <script>
@@ -222,6 +358,107 @@ if ($result_sales_data && mysqli_num_rows($result_sales_data) > 0) {
 
     <script src='js/jquery.dataTables.min.js'></script>
     <script src='js/dataTables.bootstrap4.min.js'></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const printOverviewBtn = document.getElementById('filterBtn');  // The button to trigger the modal
+            const printModal = new bootstrap.Modal(document.getElementById('filterModal'));  // The modal element
+            const inventoryTableBody = document.querySelector('#statusTable tbody');  // The table body where data will be appended
+            const printBtn2 = document.getElementById('printBtn2');  // The button to print the data
+
+            // Show modal on clicking the filter button
+            printOverviewBtn.addEventListener('click', () => {
+                printModal.show();
+            });
+
+            // Event listener for the filter buttons inside the modal
+            document.querySelectorAll('.filter-btn').forEach(button => {
+                button.addEventListener('click', function () {
+                    const filter = this.getAttribute('data-filter');
+
+                    fetch(`get_inventory_data.php?filter=${filter}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            inventoryTableBody.innerHTML = '';
+
+                            data.forEach(item => {
+                                const tr = document.createElement('tr');
+                                tr.innerHTML = `
+                            <td>${item.item}</td>
+                            <td>${item.quantity}</td>
+                            <td>${getStatusBadge(item.status)}</td>
+                        `;
+                                inventoryTableBody.appendChild(tr);
+                            });
+
+                            document.getElementById('statusTable').style.display = 'table';
+                        })
+                        .catch(error => console.error('Error loading data:', error));
+                });
+            });
+
+            function getStatusBadge(status) {
+                switch (status) {
+                    case 'In Stock':
+                        return '<span class="badge badge-success rounded-pill d-inline px-3">In Stock</span>';
+                    case 'Low Stock':
+                        return '<span class="badge badge-warning rounded-pill d-inline px-3">Low Stock</span>';
+                    case 'Out of Stock':
+                        return '<span class="badge badge-danger rounded-pill d-inline px-3">Out of Stock</span>';
+                    default:
+                        return '';
+                }
+            }
+
+            printBtn2.addEventListener('click', () => {
+                window.print();
+            });
+        });
+
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const printOverviewBtn = document.getElementById('printOverviewBtn');
+            const printModal = new bootstrap.Modal(document.getElementById('printModal'));
+            const rankingTableBody = document.querySelector('#rankingTable tbody');
+            const printBtn = document.getElementById('printBtn');
+
+            printOverviewBtn.addEventListener('click', () => {
+                printModal.show();
+            });
+
+            document.querySelectorAll('.filter-btn').forEach(button => {
+                button.addEventListener('click', function () {
+                    const filter = this.getAttribute('data-filter');
+
+                    fetch(`get_sales_ranking.php?filter=${filter}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            rankingTableBody.innerHTML = '';
+                            data.forEach(row => {
+                                const tr = document.createElement('tr');
+                                tr.innerHTML = `
+                            <td>${row.rank}</td>
+                            <td>${row.product_name}</td>
+                            <td>${row.period}</td>
+                            <td>${parseFloat(row.total_sales).toFixed(2)}</td>
+                        `;
+                                rankingTableBody.appendChild(tr);
+                            });
+
+                            document.getElementById('rankingTable').style.display = 'table';
+                        })
+                        .catch(error => console.error('Error loading data:', error));
+                });
+            });
+
+            printBtn.addEventListener('click', () => {
+                window.print();
+            });
+        });
+
+    </script>
     <script src="js/apexcharts.min.js"></script>
     <script>
         $(document).ready(function () {
