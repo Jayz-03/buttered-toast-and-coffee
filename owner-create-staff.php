@@ -28,8 +28,8 @@ $active_page = "staff";
                 <h2 class="page-title">Staff - Create Staff</h2>
 
                 <?php
-                $firstname = $lastname = $email = $password = $confirm_password = $username = $contact_number = $photo = "";
-                $firstname_err = $lastname_err = $email_err = $password_err = $confirm_password_err = $username_err = $contact_number_err = $photo_err = "";
+                $branch = $firstname = $lastname = $email = $password = $confirm_password = $username = $contact_number = $photo = "";
+                $branch_err = $firstname_err = $lastname_err = $email_err = $password_err = $confirm_password_err = $username_err = $contact_number_err = $photo_err = "";
                 $status = 0;
 
                 if (isset($_POST["submit"])) {
@@ -52,6 +52,12 @@ $active_page = "staff";
                         $email = mysqli_real_escape_string($link, ($_POST["email"]));
                     }
 
+                    if (empty(trim($_POST["branch"]))) {
+                        $branch_err = "Please enter branch.";
+                    } else {
+                        $branch = mysqli_real_escape_string($link, ($_POST["branch"]));
+                    }
+
                     if (empty(trim($_POST["password"]))) {
                         $password_err = "Please enter a password.";
                     } elseif (strlen(trim($_POST["password"])) < 8) {
@@ -62,7 +68,7 @@ $active_page = "staff";
                         $password_err = "Password must contain at least one lowercase letter.";
                     } elseif (!preg_match("/[0-9]/", $_POST["password"])) {
                         $password_err = "Password must contain at least one number.";
-                    } elseif (!preg_match("/[\W_]/", $_POST["password"])) { // This matches special characters
+                    } elseif (!preg_match("/[\W_]/", $_POST["password"])) {
                         $password_err = "Password must contain at least one special character.";
                     } else {
                         $password = trim($_POST["password"]);
@@ -124,14 +130,15 @@ $active_page = "staff";
                         $photo_new_name = rand() . $photo;
                     }
 
-                    if (empty($firstname_err) && empty($lastname_err) && empty($email_err) && empty($password_err) && empty($confirm_password_err) && empty($username_err) && empty($contact_number_err) && empty($photo_err)) {
+                    if (empty($branch_err) && empty($firstname_err) && empty($lastname_err) && empty($email_err) && empty($password_err) && empty($confirm_password_err) && empty($username_err) && empty($contact_number_err) && empty($photo_err)) {
 
 
-                        $sql = "INSERT INTO staff (status, username, password, email, firstname, lastname, contact_number, photo) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                        $sql = "INSERT INTO staff (branch_id, status, username, password, email, firstname, lastname, contact_number, photo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
                         if ($stmt = mysqli_prepare($link, $sql)) {
-                            mysqli_stmt_bind_param($stmt, "isssssss", $param_status, $param_username, $param_password, $param_email, $param_firstname, $param_lastname, $param_contact_number, $param_photo);
+                            mysqli_stmt_bind_param($stmt, "iisssssss", $param_branch, $param_status, $param_username, $param_password, $param_email, $param_firstname, $param_lastname, $param_contact_number, $param_photo);
 
+                            $param_branch = $branch;
                             $param_status = $status;
                             $param_username = $username;
                             $param_password = password_hash($password, PASSWORD_DEFAULT);
@@ -242,6 +249,27 @@ $active_page = "staff";
                                                     placeholder="Please enter username" name="password"
                                                     value="<?php echo $username; ?>">
                                                 <span class="invalid-feedback"><?php echo $username_err; ?></span>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-group mb-3">
+                                                <label for="example-select">Select Branch</label>
+                                                <select class="form-control" id="example-select" name="branch">
+                                                    <option value="">Select Branch:</option>
+                                                    <?php
+                                                    $sql1 = "SELECT * FROM branch";
+                                                    $r = mysqli_query($link, $sql1);
+
+                                                    if ($r->num_rows > 0) {
+                                                        while ($row1 = mysqli_fetch_assoc($r)) {
+                                                            echo "<option value=\"" . $row1["branch_name"] . "\">" . $row1["branch_name"] . "</option>";
+                                                        }
+                                                    } else {
+                                                        echo "<option value=\"\">No branch available</option>";
+                                                    }
+                                                    ?>
+                                                </select>
+                                                <span class="invalid-feedback"><?php echo $category_name_err; ?></span>
                                             </div>
                                         </div>
                                     </div>

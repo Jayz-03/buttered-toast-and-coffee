@@ -132,6 +132,7 @@ $active_page = "staff";
                                                 <tr class="text-center">
                                                     <th>ID</th>
                                                     <th>Profile</th>
+                                                    <th>Branch</th>
                                                     <th>Phone</th>
                                                     <th>Status</th>
                                                     <th>Last Updated</th>
@@ -145,6 +146,10 @@ $active_page = "staff";
 
                                                 if ($r->num_rows > 0) {
                                                     while ($row1 = mysqli_fetch_assoc($r)) {
+                                                        $branch_id = $row1['branch_id'];
+                                                        $sql3 = "SELECT * FROM branch WHERE branch_id = $branch_id";
+                                                        $result3 = mysqli_query($link, $sql3);
+                                                        $row3 = mysqli_fetch_assoc($result3);
                                                         ?>
 
                                                         <tr class="text-center">
@@ -170,6 +175,11 @@ $active_page = "staff";
                                                                         </p>
                                                                     </div>
                                                                 </div>
+                                                            </td>
+                                                            <td>
+                                                                <p class="fw-normal mb-1">
+                                                                    <?php echo $row3['branch_name']; ?>
+                                                                </p>
                                                             </td>
                                                             <td>
                                                                 <p class="fw-normal mb-1">

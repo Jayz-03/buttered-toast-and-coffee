@@ -83,6 +83,25 @@ $owner_id = $row["owner_id"];
             <span>Management</span>
         </p>
         <ul class="navbar-nav flex-fill w-100 mb-2">
+            <li class="nav-item <?php if ($active_page == "branch") { echo "active"; } ?> dropdown">
+                <a href="#owner-branch" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
+                    <i class="fe fe-home fe-16"></i>
+                    <span class="ml-3 item-text">Branch</span>
+                </a>
+                <ul class="collapse list-unstyled pl-4 w-100 <?php if ($active_page == "branch") { echo "show"; } ?>" id="owner-branch">
+                    <li class="nav-item">
+                        <a class="nav-link pl-3" href="owner-branch-list">
+                            <i class="fe fe-list fe-16"></i>
+                            <span class="ml-2 item-text">Branch List</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link pl-3" href="owner-create-branch">
+                            <i class="fe fe-plus fe-16"></i><span class="ml-2 item-text">Create
+                                Branch</span></a>
+                    </li>
+                </ul>
+            </li>
             <li class="nav-item <?php if ($active_page == "staff") { echo "active"; } ?> dropdown">
                 <a href="#owner-staff" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
                     <i class="fe fe-user fe-16"></i>
