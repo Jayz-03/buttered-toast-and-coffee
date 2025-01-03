@@ -26,7 +26,7 @@
                                 <label>Item:</label>
                                 <input type="text" class="form-control" value="<?php echo $row1['item']; ?>" disabled>
                                 <label class="mt-2">Quantity:</label>
-                                <input type="text" class="form-control" value="<?php echo $row1['quantity']; ?>"
+                                <input type="text" class="form-control" value="<?php echo $row1['stocks']; ?> <?php echo $row1['measurement']; ?>"
                                     disabled>
                                 <label class="mt-2">Last updated:</label>
                                 <input type="text" class="form-control" value="<?php $formattedDate = date("l, F j Y - h:i A", strtotime($row1["last_updated"]));
@@ -52,11 +52,11 @@
 
                                 <label class="mt-4">Status:</label>
                                 <br>
-                                <?php if ($row1['quantity'] > $row1['low_stock']) {
+                                <?php if ($row1['stocks'] > $row1['low_stock']) {
                                     echo '<span class="badge badge-success rounded-pill d-inline px-3">In Stock</span>';
-                                } elseif ($row1['quantity'] < $row1['low_stock']) {
+                                } elseif ($row1['stocks'] < $row1['low_stock']) {
                                     echo '<span class="badge badge-warning rounded-pill d-inline px-3">Low Stock</span>';
-                                } elseif ($row1['quantity'] == 0) {
+                                } elseif ($row1['stocks'] == 0) {
                                     echo '<span class="badge badge-danger rounded-pill d-inline px-3">Out of Stock</span>';
                                 } ?>
                             </div>

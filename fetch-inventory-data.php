@@ -10,7 +10,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$sql = "SELECT item, quantity FROM inventory WHERE quantity <= 10000";
+$sql = "SELECT item, stocks FROM inventory";
 $result = $conn->query($sql);
 
 $items = [];
@@ -19,7 +19,7 @@ $quantities = [];
 if ($result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
         $items[] = $row['item'];
-        $quantities[] = (int)$row['quantity'];
+        $quantities[] = (int)$row['stocks'];
     }
 }
 

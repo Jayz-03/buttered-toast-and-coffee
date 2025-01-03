@@ -5,11 +5,16 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     header("location: login");
     exit;
 }
+require_once 'config.php';
+
+$sql4 = "SELECT * FROM staff WHERE staff_id = '".$_SESSION['id']."'";
+$result4 = mysqli_query($link, $sql4);
+$row4 = mysqli_fetch_assoc($result4);
+$branch_id = $row4["branch_id"];
 
 $active_page = "dashboard";
 
 
-require_once 'config.php';
 
 $sql = "SELECT SUM(total_amount) AS total_income, COUNT(*) AS total_orders FROM sales";
 $result = mysqli_query($link, $sql);
@@ -25,9 +30,10 @@ if ($result && mysqli_num_rows($result) > 0) {
 
 $sql_sales_data = "SELECT p.category_name, DATE(s.transaction_date) as sale_date, 
                    SUM(si.quantity * si.price) as total_sales 
-                   FROM sales s 
+                   FROM sales s
                    JOIN sale_items si ON s.sale_id = si.sale_id 
                    JOIN product p ON si.product_id = p.product_id 
+                   WHERE s.branch_id = $branch_id
                    GROUP BY p.category_name, DATE(s.transaction_date)
                    ORDER BY sale_date ASC";
 
@@ -177,7 +183,7 @@ if ($result_sales_data && mysqli_num_rows($result_sales_data) > 0) {
                                             </thead>
                                             <tbody>
                                                 <?php
-                                                $sql1 = "SELECT * FROM inventory LIMIT 11";
+                                                $sql1 = "SELECT * FROM inventory WHERE branch_id = $branch_id LIMIT 11";
                                                 $r = mysqli_query($link, $sql1);
 
                                                 if ($r->num_rows > 0) {
@@ -201,11 +207,11 @@ if ($result_sales_data && mysqli_num_rows($result_sales_data) > 0) {
                                                                 </div>
                                                             </td>
                                                             <td>
-                                                                <?php if ($row1['quantity'] > $row1['low_stock']) {
+                                                                <?php if ($row1['stocks'] > $row1['low_stock']) {
                                                                     echo '<span class="badge badge-success rounded-pill d-inline px-3">In Stock</span>';
-                                                                } elseif ($row1['quantity'] < $row1['low_stock']) {
+                                                                } elseif ($row1['stocks'] < $row1['low_stock']) {
                                                                     echo '<span class="badge badge-warning rounded-pill d-inline px-3">Low Stock</span>';
-                                                                } elseif ($row1['quantity'] == 0) {
+                                                                } elseif ($row1['stocks'] == 0) {
                                                                     echo '<span class="badge badge-danger rounded-pill d-inline px-3">Out of Stock</span>';
                                                                 } ?>
                                                             </td>
@@ -256,7 +262,7 @@ if ($result_sales_data && mysqli_num_rows($result_sales_data) > 0) {
                                         </thead>
                                         <tbody>
                                             <?php
-                                            $sql1 = "SELECT * FROM inventory";
+                                            $sql1 = "SELECT * FROM inventory WHERE branch_id = $branch_id";
                                             $r = mysqli_query($link, $sql1);
 
                                             if ($r->num_rows > 0) {
@@ -280,20 +286,20 @@ if ($result_sales_data && mysqli_num_rows($result_sales_data) > 0) {
                                                             </div>
                                                         </td>
                                                         <td>
-                                                            <?php if ($row1['quantity'] > $row1['low_stock']) {
+                                                            <?php if ($row1['stocks'] > $row1['low_stock']) {
                                                                 echo '<span class="badge badge-success rounded-pill d-inline px-3">In Stock</span>';
-                                                            } elseif ($row1['quantity'] < $row1['low_stock']) {
+                                                            } elseif ($row1['stocks'] < $row1['low_stock']) {
                                                                 echo '<span class="badge badge-warning rounded-pill d-inline px-3">Low Stock</span>';
-                                                            } elseif ($row1['quantity'] <= 0) {
+                                                            } elseif ($row1['stocks'] <= 0) {
                                                                 echo '<span class="badge badge-danger rounded-pill d-inline px-3">Out of Stock</span>';
                                                             } ?>
                                                         </td>
                                                         <td>
-                                                            <?php if ($row1['quantity'] > $row1['low_stock']) {
+                                                            <?php if ($row1['stocks'] > $row1['low_stock']) {
                                                                 echo '<p class="fw-bold mb-1">The stock is sufficient.</p>';
-                                                            } elseif ($row1['quantity'] < $row1['low_stock']) {
+                                                            } elseif ($row1['stocks'] < $row1['low_stock']) {
                                                                 echo '<p class="fw-bold mb-1">The stock is running low.</p>';
-                                                            } elseif ($row1['quantity'] <= 0) {
+                                                            } elseif ($row1['stocks'] <= 0) {
                                                                 echo '<p class="fw-bold mb-1">The stock needs replenisment.</p>';
                                                             } ?>
                                                         </td>

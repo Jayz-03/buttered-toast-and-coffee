@@ -169,7 +169,7 @@ function getProductsByCategory($link, $categoryName)
                                             <h6>Payment Method:</h6>
                                             <select class="form-control" id="payment-method">
                                                 <option value="Cash">Cash</option>
-                                                <option value="Card">Card</option>
+                                                <option value="Card">Gcash</option>
                                             </select>
 
                                             <hr>

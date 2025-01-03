@@ -141,7 +141,7 @@ $active_page = "inventory";
                                                 <tr class="text-center">
                                                     <th>ID</th>
                                                     <th>Item</th>
-                                                    <th>Quantity</th>
+                                                    <th>Stocks</th>
                                                     <th>Status</th>
                                                     <th>Managed By</th>
                                                     <th>Last Updated</th>
@@ -184,15 +184,15 @@ $active_page = "inventory";
                                                             </td>
                                                             <td>
                                                                 <p class="fw-normal mb-1">
-                                                                    <?php echo number_format($row1['quantity']); ?>
+                                                                    <?php echo number_format($row1['stocks']); ?> <?php echo $row1['measurement']; ?>
                                                                 </p>
                                                             </td>
                                                             <td>
-                                                                <?php if ($row1['quantity'] > $row1['low_stock']) {
+                                                                <?php if ($row1['stocks'] > $row1['low_stock']) {
                                                                     echo '<span class="badge badge-success rounded-pill d-inline px-3">In Stock</span>';
-                                                                } elseif ($row1['quantity'] < $row1['low_stock']) {
+                                                                } elseif ($row1['stocks'] < $row1['low_stock']) {
                                                                     echo '<span class="badge badge-warning rounded-pill d-inline px-3">Low Stock</span>';
-                                                                } elseif ($row1['quantity'] == 0) {
+                                                                } elseif ($row1['stocks'] == 0) {
                                                                     echo '<span class="badge badge-danger rounded-pill d-inline px-3">Out of Stock</span>';
                                                                 } ?>
                                                             </td>

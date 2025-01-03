@@ -28,21 +28,34 @@ $active_page = "inventory";
                 <h2 class="page-title">Inventory - Add Inventory</h2>
 
                 <?php
-                $item = $quantity = $low_stock = $photo = "";
-                $item_err = $quantity_err = $low_stock_err = $photo_err = "";
+                $item = $branch = $measurement = $fullfilment = $quantity = $low_stock = $photo = "";
+                $item_err = $branch_err = $measurement = $fullfilment_err = $quantity_err = $low_stock_err = $photo_err = "";
 
 
                 if (isset($_POST["submit"])) {
 
+                    if (empty(trim($_POST["branch"]))) {
+                        $branch_err = "Please enter branch.";
+                    } else {
+                        $branch = mysqli_real_escape_string($link, ($_POST["branch"]));
+                    }
+
+                    if (empty(trim($_POST["measurement"]))) {
+                        $measurement_err = "Please enter a measurement.";
+                    } else {
+                        $measurement = mysqli_real_escape_string($link, ($_POST["measurement"]));
+                    }
+
                     if (empty(trim($_POST["item"]))) {
                         $item_err = "Please enter an item.";
                     } else {
-                        $sql = "SELECT inventory_id FROM inventory WHERE item = ?";
+                        $sql = "SELECT inventory_id FROM inventory WHERE item = ? AND branch_id = ?";
 
                         if ($stmt = mysqli_prepare($link, $sql)) {
-                            mysqli_stmt_bind_param($stmt, "s", $param_item);
+                            mysqli_stmt_bind_param($stmt, "si", $param_item, $param_branch);
 
                             $param_item = trim($_POST["item"]);
+                            $param_branch = $branch;
 
                             if (mysqli_stmt_execute($stmt)) {
                                 mysqli_stmt_store_result($stmt);
@@ -63,6 +76,12 @@ $active_page = "inventory";
 
                             mysqli_stmt_close($stmt);
                         }
+                    }
+
+                    if (empty(trim($_POST["fullfilment"]))) {
+                        $fullfilment_err = "Please enter fullfilment.";
+                    } else {
+                        $fullfilment = mysqli_real_escape_string($link, $_POST["fullfilment"]);
                     }
 
                     if (empty(trim($_POST["quantity"]))) {
@@ -91,25 +110,28 @@ $active_page = "inventory";
                         $photo_size = $_FILES["photo"]["size"];
                         $photo_new_name = rand() . "_" . $photo;
                     }
-                    
-                    if (empty($item_err) && empty($quantity_err) && empty($low_stock_err) && empty($photo_err)) {
-                    
-                        $sql = "INSERT INTO inventory (owner_id, item, quantity, low_stock, photo) VALUES (?, ?, ?, ?, ?)";
-                    
+
+                    if (empty($item_err) && empty($fullfilment_err) && empty($quantity_err) && empty($low_stock_err) && empty($photo_err)) {
+
+                        $sql = "INSERT INTO inventory (owner_id, branch_id, item, stocks, measurement, fullfilment, low_stock, photo) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
                         if ($stmt = mysqli_prepare($link, $sql)) {
-                            mysqli_stmt_bind_param($stmt, "isiis", $param_owner_id, $param_item, $param_quantity, $param_low_stock, $param_photo);
-                    
+                            mysqli_stmt_bind_param($stmt, "iisisiis", $param_owner_id, $param_branch_id, $param_item, $param_quantity, $param_measurement, $param_fullfilment, $param_low_stock, $param_photo);
+
                             $param_owner_id = $owner_id;
+                            $param_branch_id = $branch;
+                            $param_fullfilment = $fullfilment;
+                            $param_measurement = $measurement;
                             $param_item = $item;
                             $param_quantity = $quantity;
                             $param_low_stock = $low_stock;
                             $param_photo = $photo_new_name;
-                    
+
                             if (mysqli_stmt_execute($stmt)) {
                                 if ($photo_new_name !== "") {
                                     move_uploaded_file($photo_tmp_name, "storage/inventory/" . $photo_new_name);
                                 }
-                    
+
                                 $item = $quantity = $low_stock = "";
                                 echo "<script>swal({
                                     title: 'Success!',
@@ -118,10 +140,10 @@ $active_page = "inventory";
                                     closeOnClickOutside: false,
                                     button: false
                                 });</script>";
-                                ?>
+                ?>
                                 <meta http-equiv="Refresh" content="3; url=owner-inventory-list">
-                                <?php
-                    
+                <?php
+
                             } else {
                                 echo "<script>swal({
                                     title: 'Oops!',
@@ -130,12 +152,11 @@ $active_page = "inventory";
                                     button: 'Done!',
                                 });</script>";
                             }
-                    
+
                             // Close statement
                             mysqli_stmt_close($stmt);
                         }
                     }
-                    
                 }
 
                 ?>
@@ -165,13 +186,13 @@ $active_page = "inventory";
                                                         file</label>
                                                 </div>
                                                 <script>
-                                                    $(document).ready(function () {
+                                                    $(document).ready(function() {
 
-                                                        var readURL = function (input) {
+                                                        var readURL = function(input) {
                                                             if (input.files && input.files[0]) {
                                                                 var reader = new FileReader();
 
-                                                                reader.onload = function (e) {
+                                                                reader.onload = function(e) {
                                                                     $('.avatar').attr('src', e.target.result);
                                                                 }
 
@@ -180,7 +201,7 @@ $active_page = "inventory";
                                                         }
 
 
-                                                        $(".file-upload").on('change', function () {
+                                                        $(".file-upload").on('change', function() {
                                                             readURL(this);
                                                         });
                                                     });
@@ -198,7 +219,7 @@ $active_page = "inventory";
                                 </div>
                                 <div class="card-body">
                                     <div class="row">
-                                        <div class="col-md-12">
+                                        <div class="col">
                                             <div class="form-group mb-3">
                                                 <label for="example-item">Item Name</label>
                                                 <input type="text" id="example-item" name="item"
@@ -206,6 +227,32 @@ $active_page = "inventory";
                                                     placeholder="Please enter an item." value="<?php echo $item; ?>">
                                                 <span class="invalid-feedback"><?php echo $item_err; ?></span>
                                             </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-group mb-3">
+                                                <label for="example-select">Select Branch</label>
+                                                <select class="form-control" id="example-select" name="branch">
+                                                    <option value="">Select Branch:</option>
+                                                    <?php
+                                                    $sql1 = "SELECT * FROM branch";
+                                                    $r = mysqli_query($link, $sql1);
+
+                                                    if ($r->num_rows > 0) {
+                                                        while ($row1 = mysqli_fetch_assoc($r)) {
+                                                            echo "<option value=\"" . $row1["branch_name"] . "\">" . $row1["branch_name"] . "</option>";
+                                                        }
+                                                    } else {
+                                                        echo "<option value=\"\">No branch available</option>";
+                                                    }
+                                                    ?>
+                                                </select>
+                                                <span class="invalid-feedback"><?php echo $category_name_err; ?></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col">
                                             <div class="form-group mb-3">
                                                 <label for="example-quantity">Quantity</label>
                                                 <input type="number" id="example-quantity" name="quantity"
@@ -214,6 +261,8 @@ $active_page = "inventory";
                                                     value="<?php echo $quantity; ?>">
                                                 <span class="invalid-feedback"><?php echo $quantity_err; ?></span>
                                             </div>
+                                        </div>
+                                        <div class="col">
                                             <div class="form-group mb-3">
                                                 <label for="example-low_stock">Low Stock Quantity</label>
                                                 <input type="number" id="example-low_stock" name="low_stock"
@@ -224,17 +273,40 @@ $active_page = "inventory";
                                             </div>
                                         </div>
                                     </div>
+
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="form-group mb-3">
+                                                <label for="example-measurement">Measurement</label>
+                                                <input type="text" id="example-measurement" name="measurement"
+                                                    class="form-control <?php echo (!empty($measurement_err)) ? 'is-invalid' : ''; ?>"
+                                                    placeholder="Please enter a measurement." value="<?php echo $measurement; ?>">
+                                                <span class="invalid-feedback"><?php echo $measurement_err; ?></span>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-group mb-3">
+                                                <label for="example-fullfilment">Fullfilment</label>
+                                                <input type="number" id="example-fullfilment" name="fullfilment"
+                                                    class="form-control <?php echo (!empty($fullfilment_err)) ? 'is-invalid' : ''; ?>"
+                                                    placeholder="Please enter a fullfilment."
+                                                    value="<?php echo $fullfilment; ?>">
+                                                <span class="invalid-feedback"><?php echo $fullfilment_err; ?></span>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <button class="btn btn-lg btn-primary btn-block" type="submit" name="submit">Create</button>
-                </form>
             </div>
+            <button class="btn btn-lg btn-primary btn-block" type="submit" name="submit">Create</button>
+            </form>
+    </div>
 
-            <?php include 'partials/owner-modals.php'; ?>
+    <?php include 'partials/owner-modals.php'; ?>
 
-        </main>
+    </main>
     </div>
     <?php include 'partials/jscripts.php'; ?>
 </body>

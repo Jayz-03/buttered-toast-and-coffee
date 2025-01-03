@@ -179,7 +179,7 @@ $active_page = "card";
                                             </div>
                                             <div class="form-group mb-3">
                                                 <label for="example-limits">Limits</label>
-                                                <input type="number" id="example-limits" name="balance"
+                                                <input type="number" id="example-limits" name="limits"
                                                     class="form-control <?php echo (!empty($limits_err)) ? 'is-invalid' : ''; ?>"
                                                     placeholder="Please enter limits."
                                                     value="<?php echo $row5['limits']; ?>">
