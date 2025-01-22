@@ -113,7 +113,7 @@ $active_page = "inventory";
 
                     if (empty($item_err) && empty($fullfilment_err) && empty($quantity_err) && empty($low_stock_err) && empty($photo_err)) {
 
-                        $sql = "INSERT INTO inventory (owner_id, branch_id, item, stocks, measurement, fullfilment, low_stock, photo) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                        $sql = "INSERT INTO inventory (owner_id, branch_id, item, stocks, measurement, fulfillment, low_stock, photo) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
                         if ($stmt = mysqli_prepare($link, $sql)) {
                             mysqli_stmt_bind_param($stmt, "iisisiis", $param_owner_id, $param_branch_id, $param_item, $param_quantity, $param_measurement, $param_fullfilment, $param_low_stock, $param_photo);
@@ -254,10 +254,10 @@ $active_page = "inventory";
                                     <div class="row">
                                         <div class="col">
                                             <div class="form-group mb-3">
-                                                <label for="example-quantity">Quantity</label>
+                                                <label for="example-quantity">Stocks</label>
                                                 <input type="number" id="example-quantity" name="quantity"
                                                     class="form-control <?php echo (!empty($quantity_err)) ? 'is-invalid' : ''; ?>"
-                                                    placeholder="Please enter quantity."
+                                                    placeholder="Please enter stocks."
                                                     value="<?php echo $quantity; ?>">
                                                 <span class="invalid-feedback"><?php echo $quantity_err; ?></span>
                                             </div>
@@ -286,7 +286,7 @@ $active_page = "inventory";
                                         </div>
                                         <div class="col">
                                             <div class="form-group mb-3">
-                                                <label for="example-fullfilment">Fullfilment</label>
+                                                <label for="example-fullfilment">Fulfillment</label>
                                                 <input type="number" id="example-fullfilment" name="fullfilment"
                                                     class="form-control <?php echo (!empty($fullfilment_err)) ? 'is-invalid' : ''; ?>"
                                                     placeholder="Please enter a fullfilment."

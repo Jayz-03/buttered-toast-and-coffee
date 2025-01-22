@@ -97,6 +97,8 @@
         </div>
     </div>
 
+
+
     <div id="modal-01" hidden>
         <div class="modal-popup">
             <img src="images/folio/gallery/p-p5.jpg" alt="">
@@ -259,5 +261,42 @@
             <a href="#" class="modal-popup__details">Buttered Toast & Coffee</a>
         </div>
     </div>
+
+    <div id="bricks" class="row bricks">
+        <div class="column lg-12 masonry">
+            <div class="bricks-wrapper">
+
+                <div class="grid-sizer"></div>
+
+                <?php
+                include 'config.php';
+                $sql3 = "SELECT * FROM product";
+                $result3 = mysqli_query($link, $sql3);
+
+                while ($row3 = mysqli_fetch_assoc($result3)) {
+                    $status = ($row3['status'] == 0) ? 'Available' : 'Unavailable';
+
+                    echo '
+                <article class="brick brick--double entry">
+                    <a href="#modal-' . htmlspecialchars($row3['id']) . '" class="entry__link">
+                        <div class="entry__thumb">
+                            <img src="../storage/products/' . htmlspecialchars($row3['photo']) . '" 
+                                alt="' . htmlspecialchars($row3['product_name']) . '">
+                        </div>
+                        <div class="entry__info">
+                            <div class="entry__cat">' . htmlspecialchars($row3['category_name']) . '</div>
+                            <h4 class="entry__title">' . htmlspecialchars($row3['product_name']) . '</h4>
+                            <br>
+                            <h6 class="entry__title">' . $status . '</h6>
+                        </div>
+                    </a>
+                </article>';
+                }
+                ?>
+
+            </div>
+        </div>
+    </div>
+
 
 </section>

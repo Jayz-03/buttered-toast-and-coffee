@@ -99,7 +99,7 @@ $active_page = "inventory";
                             }
 
                             if (empty($item_err) && empty($quantity_err) && empty($photo_err) && empty($low_stock_err)) {
-                                $sql = "UPDATE inventory SET owner_id=?, item=?, quantity=?, low_stock=?, photo=? WHERE inventory_id=?";
+                                $sql = "UPDATE inventory SET owner_id=?, item=?, stocks=?, low_stock=?, photo=? WHERE inventory_id=?";
                                 $stmt = mysqli_prepare($link, $sql);
 
                                 mysqli_stmt_bind_param($stmt, "isiisi", $owner_id, $item, $quantity, $low_stock, $photo, $inventory_id);

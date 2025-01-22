@@ -217,7 +217,7 @@ function getProductsByCategory($link, $categoryName)
     </div>
     <?php include 'partials/jscripts.php'; ?>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             function loadProducts(categoryName) {
                 const productList = document.getElementById('product-list');
                 productList.innerHTML = '';
@@ -225,7 +225,7 @@ function getProductsByCategory($link, $categoryName)
                 const xhr = new XMLHttpRequest();
                 xhr.open("POST", "get-products.php", true);
                 xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                xhr.onload = function() {
+                xhr.onload = function () {
                     if (xhr.status === 200) {
                         productList.innerHTML = xhr.responseText;
                         attachAddToCartEvents();
@@ -233,7 +233,7 @@ function getProductsByCategory($link, $categoryName)
                         console.error('Error loading products');
                     }
                 };
-                xhr.onerror = function() {
+                xhr.onerror = function () {
                     console.error('Request failed');
                 };
                 xhr.send("category_name=" + encodeURIComponent(categoryName));
@@ -241,7 +241,7 @@ function getProductsByCategory($link, $categoryName)
 
             function attachAddToCartEvents() {
                 document.querySelectorAll('.btn-add-cart').forEach(button => {
-                    button.addEventListener('click', function() {
+                    button.addEventListener('click', function () {
                         const productId = this.getAttribute('data-id');
                         const productName = this.getAttribute('data-name');
                         const productPrice = parseFloat(this.getAttribute('data-price'));
@@ -330,7 +330,7 @@ function getProductsByCategory($link, $categoryName)
 
             function attachCartEvents() {
                 document.querySelectorAll('.btn-minus').forEach(button => {
-                    button.addEventListener('click', function() {
+                    button.addEventListener('click', function () {
                         const productId = this.getAttribute('data-id');
                         if (cart[productId].quantity > 1) {
                             cart[productId].quantity--;
@@ -342,7 +342,7 @@ function getProductsByCategory($link, $categoryName)
                 });
 
                 document.querySelectorAll('.btn-plus').forEach(button => {
-                    button.addEventListener('click', function() {
+                    button.addEventListener('click', function () {
                         const productId = this.getAttribute('data-id');
                         cart[productId].quantity++;
                         updateCartUI();
@@ -350,7 +350,7 @@ function getProductsByCategory($link, $categoryName)
                 });
 
                 document.querySelectorAll('.btn-delete').forEach(button => {
-                    button.addEventListener('click', function() {
+                    button.addEventListener('click', function () {
                         const productId = this.getAttribute('data-id');
                         delete cart[productId];
                         updateCartUI();
@@ -361,7 +361,7 @@ function getProductsByCategory($link, $categoryName)
             loadProducts('all');
 
             document.querySelectorAll('.nav-link').forEach(tab => {
-                tab.addEventListener('click', function() {
+                tab.addEventListener('click', function () {
                     const categoryName = this.getAttribute('data-category');
                     loadProducts(categoryName);
                 });
@@ -520,6 +520,9 @@ function getProductsByCategory($link, $categoryName)
                 iframe.style.height = '0';
                 iframe.style.border = 'none';
 
+                const address = "Golden Country Homes Alangilan";
+                const datetimeIssued = new Date().toLocaleString();
+
                 let invoiceContent = `
                 <html>
                 <head>
@@ -530,6 +533,8 @@ function getProductsByCategory($link, $categoryName)
                             <img src="assets/images/logo.png" alt="Logo" height="90">
                             <h2>INVOICE</h2>
                             <h3 style='margin-top: -10px;'>Queue Number: ${queueNo}</h3>
+                            <p><strong>Address:</strong> ${address}</p>
+                            <p><strong>Issued On:</strong> ${datetimeIssued}</p>
                         </div>
                         <div>
                             <p><strong>Payment Method:</strong> ${paymentMethod}</p>
@@ -548,28 +553,29 @@ function getProductsByCategory($link, $categoryName)
                             <tbody>
                 `;
 
-                Object.keys(cart).forEach(productId => {
-                    const product = cart[productId];
-                    const amount = product.price * product.quantity;
-                    invoiceContent += `
+                            Object.keys(cart).forEach(productId => {
+                                const product = cart[productId];
+                                const amount = product.price * product.quantity;
+                                invoiceContent += `
                                 <tr>
                                     <td>${product.name}</td>
                                     <td>${product.quantity}</td>
                                     <td class="right">₱${amount.toFixed(2)}</td>
                                 </tr>`;
-                });
+                            });
 
-                invoiceContent += `
+                            invoiceContent += `
                             </tbody>
                         </table>
                         <br>
                         <div class="footer" style='text-align: center;'>
                             <h3>To be happy is to drink coffee.</h3>
                             <h3 style='margin-top: -10px;'>Thank you for your order!</h3>
-                    </div>
-                    <br>
-                    <div class="footer" style='text-align: center;'>
+                        </div>
+                        <br>
+                        <div class="footer" style='text-align: center;'>
                             <small>Note: Kindly wait until your queue number is called.</small>
+                        </div>
                     </div>
                 </body>
                 </html>
@@ -584,6 +590,7 @@ function getProductsByCategory($link, $categoryName)
 
                 document.body.removeChild(iframe);
             }
+
         });
     </script>
 </body>

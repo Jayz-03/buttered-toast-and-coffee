@@ -12,6 +12,12 @@ $result4 = mysqli_query($link, $sql4);
 $row4 = mysqli_fetch_assoc($result4);
 $branch_id = $row4["branch_id"];
 
+
+$sql5 = "SELECT * FROM branch WHERE branch_id = $branch_id";
+$result5 = mysqli_query($link, $sql5);
+$row5 = mysqli_fetch_assoc($result5);
+$branch = $row5["branch_name"];
+
 $active_page = "dashboard";
 
 
@@ -72,7 +78,7 @@ if ($result_sales_data && mysqli_num_rows($result_sales_data) > 0) {
 
         <main role="main" class="main-content">
             <div class="container-fluid">
-                <h2 class="page-title">Dashboard</h2>
+                <h2 class="page-title">Dashboard - <?php echo $branch; ?> Branch</h2>
                 <div class="row align-items-center my-2">
                     <div class="col-auto ml-auto">
                         <form class="form-inline">

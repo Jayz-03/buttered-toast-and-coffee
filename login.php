@@ -158,11 +158,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             </div>
                         </div>
                     </div>
-                    <div class="col text-right">
-                        <div class="forgot-password">
-                            <a href="#" style="color: #000000;">Forgot Password?</a>
-                        </div>
-                    </div>
                 </div>
 
                 <script>

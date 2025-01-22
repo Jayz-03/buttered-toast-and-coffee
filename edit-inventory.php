@@ -88,7 +88,7 @@
                                                 <input type="number" id="example-quantity" name="quantity"
                                                     class="form-control <?php echo (!empty($quantity_err)) ? 'is-invalid' : ''; ?>"
                                                     placeholder="Please enter quantity."
-                                                    value="<?php echo $row1['quantity']; ?>">
+                                                    value="<?php echo $row1['stocks']; ?>">
                                                 <span class="invalid-feedback"><?php echo $quantity_err; ?></span>
                                             </div>
                                             <div class="form-group mb-3">
